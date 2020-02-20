@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /arbeidsforhold-api
+
+management.endpoints.web:
+  exposure.include: info, health, metrics, prometheus
+  base-path: /internal/actuator
+
+spring:
+  profiles:
+    active: dev
+
+---
