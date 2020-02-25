@@ -41,10 +41,10 @@ jobs:
           java-version: '11.x'
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-cache-${{ hashFiles('build.gradle') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-cache-
+            ${{ runner.os }}-maven-
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
