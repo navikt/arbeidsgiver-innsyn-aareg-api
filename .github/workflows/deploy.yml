@@ -47,12 +47,12 @@ jobs:
             ${{ runner.os }}-gradle-cache-
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
+            ${{ runner.os }}-maven-
       - name: Build JAR
-        run: ./gradlew clean build shadowJar -x test
+        run: mvn -f ./pom.xml clean verify
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
