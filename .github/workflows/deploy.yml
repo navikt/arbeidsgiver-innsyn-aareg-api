@@ -3,7 +3,7 @@ name: Build, push, and deploy
 on: [push, pull_request]
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/default:${{ github.sha }}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
 
 jobs:
   test:
@@ -16,18 +16,18 @@ jobs:
           java-version: '11.x'
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-cache-${{ hashFiles('build.gradle') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-cache-
+            ${{ runner.os }}-maven-
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
+            ${{ runner.os }}-maven-
       - name: Build and run tests
-        run: ./gradlew clean build
+        run: mvn -f ./pom.xml clean compile
 
   build:
     name: Build and push docker image
@@ -41,18 +41,18 @@ jobs:
           java-version: '11.x'
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-cache-${{ hashFiles('build.gradle') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-cache-
+            ${{ runner.os }}-maven-
       - uses: actions/cache@v1
         with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
+            ${{ runner.os }}-maven-
       - name: Build JAR
-        run: ./gradlew clean build shadowJar -x test
+        run: mvn -f ./pom.xml clean verify
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: .nais/dev.yaml
+          RESOURCE: nais/dev.yaml
 
 #  deploy-prod:
 #    name: Deploy to NAIS prod
