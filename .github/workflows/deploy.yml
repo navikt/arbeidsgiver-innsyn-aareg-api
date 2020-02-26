@@ -3,7 +3,7 @@ name: Build, push, and deploy
 on: [push, pull_request]
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/default:${{ github.sha }}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
 
 jobs:
   test:
