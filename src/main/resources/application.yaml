@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /arbeidsforhold-api
+    context-path: /arbeidsgiver-arbeidsforhold-api
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
