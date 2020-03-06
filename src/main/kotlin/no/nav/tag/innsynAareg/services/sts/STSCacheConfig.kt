@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import org.springframework.boot.autoconfigure.cache.CacheProperties
 
 @Configuration
 class STSCacheConfig {
@@ -15,7 +14,7 @@ class STSCacheConfig {
     @Bean
     fun stsCache(): CaffeineCache {
         return CaffeineCache(STS_CACHE,
-                CacheProperties.Caffeine.newBuilder()
+                Caffeine.newBuilder()
                         .maximumSize(1)
                         .expireAfterWrite(59, TimeUnit.MINUTES)
                         .recordStats()
