@@ -10,7 +10,7 @@ class Test {
     @ResponseBody
     fun skrivTest(): ResponseEntity<String> {
 
-        return ResponseEntity.ok<String>("hei")
+        return ResponseEntity.ok<String>("heihHEHEI")
     }
 
 }
