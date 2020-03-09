@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder
 class STSClient @Autowired
 constructor(@Value("sts.stsPass") stsPass: String,
             @Value("sts.stsUrl") stsUrl: String,
-            private val restTemplate: RestTemplate) {
+            private val restTemplate: RestTemplate ) {
     private val requestEntity: HttpEntity<String>
     private val uriString: String
 
@@ -43,7 +43,7 @@ constructor(@Value("sts.stsPass") stsPass: String,
 
     init {
         this.requestEntity = getRequestEntity(stsPass)
-        this.uriString = buildUriString(stsUrl)
+        this.uriString = buildUriString(stsUrl);
     }
 
     private fun getRequestEntity(stsPass: String): HttpEntity<String> {
