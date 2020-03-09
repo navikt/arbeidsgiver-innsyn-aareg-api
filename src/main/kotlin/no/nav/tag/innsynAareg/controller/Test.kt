@@ -9,8 +9,7 @@ class Test {
     @GetMapping(value = ["/test"])
     @ResponseBody
     fun skrivTest(): ResponseEntity<String> {
-
-        return ResponseEntity.ok<String>("heihHEHEI")
+        return ResponseEntity.ok<String>("hei")
     }
 
 }
