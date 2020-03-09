@@ -12,3 +12,15 @@ spring:
     active: dev
 
 ---
+
+spring:
+  profiles: dev
+
+mock:
+  enabled: true
+  port: 8081
+  aktorPort: 8082
+
+aareg:
+  aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
+  aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
