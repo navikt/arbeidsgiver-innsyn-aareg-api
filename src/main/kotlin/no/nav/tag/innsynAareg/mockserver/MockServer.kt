@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.net.URL
 import java.nio.charset.StandardCharsets
 
-@Profile("dev")
+@Profile("local")
 @Component
 class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String ) {
 

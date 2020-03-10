@@ -9,12 +9,12 @@ management.endpoints.web:
 
 spring:
   profiles:
-    active: dev
+    active: local
 
 ---
 
 spring:
-  profiles: dev
+  profiles: local
 
 mock:
   enabled: true
@@ -24,3 +24,12 @@ mock:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+
+---
+
+spring:
+  profiles: dev
+
+aareg:
+  aaregArbeidsforhold: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
+  aaregArbeidsgivere: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
