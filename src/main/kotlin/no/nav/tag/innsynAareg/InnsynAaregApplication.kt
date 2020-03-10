@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@EnableOIDCTokenValidation(ignore=["org.springframework"])
+@EnableOIDCTokenValidation(ignore=["org.springframework", "springfox.documentation.swagger.web.ApiResourceController"])
 class InnsynAaregApplication
 
 fun main(args: Array<String>) {
