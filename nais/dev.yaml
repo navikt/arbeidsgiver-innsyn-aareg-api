@@ -9,6 +9,7 @@ spec:
   image: {{ image }}
   team: arbeidsgiver
   port: 8080
+  webproxy: true
   ingresses:
     - https://arbeidsgiver.nais.preprod.local/arbeidsgiver-arbeidsforhold-api/
   env:
