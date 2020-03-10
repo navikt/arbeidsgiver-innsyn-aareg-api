@@ -1,9 +1,11 @@
 package no.nav.tag.innsynAareg.controller
 
+import no.nav.security.oidc.api.Unprotected
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Unprotected
 class Test {
 
     @GetMapping(value = ["/test"])
