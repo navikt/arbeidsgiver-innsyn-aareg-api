@@ -16,12 +16,13 @@ spring:
 spring:
   profiles: local
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuers: selvbetjening
   issuer:
     selvbetjening:
       discoveryurl: http://metadata-selvbetjening
       accepted_audience: aud-localhost
+      cookiename: localhost-idtoken
 
 mock:
   enabled: true
@@ -41,7 +42,7 @@ aareg:
   aaregArbeidsforhold: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuers: selvbetjening
   issuer:
     selvbetjening:
@@ -54,7 +55,7 @@ no.nav.security.oidc:
 spring:
   profiles: prod
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuers: selvbetjening
   issuer:
     selvbetjening:

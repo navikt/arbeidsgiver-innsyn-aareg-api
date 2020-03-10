@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.controller
 
-import no.nav.security.oidc.api.Unprotected
+import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

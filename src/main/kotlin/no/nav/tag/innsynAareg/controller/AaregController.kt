@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.controller
 
-import no.nav.security.oidc.api.Protected
+import no.nav.security.token.support.core.api.Protected
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.service.AaregService
 import org.springframework.web.bind.annotation.GetMapping
