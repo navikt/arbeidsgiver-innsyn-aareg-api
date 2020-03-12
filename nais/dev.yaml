@@ -11,6 +11,9 @@ spec:
   port: 8080
   ingresses:
     - https://arbeidsgiver.nais.preprod.local/arbeidsgiver-arbeidsforhold-api/
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dev
   vault:
     enabled: true
     paths:
