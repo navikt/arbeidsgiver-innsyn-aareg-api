@@ -34,7 +34,7 @@ constructor(@Value("sts.stsPass") stsPass: String,
                     throw RuntimeException(message)
                 }
                 return response.getBody()
-            } catch (e: HttpClientErrorException) {
+            } catch (e: Throwable) {
                 //log.error("Feil ved oppslag i STS", e)
                 throw RuntimeException(e)
             }
