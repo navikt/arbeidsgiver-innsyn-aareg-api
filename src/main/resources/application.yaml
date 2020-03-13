@@ -21,9 +21,15 @@ mock:
   port: 8081
   aktorPort: 8082
 
+sts:
+  stsPass: "mockpass"
+  stsUrl: "http://localhost:${mock.port}/sts"
+
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+
+
 
 ---
 
@@ -33,3 +39,7 @@ spring:
 aareg:
   aaregArbeidsforhold: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "https://modapp-q0.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+
+sts:
+  stsPass: ${STS_PASS}
+  stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token

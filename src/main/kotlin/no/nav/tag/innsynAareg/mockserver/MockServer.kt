@@ -14,13 +14,15 @@ import java.nio.charset.StandardCharsets
 
 @Profile("local")
 @Component
-class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String ) {
+class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${sts.stsUrl}") val stsUrl: String,@Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String ) {
 
     init {
         System.out.println("mocking")
         val server:WireMockServer = WireMockServer(WireMockConfiguration().port(port).extensions(ResponseTemplateTransformer(true)))
         val aaregArbeidsforholdPath = URL(aaregArbeidsforholdUrl).path
          mockForPath(server,aaregArbeidsforholdPath,"arbeidsforholdrespons.json")
+        val stsPath = URL(stsUrl).path
+        mockForPath(server,stsPath,"STStoken.json")
 
         server.start()
     }
