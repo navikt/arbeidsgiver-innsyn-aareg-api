@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets
 
 @Profile("local")
 @Component
-class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String, @Value("\${sts.stsUrl}") val stsUrl: String ) {
+class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${sts.stsUrl}") val stsUrl: String,@Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String ) {
 
     init {
         System.out.println("mocking")
