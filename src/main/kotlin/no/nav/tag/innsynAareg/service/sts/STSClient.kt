@@ -1,7 +1,7 @@
-package no.nav.tag.innsynAareg.services.sts
+package no.nav.tag.innsynAareg.service.sts
 
 import lombok.extern.slf4j.Slf4j
-import no.nav.tag.innsynAareg.services.sts.STSCacheConfig.Companion.STS_CACHE
+import no.nav.tag.innsynAareg.service.sts.STSCacheConfig.Companion.STS_CACHE
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
