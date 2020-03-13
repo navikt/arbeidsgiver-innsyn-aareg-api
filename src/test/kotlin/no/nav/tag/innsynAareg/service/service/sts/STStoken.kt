@@ -1,4 +1,4 @@
-package no.nav.tag.dittNavArbeidsgiver.services.aktor
+package no.nav.tag.innsynAareg.service
 
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import org.junit.Test
@@ -24,5 +24,7 @@ class AktorClientTest {
     @Test
     fun getstsToken() {
 
+        //val result = STSClient.STStoken
+        //assertEquals(result, "Bearer");
     }
 }
