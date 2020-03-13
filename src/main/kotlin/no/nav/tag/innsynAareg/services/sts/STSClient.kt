@@ -15,8 +15,8 @@ import org.springframework.web.util.UriComponentsBuilder
 @Slf4j
 @Component
 class STSClient @Autowired
-constructor(@Value("sts.stsPass") stsPass: String,
-            @Value("sts.stsUrl") stsUrl: String,
+constructor(@Value("\${sts.stsPass}") stsPass: String,
+            @Value("\${sts.stsUrl}") stsUrl: String,
             private val restTemplate: RestTemplate ) {
     private val requestEntity: HttpEntity<String>
     private val uriString: String
