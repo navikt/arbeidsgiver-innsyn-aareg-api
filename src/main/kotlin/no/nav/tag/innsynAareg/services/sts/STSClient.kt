@@ -1,7 +1,6 @@
 package no.nav.tag.innsynAareg.services.sts
 
 import lombok.extern.slf4j.Slf4j
-import no.nav.tag.innsynAareg.InnsynAaregApplication
 import no.nav.tag.innsynAareg.services.sts.STSCacheConfig.Companion.STS_CACHE
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +9,6 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*
 import org.springframework.stereotype.Component
-import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -48,7 +46,7 @@ constructor(@Value("sts.stsPass") stsPass: String,
 
     private fun getRequestEntity(stsPass: String): HttpEntity<String> {
         val headers = HttpHeaders()
-        headers.setBasicAuth(InnsynAaregApplication.APP_NAME, stsPass)
+        headers.setBasicAuth("srvAG-Arbforhold", stsPass)
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         return HttpEntity(headers)
     }
