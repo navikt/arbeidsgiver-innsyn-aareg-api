@@ -1,12 +1,28 @@
-package no.nav.tag.innsynAareg.service.sts;
+package no.nav.tag.dittNavArbeidsgiver.services.aktor
 
-import lombok.Data
+import no.nav.tag.innsynAareg.service.sts.STSClient
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.junit4.SpringRunner
 
-@Data
-class STSControllerTest {
-    var access_token: String? = null
+import org.junit.Assert.*
 
-    internal var token_type: String? = null
-    internal var expires_in: Int = 0
+@SpringBootTest
+@RunWith(SpringRunner::class)
+@ActiveProfiles("dev")
+@TestPropertySource(properties = ["mock.port=8082"])
+class AktorClientTest {
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+
+    private val stsClient: STSClient? = null;
+
+    @Test
+    fun getstsToken() {
+
+    }
 }
-
