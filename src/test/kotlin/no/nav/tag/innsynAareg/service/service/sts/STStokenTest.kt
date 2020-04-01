@@ -15,16 +15,15 @@ import org.junit.Assert.*
 @RunWith(SpringRunner::class)
 @ActiveProfiles("dev")
 @TestPropertySource(properties = ["mock.port=8082"])
-class AktorClientTest {
+class STStokenTest {
+
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-
-    private val stsClient: STSClient? = null;
+    val stsClient = STSClient::class
 
     @Test
     fun getstsToken() {
-
-        //val result = STSClient.STStoken
-        //assertEquals(result, "Bearer");
+        val result = stsClient.getToken();
+        assertEquals(result, "Bearer");
     }
 }
