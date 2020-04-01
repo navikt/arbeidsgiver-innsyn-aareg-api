@@ -18,7 +18,7 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
 
     init {
         System.out.println("mocking")
-        val server:WireMockServer = WireMockServer(WireMockConfiguration().port(port).extensions(ResponseTemplateTransformer(true)))
+        val server = WireMockServer(WireMockConfiguration().port(port).extensions(ResponseTemplateTransformer(true)))
         val aaregArbeidsforholdPath = URL(aaregArbeidsforholdUrl).path
          mockForPath(server,aaregArbeidsforholdPath,"arbeidsforholdrespons.json")
         val stsPath = URL(stsUrl).path
