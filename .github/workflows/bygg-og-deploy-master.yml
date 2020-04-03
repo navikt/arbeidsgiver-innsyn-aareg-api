@@ -58,7 +58,7 @@ jobs:
       - name: Bygg og test med Maven
         run: |
           mvn versions:set -DnewVersion=${TAG}
-          mvn -f ./pom.xml clean compile
+          mvn mvn -f ./pom.xml clean package
         env:
           GITHUB_USERNAME: x-access-token
 
