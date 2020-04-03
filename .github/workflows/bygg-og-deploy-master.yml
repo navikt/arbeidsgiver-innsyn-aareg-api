@@ -58,7 +58,7 @@ jobs:
       - name: Bygg og test med Maven
         run: |
           mvn versions:set -DnewVersion=${TAG}
-          mvn package -B -Dsurefire.useFile=false --settings .github/workflows/.m2/settings.xml
+          mvn -f ./pom.xml clean compile
         env:
           GITHUB_USERNAME: x-access-token
 
