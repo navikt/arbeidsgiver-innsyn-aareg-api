@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Bygg og test med Maven
-        run: mvn -f ./pom.xml clean package
+        run: mvn -f ./pom.xml clean test package
 
       - name: Sjekk om branch er oppdatert mot master
         id: sjekk-mot-master
