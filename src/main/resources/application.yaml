@@ -29,7 +29,8 @@ aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
-
+yrkeskodeverk:
+  yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
 
 ---
 
@@ -43,3 +44,6 @@ aareg:
 sts:
   stsPass: ${STS_PASS}
   stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
+
+yrkeskodeverk:
+  yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
