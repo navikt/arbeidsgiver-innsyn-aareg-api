@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Profile
 @Configuration
 @Import(TokenGeneratorConfiguration::class)
 @Profile("local")
-class LocalOidcConfiguration {
+class LocalJWTConfig {
 }
