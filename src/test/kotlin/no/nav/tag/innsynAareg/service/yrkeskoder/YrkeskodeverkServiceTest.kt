@@ -20,9 +20,13 @@ internal class YrkeskodeverkServiceTest() {
     @Test
     fun hentBetydningerAvYrkeskoder() {
         val respons = yrkeskodeservice.hentBetydningerAvYrkeskoder();
+        val betydning = respons?.getBetydninger()?.get("1227184")?.get(0)?.beskrivelser?.nb?.tekst;
+
+        println(betydning)
+
         println(respons)
         print("RESPONN")
-        Assert.assertEquals("hello ", respons);
+        Assert.assertEquals("hello ", betydning);
 
     }
 }

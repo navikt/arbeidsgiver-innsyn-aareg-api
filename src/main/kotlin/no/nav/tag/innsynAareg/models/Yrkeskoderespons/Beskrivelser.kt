@@ -8,7 +8,7 @@ import lombok.Data
 @Data
 class Beskrivelser {
     @JsonProperty("nn")
-    private val nn: Sprak? = null
+    val nn: Sprak? = null
     @JsonProperty("nb")
-    private val nb: Sprak? = null
+    val nb: Sprak? = null
 }

@@ -8,9 +8,9 @@ import lombok.Data
 @Data
 class Yrkeskode {
     @JsonProperty("gyldigFra")
-    private val gyldigFra: String? = null
+    val gyldigFra: String? = null
     @JsonProperty("gyldigTil")
-    private val gyldigTil: String? = null
+    val gyldigTil: String? = null
     @JsonProperty("beskrivelser")
-    private val beskrivelser: Beskrivelser? = null
+    val beskrivelser: Beskrivelser? = null
 }
