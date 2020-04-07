@@ -21,12 +21,6 @@ internal class YrkeskodeverkServiceTest() {
     fun hentBetydningerAvYrkeskoder() {
         val respons = yrkeskodeservice.hentBetydningerAvYrkeskoder();
         val betydning = respons?.betydninger?.get("1227184")?.get(0)?.beskrivelser?.nb?.tekst;
-
-        println(betydning)
-
-        println(respons)
-        print("RESPONN")
-        Assert.assertEquals("hello ", betydning);
-
+        Assert.assertEquals("PLANSJEF (OFFENTLIG VIRKSOMHET)", betydning);
     }
 }
