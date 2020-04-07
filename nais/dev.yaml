@@ -15,5 +15,12 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
+  vault:
+    enabled: true
+    paths:
+      - mountPath: /var/run/secrets/nais.io/vault
+        kvPath: /kv/preprod/fss/arbeidsgiver-arbeidsforhold-api/default
+      - mountPath: /var/run/secrets/nais.io/service_user
+        kvPath: /serviceuser/data/dev/srvag-arbforhold
   #image: docker.pkg.github.com/navikt/myrepository/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
   #       ^--- interpolated from the $IMAGE environment variable in the workflow
