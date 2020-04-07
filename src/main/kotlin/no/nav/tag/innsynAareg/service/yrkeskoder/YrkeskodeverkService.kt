@@ -17,10 +17,9 @@ import java.util.*
 
 @Slf4j
 @Service
-class KodeverkService @Autowired constructor(private val restTemplate: RestTemplate, @Value("\${yrkeskodeverk.yrkeskodeUrl}") yrkeskodeUrl: String) {
+class YrkeskodeverkService @Autowired constructor(private val restTemplate: RestTemplate, @Value("\${yrkeskodeverk.yrkeskodeUrl}") yrkeskodeUrl: String) {
     private val headerEntity: HttpEntity<String>
     private val uriString: String = yrkeskodeUrl;
-
 
 
     @Cacheable(YRKESKODE_CACHE)
