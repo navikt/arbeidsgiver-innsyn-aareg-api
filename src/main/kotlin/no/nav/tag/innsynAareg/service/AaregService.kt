@@ -20,15 +20,12 @@ class AaregService (val restTemplate: RestTemplate){
                     HttpMethod.GET, entity, OversiktOverArbeidsForhold::class.java)
             if (respons.statusCode != HttpStatus.OK) {
                 val message = "Kall mot aareg feiler med HTTP-" + respons.statusCode
-
                 throw RuntimeException(message)
             }
             respons.body!!
         } catch (exception: RestClientException) {
-
             throw RuntimeException(" Aareg Exception: $exception")
         }
-
     }
 
     private fun getRequestEntity(bedriftsnr: String, juridiskEnhetOrgnr: String, idPortenToken: String): HttpEntity<String> {
