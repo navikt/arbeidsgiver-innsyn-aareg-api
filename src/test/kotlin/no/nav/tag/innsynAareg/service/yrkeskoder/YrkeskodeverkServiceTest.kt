@@ -1,7 +1,4 @@
 package no.nav.tag.innsynAareg.service.yrkeskoder
-
-import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
-
 import org.junit.Assert
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -22,8 +19,10 @@ internal class YrkeskodeverkServiceTest() {
 
     @Test
     fun hentBetydningerAvYrkeskoder() {
-        val respons: Yrkeskoderespons? = yrkeskodeservice.hentBetydningerAvYrkeskoder();
-        Assert.assertEquals("hello ", respons.toString());
+        val respons = yrkeskodeservice.hentBetydningerAvYrkeskoder();
+        println(respons)
+        print("RESPONN")
+        Assert.assertEquals("hello ", respons);
 
     }
 }
