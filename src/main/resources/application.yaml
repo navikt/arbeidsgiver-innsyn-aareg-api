@@ -37,6 +37,9 @@ aareg:
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
 
+pdl:
+  pdlUrl: "http://localhost:${mock.port}/graphql"
+
 ---
 
 spring:
@@ -54,9 +57,13 @@ no.nav.security.jwt.issuer.selvbetjening:
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
+
 sts:
   stsPass: ${STS_PASS}
   stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
+
+pdl:
+  pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ---
 
@@ -76,3 +83,6 @@ sts:
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk.nais.adeo.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
+
+pdl:
+  pdlUrl: "https://pdl-api.nais.adeo.no/graphql"
