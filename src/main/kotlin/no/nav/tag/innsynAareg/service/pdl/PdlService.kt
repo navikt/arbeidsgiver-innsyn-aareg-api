@@ -67,7 +67,7 @@ class PdlService {
         } catch (e: NullPointerException) {
             logger.error("MSA-AAREG nullpointer exception: {} ", e.message)
             if (respons?.errors?.firstOrNull() != null) {
-                logger.error("MSA-AAREG pdlerror: " + respons.errors?.first().toString()
+                logger.error("MSA-AAREG pdlerror: " + respons.errors?.first().toString())
             } else {
                 logger.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
             }
@@ -81,10 +81,10 @@ class PdlService {
            val respons: PdlRespons? = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
-            no.nav.tag.dittNavArbeidsgiver.service.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)
+            logger.error("MSA-AAREG Exception: {}", exception.message)
             lagManglerNavnException()
         } catch (exception: IOException) {
-            no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)
+            logger.error("MSA-AAREG Exception: {}", exception.message)
             lagManglerNavnException()
         }
     }
