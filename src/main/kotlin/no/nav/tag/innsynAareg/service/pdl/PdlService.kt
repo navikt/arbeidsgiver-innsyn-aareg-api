@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
+import no.nav.tag.innsynAareg.models.pdlPerson.Variables
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Value
@@ -27,13 +28,15 @@ class PdlService {
     @Value("\${pdl.pdlUrl}")
     var pdlUrl: String? = null
 
+    val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
+
     @SneakyThrows
     fun hentNavnMedFnr(fnr: String): String {
-        val result: Navn = getFraPdl(fnr)
+        val result: Navn? = getFraPdl(fnr)
         var navn = ""
-        if (result.fornavn != null) navn += result.fornavn
-        if (result.mellomNavn != null) navn += " " + result.mellomNavn
-        if (result.etternavn != null) navn += " " + result.etternavn
+        if (result?.fornavn != null) navn += result.fornavn
+        if (result?.mellomNavn != null) navn += " " + result.mellomNavn
+        if (result?.etternavn != null) navn += " " + result.etternavn
         return navn
     }
 
@@ -58,34 +61,27 @@ class PdlService {
         return exceptionNavn
     }
 
-    private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn {
+    private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn? {
         try {
-            return respons.data.hentPerson.navn.get(0)
+            return respons?.data?.hentPerson?.navn?.first()
         } catch (e: NullPointerException) {
-            no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG nullpointer exception: {} ", e.message)
-            if (respons.errors != null && !respons.errors.isEmpty()) {
-                no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
+            logger.error("MSA-AAREG nullpointer exception: {} ", e.message)
+            if (respons?.errors?.firstOrNull() != null) {
+                logger.error("MSA-AAREG pdlerror: " + respons.errors?.first().toString()
             } else {
-                no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
-            }
-        } catch (e: ArrayIndexOutOfBoundsException) {
-            no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG nullpointer exception: {} ", e.message)
-            if (respons.errors != null && !respons.errors.isEmpty()) {
-                no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
-            } else {
-                no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+                logger.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
             }
         }
         return lagManglerNavnException()
     }
 
-    private fun getFraPdl(fnr: String): Navn {
+    private fun getFraPdl(fnr: String): Navn? {
         return try {
-            //val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
-           // val respons: PdlRespons = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
+            val pdlRequest = PdlRequest(graphQlUtils?.resourceAsString(), Variables(fnr))
+           val respons: PdlRespons? = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
-            no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)
+            no.nav.tag.dittNavArbeidsgiver.service.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)
             lagManglerNavnException()
         } catch (exception: IOException) {
             no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)

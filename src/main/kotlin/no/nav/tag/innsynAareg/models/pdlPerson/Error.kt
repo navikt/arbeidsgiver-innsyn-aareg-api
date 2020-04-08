@@ -1,5 +1,4 @@
 package no.nav.tag.innsynAareg.models.pdlPerson
 
-class Error {
-    var message: String? = null
-}
+data class Error(val message: String);
+
