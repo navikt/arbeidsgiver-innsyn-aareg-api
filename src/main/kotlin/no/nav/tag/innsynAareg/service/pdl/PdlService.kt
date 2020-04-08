@@ -3,7 +3,11 @@ package no.nav.tag.innsynAareg.service.pdl
 import lombok.RequiredArgsConstructor
 import lombok.SneakyThrows
 import lombok.extern.slf4j.Slf4j
+import no.nav.tag.innsynAareg.models.pdlPerson.Navn
+import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
+import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
 import no.nav.tag.innsynAareg.service.sts.STSClient
+import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -34,16 +38,17 @@ class PdlService {
     }
 
     private fun createHeaders(): HttpHeaders {
-        val stsToken: String = stsClient.getToken().getAccess_token()
+        val stsToken: String? = stsClient?.token?.access_token;
         val headers = HttpHeaders()
-        headers.setBearerAuth(stsToken)
+        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+        headers["Authorization"] = "Bearer $stsToken"
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
         return headers
     }
 
-    private fun createRequestEntity(pdlRequest: PdlRequest): HttpEntity<String?> {
+    private fun createRequestEntity(pdlRequest: PdlRequest): HttpEntity<Any?> {
         return HttpEntity<Any?>(pdlRequest, createHeaders())
     }
 
@@ -76,8 +81,8 @@ class PdlService {
 
     private fun getFraPdl(fnr: String): Navn {
         return try {
-            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
-            val respons: PdlRespons = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
+            //val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
+           // val respons: PdlRespons = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
             no.nav.tag.dittNavArbeidsgiver.services.pdl.PdlService.log.error("MSA-AAREG Exception: {}", exception.message)
