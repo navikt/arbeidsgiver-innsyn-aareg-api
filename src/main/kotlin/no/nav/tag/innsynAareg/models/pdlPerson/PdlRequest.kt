@@ -3,7 +3,4 @@ package no.nav.tag.innsynAareg.models.pdlPerson
 import lombok.Value
 
 @Value
-class PdlRequest {
-    private val query: String? = null
-    private val variables: Variables? = null
-}
+data class PdlRequest(val query: String?, val variable: Variables);
