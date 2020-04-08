@@ -51,6 +51,13 @@ no.nav.security.jwt.issuer.selvbetjening:
   accepted_audience: 0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5
   cookiename: selvbetjening-idtoken
   proxyurl: http://webproxy.nais:8088
+
+yrkeskodeverk:
+  yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
+sts:
+  stsPass: ${STS_PASS}
+  stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
+
 ---
 
 
@@ -65,7 +72,7 @@ no.nav.security.jwt.issuer.selvbetjening:
 
 sts:
   stsPass: ${STS_PASS}
-  stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
+  stsUrl: https://security-token-service.nais.adeo.no/rest/v1/sts/token
 
 yrkeskodeverk:
-  yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
+  yrkeskodeUrl: "https://kodeverk.nais.adeo.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
