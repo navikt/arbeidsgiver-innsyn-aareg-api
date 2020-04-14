@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets
 
 @Profile("local")
 @Component
-class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${sts.stsUrl}") val stsUrl: String,@Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String, @Value("\${yrkeskodeverk.yrkeskodeUrl}") val yrkeskodeUrl: String  ) {
+class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, @Value("\${sts.stsUrl}") val stsUrl: String, @Value("\${aareg.aaregArbeidsforhold}") val aaregArbeidsforholdUrl: String, @Value("\${yrkeskodeverk.yrkeskodeUrl}") val yrkeskodeUrl: String, @Value("\${pdl.pdlUrl}") val pdlUrl: String  ) {
 
     init {
         System.out.println("mocking")
@@ -25,6 +25,8 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
         mockForPath(server,stsPath,"STStoken.json")
         val yrkeskodePath = URL(yrkeskodeUrl).path
         mockForPath(server,yrkeskodePath,"yrkeskoder.json")
+        val pdlPath = URL(pdlUrl).path
+        mockForPath(server,pdlPath,"pdlRespons.json")
 
         server.start()
     }

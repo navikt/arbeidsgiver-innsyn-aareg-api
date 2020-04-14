@@ -39,7 +39,6 @@ class PdlServiceTest {
 
     @Before
     fun setUp() {
-        pdlService!!.pdlUrl = PDL_URL;
         Mockito.`when`(stsClient?.token).thenReturn(STStoken())
         respons = PdlRespons()
         lagPdlObjekt()

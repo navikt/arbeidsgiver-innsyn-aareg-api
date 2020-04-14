@@ -9,6 +9,7 @@ import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
 import no.nav.tag.innsynAareg.models.pdlPerson.Variables
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -17,16 +18,17 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
+import java.util.*
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class PdlService {
+class PdlService @Autowired constructor(private val restTemplate: RestTemplate, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
+
     private val graphQlUtils: GraphQlUtils? = null
     private val stsClient: STSClient? = null
-    private val restTemplate: RestTemplate? = null
-    @Value("\${pdl.pdlUrl}")
-    var pdlUrl: String? = null
+    private val uri: String = buildString { pdlUrl }
+
 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
 
@@ -78,7 +80,7 @@ class PdlService {
     private fun getFraPdl(fnr: String): Navn? {
         return try {
             val pdlRequest = PdlRequest(graphQlUtils?.resourceAsString(), Variables(fnr))
-           val respons: PdlRespons? = restTemplate!!.postForObject(pdlUrl!!, createRequestEntity(pdlRequest), PdlRespons::class.java)
+           val respons: PdlRespons? = restTemplate!!.postForObject(uri, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
             logger.error("MSA-AAREG Exception: {}", exception.message)
@@ -88,4 +90,5 @@ class PdlService {
             lagManglerNavnException()
         }
     }
+
 }
