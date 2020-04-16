@@ -1,6 +1,8 @@
 package no.nav.tag.innsynAareg.service
 
 import lombok.extern.slf4j.Slf4j
+import no.nav.metrics.MetricsFactory
+import no.nav.metrics.Timer
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.service.sts.STSClient
@@ -18,7 +20,9 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     lateinit var aaregArbeidsforholdUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
+        val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
+        kunArbeidstimer.stop().report()
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold)!!
 
     }
@@ -50,7 +54,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return HttpEntity(headers)
     }
     fun settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        //val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
+        val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
         logger.info("settYrkeskodebetydningPaAlleArbeidsforhold")
         val yrkeskodeBeskrivelser: Yrkeskoderespons = yrkeskodeverkService.hentBetydningerAvYrkeskoder()!!
         logger.info("settYrkeskodebetydningPaAlleArbeidsforhold yrkeskodeBeskrivelser: $yrkeskodeBeskrivelser")
@@ -59,7 +63,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             val yrkeskodeBeskrivelse: String = finnYrkeskodebetydningPaYrke(yrkeskode, yrkeskodeBeskrivelser)!!
             arbeidsforhold.yrkesbeskrivelse =yrkeskodeBeskrivelse
         }
-      //  hentYrkerTimer.stop().report()
+        hentYrkerTimer.stop().report()
          return arbeidsforholdOversikt
     }
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
