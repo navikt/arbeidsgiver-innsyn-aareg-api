@@ -8,24 +8,30 @@ import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.service.sts.STStoken
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
-import org.assertj.core.api.Assertions.assertThat
+
+import org.junit.Assert
 import org.junit.Before
+
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpEntity
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import java.util.*
 import java.util.concurrent.ExecutionException
 
 
-
-@RunWith(MockitoJUnitRunner::class)
+@SpringBootTest
+@RunWith(SpringRunner::class)
+@ActiveProfiles("local")
+@TestPropertySource(properties = ["mock.port=8082"])
 class PdlServiceTest {
     var respons: PdlRespons? = null
     @Mock
@@ -59,7 +65,7 @@ class PdlServiceTest {
         val navn = "Ole Dole"
         Mockito.`when`(restTemplate?.postForObject(ArgumentMatchers.eq(PDL_URL), ArgumentMatchers.any(HttpEntity::class.java), ArgumentMatchers.eq(PdlRespons::class.java)))
                 .thenReturn(respons)
-        assertThat(pdlService!!.hentNavnMedFnr(FNR)).isEqualTo(navn)
+        Assert.assertEquals(navn, pdlService!!.hentNavnMedFnr(FNR))
         Mockito.verify<Any?>(stsClient?.token?.access_token)
     }
 
@@ -74,7 +80,7 @@ class PdlServiceTest {
         tomRespons.errors?.add(ingenPersonError)
         Mockito.`when`(restTemplate?.postForObject(ArgumentMatchers.eq(PDL_URL), ArgumentMatchers.any(HttpEntity::class.java), ArgumentMatchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
-        assertThat(pdlService!!.hentNavnMedFnr(FNR)).isEqualTo("Kunne ikke hente navn")
+        Assert.assertEquals("Kunne ikke hente navn", pdlService!!.hentNavnMedFnr(FNR))
         Mockito.verify<Any?>(stsClient?.token?.access_token)
     }
 
@@ -84,7 +90,7 @@ class PdlServiceTest {
         val tomRespons = PdlRespons()
         Mockito.`when`(restTemplate?.postForObject(ArgumentMatchers.eq(PDL_URL), ArgumentMatchers.any(HttpEntity::class.java), ArgumentMatchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
-        assertThat(pdlService!!.hentNavnMedFnr(FNR)).isEqualTo("Kunne ikke hente navn")
+        Assert.assertEquals("Kunne ikke hente navn", pdlService!!.hentNavnMedFnr(FNR))
         Mockito.verify<Any?>(stsClient?.token?.access_token)
     }
 
@@ -92,7 +98,7 @@ class PdlServiceTest {
     @Throws(ExecutionException::class, InterruptedException::class)
     fun hentNavnMedFnr_skal_hente_sts_token_fange_opp_feil() {
         Mockito.`when`(restTemplate?.postForObject(ArgumentMatchers.eq(PDL_URL), ArgumentMatchers.any(HttpEntity::class.java), ArgumentMatchers.eq(PdlRespons::class.java))).thenThrow(RestClientException("401"))
-        assertThat(pdlService!!.hentNavnMedFnr(FNR)).isEqualTo("Kunne ikke hente navn")
+        Assert.assertEquals("Kunne ikke hente navn", pdlService!!.hentNavnMedFnr(FNR))
         Mockito.verify<Any?>(stsClient?.token?.access_token)
     }
 
