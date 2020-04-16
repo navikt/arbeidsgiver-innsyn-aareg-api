@@ -6,7 +6,7 @@ import org.springframework.core.io.Resource
 import org.springframework.util.StreamUtils
 import java.io.IOException
 
-class GraphQlUtils {
+open class GraphQlUtils {
     @Value("classpath:pdl/hentPerson.navn.graphql")
     var navnQueryResource: Resource? = null
 
