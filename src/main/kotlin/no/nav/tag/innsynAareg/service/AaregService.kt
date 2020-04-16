@@ -1,19 +1,32 @@
 package no.nav.tag.innsynAareg.service
 
+import lombok.extern.slf4j.Slf4j
+import no.nav.metrics.MetricsFactory
+import no.nav.metrics.Timer
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.service.sts.STSClient
+import no.nav.tag.innsynAareg.service.yrkeskoder.YrkeskodeverkService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-
+@Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient){
+class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
-
+    val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
+        val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
+        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
+        kunArbeidstimer.stop().report()
+        return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold)!!
+
+    }
+    fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
@@ -40,6 +53,19 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient){
         headers["Nav-Consumer-Token"] = stsClient.token?.access_token;
         return HttpEntity(headers)
     }
-
+    fun settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+        val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
+        val yrkeskodeBeskrivelser: Yrkeskoderespons = yrkeskodeverkService.hentBetydningerAvYrkeskoder()!!
+        for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+            val yrkeskode: String = arbeidsforhold.yrke
+            val yrkeskodeBeskrivelse: String = finnYrkeskodebetydningPaYrke(yrkeskode, yrkeskodeBeskrivelser)!!
+            arbeidsforhold.yrkesbeskrivelse =yrkeskodeBeskrivelse
+        }
+        hentYrkerTimer.stop().report()
+         return arbeidsforholdOversikt
+    }
+    fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
+        return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
+    }
 
 }
