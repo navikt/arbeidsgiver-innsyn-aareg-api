@@ -55,9 +55,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
     fun settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
         val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
-        logger.info("settYrkeskodebetydningPaAlleArbeidsforhold")
         val yrkeskodeBeskrivelser: Yrkeskoderespons = yrkeskodeverkService.hentBetydningerAvYrkeskoder()!!
-        logger.info("settYrkeskodebetydningPaAlleArbeidsforhold yrkeskodeBeskrivelser: $yrkeskodeBeskrivelser")
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
             val yrkeskode: String = arbeidsforhold.yrke
             val yrkeskodeBeskrivelse: String = finnYrkeskodebetydningPaYrke(yrkeskode, yrkeskodeBeskrivelser)!!
