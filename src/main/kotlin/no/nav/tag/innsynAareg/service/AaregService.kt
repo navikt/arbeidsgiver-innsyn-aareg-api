@@ -51,7 +51,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             arbeidsforhold.yrkesbeskrivelse =yrkeskodeBeskrivelse
         }
       //  hentYrkerTimer.stop().report()
-        return arbeidsforholdOversikt
+         return arbeidsforholdOversikt
     }
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
