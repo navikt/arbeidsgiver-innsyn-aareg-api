@@ -1,8 +1,5 @@
 package no.nav.tag.innsynAareg.service.pdl
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer
 import lombok.RequiredArgsConstructor
 import lombok.SneakyThrows
 import lombok.extern.slf4j.Slf4j
@@ -25,9 +22,8 @@ import java.io.IOException
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class PdlService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlUtils) {
-    @Value("\${pdl.pdlUrl}}")
-    lateinit var pdlUrl: String
+class PdlService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlUtils, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
+    private val uriString: String = pdlUrl;
 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
 
@@ -79,7 +75,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     private fun getFraPdl(fnr: String): Navn? {
         return try {
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
-           val respons: PdlRespons? = restTemplate.postForObject(pdlUrl, createRequestEntity(pdlRequest), PdlRespons::class.java)
+           val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
             logger.error("MSA-AAREG Exception: {}", exception.message)

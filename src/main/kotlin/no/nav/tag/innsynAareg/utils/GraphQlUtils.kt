@@ -9,8 +9,6 @@ import org.springframework.util.StreamUtils
 
 @Service
 class GraphQlUtils @Autowired constructor(@Value("classpath:pdl/hentPerson.navn.graphql") val navnQueryResource: Resource){
-
-
     fun resourceAsString(): String {
         val filinnhold = StreamUtils.copyToString(navnQueryResource.inputStream, Charsets.UTF_8)
         return filinnhold.replace("\\s+".toRegex(), " ")
