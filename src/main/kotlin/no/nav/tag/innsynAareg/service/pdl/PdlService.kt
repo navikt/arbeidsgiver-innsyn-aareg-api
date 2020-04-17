@@ -18,17 +18,15 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
-import java.util.*
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class PdlService @Autowired constructor(private val restTemplate: RestTemplate, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
+class PdlService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient) {
+    @Value("\${pdl.pdlUrl}}")
+    lateinit var pdlUrl: String
 
-    private val graphQlUtils: GraphQlUtils? = null
-    private val stsClient: STSClient? = null
-    private val uri: String = buildString { pdlUrl }
-
+    lateinit var graphQlUtils: GraphQlUtils
 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
 
@@ -79,8 +77,8 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun getFraPdl(fnr: String): Navn? {
         return try {
-            val pdlRequest = PdlRequest(graphQlUtils?.resourceAsString(), Variables(fnr))
-           val respons: PdlRespons? = restTemplate!!.postForObject(uri, createRequestEntity(pdlRequest), PdlRespons::class.java)
+            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
+           val respons: PdlRespons? = restTemplate.postForObject(pdlUrl, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
             logger.error("MSA-AAREG Exception: {}", exception.message)
