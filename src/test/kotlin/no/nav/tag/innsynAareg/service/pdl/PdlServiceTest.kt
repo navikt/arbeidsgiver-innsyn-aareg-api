@@ -20,7 +20,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpEntity
-import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
@@ -28,7 +27,7 @@ import java.util.concurrent.ExecutionException
 
 
 @SpringBootTest
-@TestPropertySource(properties = ["mock.port=8082"])
+
 @RunWith(SpringRunner::class)
 class PdlServiceTest {
     var respons: PdlRespons? = null
