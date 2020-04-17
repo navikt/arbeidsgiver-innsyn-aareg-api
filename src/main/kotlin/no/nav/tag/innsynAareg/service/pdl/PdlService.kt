@@ -1,5 +1,8 @@
 package no.nav.tag.innsynAareg.service.pdl
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer
 import lombok.RequiredArgsConstructor
 import lombok.SneakyThrows
 import lombok.extern.slf4j.Slf4j
@@ -22,11 +25,9 @@ import java.io.IOException
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class PdlService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient) {
+class PdlService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlUtils) {
     @Value("\${pdl.pdlUrl}}")
     lateinit var pdlUrl: String
-
-    lateinit var graphQlUtils: GraphQlUtils
 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
 
