@@ -5,6 +5,7 @@ import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
+import no.nav.tag.innsynAareg.service.pdl.PdlService
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.service.yrkeskoder.YrkeskodeverkService
 import org.slf4j.LoggerFactory
@@ -13,9 +14,10 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+
 @Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService){
+class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
@@ -23,9 +25,10 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
         kunArbeidstimer.stop().report()
-        return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold)!!
-
+        val arbeidsforholdMedNavn = settNavnPåArbeidsforhold(arbeidsforhold);
+        return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
+
     fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
@@ -66,6 +69,19 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
+    }
+
+    fun settNavnPåArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+        if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
+            for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+                val fnr: String = arbeidsforhold.arbeidstaker.offegtligId;
+                if (fnr.isNullOrBlank()) {
+                    val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
+                    arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
+                }
+            }
+        }
+        return arbeidsforholdOversikt
     }
 
 }

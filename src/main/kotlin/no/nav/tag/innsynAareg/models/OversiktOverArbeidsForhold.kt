@@ -14,8 +14,8 @@ data class Arbeidsgiver(
 data class Arbeidstaker(
         val type:String,
         val aktoerId:String,
-        val offegtligId: String?,
-        val navn:String?
+        val offegtligId: String,
+        var navn:String?
 )
 data class Opplysningspliktig(
         val type:String
@@ -36,7 +36,7 @@ data class ArbeidsForhold(
         val ansattFom:String,
         val ansattTom:String?,
         val arbeidsgiver: Arbeidsgiver,
-        val arbeidstaker:Arbeidstaker,
+        var arbeidstaker:Arbeidstaker,
         val innrapportertEtterAOrdningen:String,
         val navArbeidsforholdId:String,
         val opplysningspliktig: Opplysningspliktig,
