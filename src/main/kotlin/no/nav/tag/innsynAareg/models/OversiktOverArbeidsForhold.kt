@@ -45,7 +45,7 @@ data class ArbeidsForhold(
         val type:String,
         val varsler:Array<ArbeidsforholdVarsel>?,
         val yrke:String,
-        val yrkesbeskrivelse:String?
+        var yrkesbeskrivelse:String?
         )
 
 data class OversiktOverArbeidsForhold(
