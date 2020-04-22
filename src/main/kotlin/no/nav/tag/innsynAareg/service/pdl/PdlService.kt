@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
+import java.lang.NullPointerException
 
 @Slf4j
 @Service
@@ -60,13 +61,14 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn? {
         try {
-            return respons?.data?.hentPerson?.navn?.first()
-        } catch (e: NullPointerException) {
-            logger.error("MSA-AAREG nullpointer exception: {} ", e.message)
-            if (respons?.errors?.firstOrNull() != null) {
-                logger.error("MSA-AAREG pdlerror: " + respons.errors?.first().toString())
-            } else {
-                logger.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+            return respons?.data?.hentPerson?.navn!!.first()
+        } catch (e: Exception) {
+            logger.error("AAREG exception: {} ", e.message)
+            if ( !respons?.errors.isNullOrEmpty() ) {
+                logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
+            }
+            else {
+                logger.error("AAREG nullpointer: helt tom respons fra pdl")
             }
         }
         return lagManglerNavnException()
