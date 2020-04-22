@@ -63,12 +63,12 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
         try {
             return respons?.data?.hentPerson?.navn!!.first()
         } catch (e: Exception) {
-            logger.error("MSA-AAREG nullpointer exception: {} ", e.message)
-            if (e is NullPointerException) {
-                logger.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+            logger.error("AAREG exception: {} ", e.message)
+            if ( !respons?.errors.isNullOrEmpty() ) {
+                logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
             }
-            if (e is IndexOutOfBoundsException) {
-                logger.error("MSA-AAREG pdlerror: " + respons?.errors?.first().toString())
+            else {
+                logger.error("AAREG nullpointer: helt tom respons fra pdl")
             }
         }
         return lagManglerNavnException()
