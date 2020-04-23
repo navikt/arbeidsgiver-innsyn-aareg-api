@@ -48,7 +48,7 @@ class PdlServiceTest {
         tomRespons.data = Data()
         tomRespons.data!!.hentPerson = null
         tomRespons.errors = ArrayList<Error>()
-        tomRespons.errors!!.add(ingenPersonError)
+        tomRespons.errors?.add(ingenPersonError)
         Mockito.`when`(mockRestTemplate.postForObject(Matchers.eq(PDL_URL), Matchers.any(org.springframework.http.HttpEntity::class.java), Matchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
         Assert.assertEquals("Kunne ikke hente navn", pdlService.hentNavnMedFnr(FNR))
