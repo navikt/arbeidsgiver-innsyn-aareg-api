@@ -74,7 +74,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
         return lagManglerNavnException()
     }
 
-    private fun getFraPdl(fnr: String): Navn? {
+    fun getFraPdl(fnr: String): Navn? {
         return try {
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
