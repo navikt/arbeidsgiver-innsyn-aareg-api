@@ -25,7 +25,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
         kunArbeidstimer.stop().report()
-        val arbeidsforholdMedNavn = settNavnPåArbeidsforhold(arbeidsforhold);
+        val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
@@ -71,11 +71,11 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
     }
 
-    fun settNavnPåArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+    fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
         if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
             for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
-                val fnr: String = arbeidsforhold.arbeidstaker.offegtligId;
-                if (fnr.isNullOrBlank()) {
+                val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
+                if (!fnr.isBlank()) {
                     val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
                     arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
                 }
