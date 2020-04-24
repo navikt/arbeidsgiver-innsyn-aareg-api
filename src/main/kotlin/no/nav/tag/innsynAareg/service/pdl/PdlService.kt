@@ -76,7 +76,9 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     fun getFraPdl(fnr: String): Navn? {
         return try {
-            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), Variables(fnr))
+            val variables = Variables(fnr);
+            logger.error("AAREG arbeidsforhold variables er", variables);
+            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
