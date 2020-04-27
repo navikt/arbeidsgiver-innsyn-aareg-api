@@ -40,7 +40,7 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
     fun itererOverOrgtre(orgnr: String, orgledd: Organisasjoneledd, idToken: String?): OversiktOverArbeidsForhold? {
         val result: OversiktOverArbeidsForhold = aAregService.hentArbeidsforhold(orgnr, orgledd!!.organisasjonsnummer, idToken)
         //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG itererOverOrgtre orgnr: " + orgnr + "orgledd: " + orgledd)
-         if (result.arbeidsforholdoversikter.isNotEmpty()) {
+         if (result.arbeidsforholdoversikter!!.isNotEmpty()) {
              return result
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
             val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer

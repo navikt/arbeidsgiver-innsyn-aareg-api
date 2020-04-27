@@ -50,7 +50,7 @@ data class ArbeidsForhold(
 
 data class OversiktOverArbeidsForhold(
         val antall:Long,
-        val arbeidsforholdoversikter:Array<ArbeidsForhold>,
+        val arbeidsforholdoversikter:Array<ArbeidsForhold>?,
         val startrad:String,
         val totalAntall:String
         )
