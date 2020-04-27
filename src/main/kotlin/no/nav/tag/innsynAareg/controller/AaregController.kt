@@ -20,8 +20,15 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
     fun hentArbeidsforhold(@RequestHeader("orgnr") orgnr:String,
                            @RequestHeader("jurenhet") juridiskEnhetOrgnr:String ,
                            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken:String): OversiktOverArbeidsForhold {
-        return aAregService.hentArbeidsforhold(orgnr,juridiskEnhetOrgnr,idToken);
+        var response: OversiktOverArbeidsForhold = aAregService.hentArbeidsforhold(orgnr,juridiskEnhetOrgnr,idToken);
+        if (response.arbeidsforholdoversikter.isNullOrEmpty()) {
+            response = finnOpplysningspliktigorg(orgnr, idToken)!!
+        }
+        return response
     }
+
+
+
     fun finnOpplysningspliktigorg(orgnr: String, idToken: String?): OversiktOverArbeidsForhold? {
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
         //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
