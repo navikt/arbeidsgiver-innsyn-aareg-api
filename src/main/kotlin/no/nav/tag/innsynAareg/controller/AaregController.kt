@@ -19,10 +19,10 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
     @GetMapping(value= ["/arbeidsforhold"])
     fun hentArbeidsforhold(@RequestHeader("orgnr") orgnr:String,
                            @RequestHeader("jurenhet") juridiskEnhetOrgnr:String ,
-                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken:String): OversiktOverArbeidsForhold {
-        var response: OversiktOverArbeidsForhold = aAregService.hentArbeidsforhold(orgnr,juridiskEnhetOrgnr,idToken);
-        if (response.arbeidsforholdoversikter.isNullOrEmpty()) {
-            response = finnOpplysningspliktigorg(orgnr, idToken)!!
+                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken:String): OversiktOverArbeidsForhold? {
+        var response: OversiktOverArbeidsForhold? = aAregService.hentArbeidsforhold(orgnr,juridiskEnhetOrgnr,idToken);
+        if (response?.arbeidsforholdoversikter.isNullOrEmpty()) {
+            return finnOpplysningspliktigorg(orgnr, idToken)!!
         }
         return response
     }
