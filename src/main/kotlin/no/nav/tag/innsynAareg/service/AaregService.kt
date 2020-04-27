@@ -21,7 +21,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
-    fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
+    fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
         val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
         kunArbeidstimer.stop().report()
@@ -29,7 +29,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
-    fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):OversiktOverArbeidsForhold {
+    fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
@@ -45,7 +45,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         }
     }
 
-    private fun getRequestEntity(bedriftsnr: String, juridiskEnhetOrgnr: String, idPortenToken: String): HttpEntity<String> {
+    private fun getRequestEntity(bedriftsnr: String, juridiskEnhetOrgnr: String?, idPortenToken: String?): HttpEntity<String> {
         val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
