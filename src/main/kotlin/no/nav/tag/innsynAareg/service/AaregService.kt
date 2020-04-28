@@ -22,9 +22,9 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     lateinit var aaregArbeidsforholdUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
-        val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
+        //val kunArbeidstimer: Timer= MetricsFactory.createTimer("DittNavArbeidsgiverApi.kunArbeidsforhold").start()
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,overOrdnetEnhetOrgnr,idPortenToken)
-        kunArbeidstimer.stop().report()
+        //kunArbeidstimer.stop().report()
         val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
