@@ -21,7 +21,7 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
                            @RequestHeader("jurenhet") juridiskEnhetOrgnr:String ,
                            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken:String): OversiktOverArbeidsForhold? {
         val response: OversiktOverArbeidsForhold? = aAregService.hentArbeidsforhold(orgnr,juridiskEnhetOrgnr,idToken);
-        if (response?.arbeidsforholdoversikter.isNullOrEmpty()) {
+        if (response!!.arbeidsforholdoversikter.isNullOrEmpty()) {
             return finnOpplysningspliktigorg(orgnr, idToken)!!
         }
         return response
