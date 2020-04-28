@@ -23,7 +23,7 @@ class AAregControllerTest {
 
     @Test
     fun hentArbeidsforhold() {
-        //val tomRespons = aAregController?.hentArbeidsforhold("910825517", "132", "132")
+        //val tomRespons = aAregController.hentArbeidsforhold("910825517", "132", "132")
         //Assert.assertNull(tomRespons)
         val responsMedInnhold = aAregController.hentArbeidsforhold("910825518", "132", "132")
         Assert.assertEquals(13, responsMedInnhold?.arbeidsforholdoversikter?.size)
