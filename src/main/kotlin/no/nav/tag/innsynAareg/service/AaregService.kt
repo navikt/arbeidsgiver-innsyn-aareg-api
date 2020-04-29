@@ -121,9 +121,29 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return arbeidsforholdOversikt
     }
 
-    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):Number {
+    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):Number? {
         val respons = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken);
-        return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons);
+        return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons,overOrdnetEnhetOrgnr, idPortenToken);
+    }
+
+    fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String?): Pair<String, Number>? {
+        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
+        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
+        if (!orgtreFraEnhetsregisteret?.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
+            return itererOverOrgtre2(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
+        } else return null;
+    }
+
+    fun itererOverOrgtre2(orgnr: String, orgledd: Organisasjoneledd, idToken: String?): Pair<String, Number> {
+        val antall: Number? = hentAntallArbeidsforholdPaUnderenhet(orgnr, orgledd.organisasjonsnummer!!, idToken)
+        if (antall != null) {
+            return Pair(orgledd.organisasjonsnummer!!, antall)
+        } else if (!orgledd.inngaarIJuridiskEnheter.isNullOrEmpty()) {
+            val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter!!.get(0).organisasjonsnummer!!
+            val antallNesteNiva: Number? = hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
+            if (antallNesteNiva != null) return Pair(juridiskEnhetOrgnr, antallNesteNiva);
+        }
+            return itererOverOrgtre2(orgnr, orgledd.organisasjonsleddOver!!.get(0).organisasjonsledd!!, idToken)
     }
 
     fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):Array<OversiktOverArbeidsgiver> {
@@ -142,11 +162,14 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         }
     }
 
-    fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>): Number {
+    fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>, juridiskEnhetOrgnr: String, idPortenToken: String?): Number? {
         val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr };
-        if (valgUnderenhetOVersikt != null) {
-            return valgUnderenhetOVersikt.aktiveArbeidsforhold.toInt() + valgUnderenhetOVersikt.inaktiveArbeidsforhold.toInt();
+        val antall: Number? = valgUnderenhetOVersikt?.aktiveArbeidsforhold!!.toInt() + valgUnderenhetOVersikt.inaktiveArbeidsforhold.toInt();
+        if (antall != null) {
+            return antall;
         }
-        return 0;
+        else {
+            return finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken)?.second
+        }
     }
-}
+};
