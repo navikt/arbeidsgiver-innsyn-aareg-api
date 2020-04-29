@@ -26,7 +26,7 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
     fun hentAntallArbeidsforhold(@RequestHeader("orgnr") orgnr: String,
                            @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
                            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): Number? {
-        val response: Number = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
+        val response: Number? = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
         return response
     }
 }
