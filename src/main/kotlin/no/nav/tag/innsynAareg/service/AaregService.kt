@@ -128,27 +128,34 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
 
     fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String): Pair<String, Int>? {
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
-
         //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
         return if (!orgtreFraEnhetsregisteret?.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
-             //itererOverOrgtre2(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
-            Pair(orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!.organisasjonsnummer!!, 6 );
+             itererOverOrgtre2(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
+
         } else return null;
     }
 
-    fun itererOverOrgtre2(orgnr: String, orgledd: Organisasjoneledd, idToken: String): Pair<String, Number>? {
-        val antall: Int? = hentAntallArbeidsforholdPaUnderenhet(orgnr, orgledd.organisasjonsnummer!!, idToken).second
+    fun itererOverOrgtre2(orgnr: String, orgledd: Organisasjoneledd, idToken: String): Pair<String, Int>? {
+        val oversikt  = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(orgnr, orgledd.organisasjonsnummer, idToken)
+        val antall = finnAntallGittListe(orgnr, oversikt);
         if (antall != null) {
             return Pair(orgledd.organisasjonsnummer!!, antall)
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
             val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
             val oversiktNesteNiva = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(orgnr, juridiskEnhetOrgnr, idToken);
-            val valgtUnderenhetOversikt: OversiktOverArbeidsgiver?  = oversiktNesteNiva .find { it.arbeidsgiver.organisasjonsnummer == orgnr };
-            //val antallForholdForOpplysningspliktig: Number = valgtUnderenhetOversikt?.aktiveArbeidsforhold!!.toInt() + valgtUnderenhetOversikt.inaktiveArbeidsforhold.toInt();
-            return Pair("2", 5);
+            val antallNesteNiva = finnAntallGittListe(orgnr, oversiktNesteNiva);
+            return Pair(juridiskEnhetOrgnr!!, antallNesteNiva!!);
         } else {
             return itererOverOrgtre2(orgnr, orgledd.organisasjonsleddOver!!.get(0).organisasjonsledd!!, idToken)
         }
+    }
+
+    fun finnAntallGittListe(orgnr: String, oversikt: Array<OversiktOverArbeidsgiver>): Int? {
+        val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == orgnr };
+        if (valgUnderenhetOVersikt != null) {
+            return valgUnderenhetOVersikt.aktiveArbeidsforhold + valgUnderenhetOVersikt.inaktiveArbeidsforhold;
+        }
+        return null;
     }
 
     fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String):Array<OversiktOverArbeidsgiver> {
@@ -168,9 +175,9 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>, juridiskEnhetOrgnr: String, idPortenToken: String): Pair<String, Int> {
-        val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr };
-        if (valgUnderenhetOVersikt != null) {
-            return Pair( juridiskEnhetOrgnr, valgUnderenhetOVersikt.aktiveArbeidsforhold + valgUnderenhetOVersikt.inaktiveArbeidsforhold);
+        val antall = finnAntallGittListe(bedriftsnr,oversikt);
+        if (antall != null) {
+            return Pair(juridiskEnhetOrgnr, antall);
         }
         else {
             return finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken)!!

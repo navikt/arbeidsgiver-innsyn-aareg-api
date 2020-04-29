@@ -31,6 +31,6 @@ class AAregControllerTest {
     @Test
     fun hentAntallArbeidsforhold() {
         val responsMedInnhold = aAregController.hentAntallArbeidsforhold("910825518", "132", "132")
-        Assert.assertEquals(5, responsMedInnhold)
+        Assert.assertEquals(Pair("983887457", 5), responsMedInnhold)
     }
 }
