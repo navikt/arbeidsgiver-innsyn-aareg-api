@@ -24,7 +24,8 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
         mockForPath(server, aaregArbeidsforholdPath, "tomArbeidsforholdrespons.json")
         mockArbeidsforholdmedJuridiskEnhet(server, aaregArbeidsforholdPath)
         val aaregArbeidsgiverePath = URL(aaregArbeidsgiveredUrl).path;
-        mockForPath(server, aaregArbeidsgiverePath, "arbeidsgiveroversiktaareg.json")
+        mockForPath(server, aaregArbeidsgiverePath, "tomArbeidsgiveroversiktAareg.json")
+        mockAntallArbeidsforholdmedJuridiskEnhet(server, aaregArbeidsgiverePath)
         val stsPath = URL(stsUrl).path
         mockForPath(server,stsPath,"STStoken.json")
         val yrkeskodePath = URL(yrkeskodeUrl).path
@@ -58,6 +59,14 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
         .withHeader("Content-Type", "application/json")
         .withBody(hentStringFraFil("arbeidsforholdrespons.json"))
     ))
-}
+    }
 
+    fun mockAntallArbeidsforholdmedJuridiskEnhet( server: WireMockServer, path: String) {
+        server.stubFor(WireMock.get(WireMock.urlPathEqualTo(path))
+                .withHeader("Nav-Opplysningspliktigident", WireMock.equalTo("983887457")).withHeader("Nav-Arbeidsgiverident", WireMock.equalTo("910825518"))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(hentStringFraFil("arbeidsgiveroversiktaareg.json"))
+                ))
+    }
 }
