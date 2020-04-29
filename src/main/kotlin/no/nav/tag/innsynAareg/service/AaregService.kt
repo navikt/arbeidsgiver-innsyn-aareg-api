@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.models.OversiktOverArbeidsgiver
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.enhetsregisteret.EnhetsRegisterOrg
 import no.nav.tag.innsynAareg.models.enhetsregisteret.Organisasjoneledd
@@ -23,6 +24,8 @@ import org.springframework.web.client.RestTemplate
 class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService, val enhetsregisteretService: EnhetsregisterService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
+    @Value("\${aareg.aaregArbeidsgivere}")
+    lateinit var aaregArbeidsgiverOversiktUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
 
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
@@ -118,4 +121,32 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return arbeidsforholdOversikt
     }
 
+    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):Number {
+        val respons = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken);
+        return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons);
+    }
+
+    fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):Array<OversiktOverArbeidsgiver> {
+        val url = aaregArbeidsgiverOversiktUrl
+        val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        return try {
+            val respons = restTemplate.exchange(url,
+                    HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java)
+            if (respons.statusCode != HttpStatus.OK) {
+                val message = "Kall mot aareg feiler med HTTP-" + respons.statusCode
+                throw RuntimeException(message)
+            }
+            respons.body!!
+        } catch (exception: RestClientException) {
+            throw RuntimeException(" Aareg Exception: $exception")
+        }
+    }
+
+    fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>): Number {
+        val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr };
+        if (valgUnderenhetOVersikt != null) {
+            return valgUnderenhetOVersikt.aktiveArbeidsforhold.toInt() + valgUnderenhetOVersikt.inaktiveArbeidsforhold.toInt();
+        }
+        return 0;
+    }
 }

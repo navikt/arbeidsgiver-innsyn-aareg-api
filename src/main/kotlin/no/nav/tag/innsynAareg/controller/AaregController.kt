@@ -21,5 +21,13 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
         val response: OversiktOverArbeidsForhold? = aAregService.hentArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken);
         return response
     }
+
+    @GetMapping(value = ["/antall-arbeidsforhold"])
+    fun hentAntallArbeidsforhold(@RequestHeader("orgnr") orgnr: String,
+                           @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): Number? {
+        val response: Number = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
+        return response
+    }
 }
 
