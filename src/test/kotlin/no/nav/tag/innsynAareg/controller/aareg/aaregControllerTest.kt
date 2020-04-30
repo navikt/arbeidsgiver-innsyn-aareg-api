@@ -4,6 +4,8 @@ package no.nav.tag.innsynAareg.controller.aareg
 import no.nav.tag.innsynAareg.controller.AaregController
 import org.junit.Assert
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,10 +24,18 @@ class AAregControllerTest {
 
     @Test
     fun hentArbeidsforhold() {
-        val tomRespons = aAregController.hentArbeidsforhold("910825517", "132", "132")
-        Assert.assertEquals(null, tomRespons)
         val responsMedInnhold = aAregController.hentArbeidsforhold("910825518", "132", "132")
         Assert.assertEquals(13, responsMedInnhold?.arbeidsforholdoversikter?.size)
+    }
+
+    @Test
+    fun sjekkExceptions() {
+        //denne foresporsel skal lede til nosting til overste niva og ikke finne arbeidsforhold
+        aAregController.hentArbeidsforhold("910825517", "132", "132")
+        val exception: Exception = assertThrows(RuntimeException::class.java) { "1a".toInt() }
+        val expectedMessage = "For input string"
+        val actualMessage = exception.message
+        assertTrue(actualMessage!!.contains(expectedMessage))
     }
 
     @Test
