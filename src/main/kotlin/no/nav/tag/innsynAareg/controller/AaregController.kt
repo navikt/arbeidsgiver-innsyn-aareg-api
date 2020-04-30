@@ -25,8 +25,8 @@ class AaregController (val resttemplate: RestTemplate, val aAregService:AaregSer
     @GetMapping(value = ["/antall-arbeidsforhold"])
     fun hentAntallArbeidsforhold(@RequestHeader("orgnr") orgnr: String,
                            @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): Pair<String, Number> {
-        val response: Pair<String, Number> = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
+                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): Pair<String, Number>? {
+        val response: Pair<String, Number>? = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
         return response
     }
 }
