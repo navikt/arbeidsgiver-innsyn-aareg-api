@@ -1,4 +1,4 @@
-package no.nav.tag.innsynAareg.service
+package no.nav.tag.innsynAareg.service.aareg
 
 import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
@@ -28,13 +28,10 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     lateinit var aaregArbeidsgiverOversiktUrl: String
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
 
-    fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold? {
+    fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
         val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!)?.first
-        if (opplysningspliktigorgnr != null) {
-            val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
-            return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
-        }
-        return null
+        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
+        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
     }
 
     fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
@@ -122,7 +119,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     //Kode for nøsting basert på antall-kall
-    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):Pair<String, Int>? {
+    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):Pair<String, Int> {
         //respons er tomt array dersom det er feil opplysningpliktig
         val respons: Array<OversiktOverArbeidsgiver> = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken);
         return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons, overOrdnetEnhetOrgnr, idPortenToken);
@@ -169,7 +166,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
         }
         catch (exception: Exception) {
-            throw Exception(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
+            throw AaregException(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
         }
     }
 
@@ -187,7 +184,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
                  return Pair(juridiskEnhetOrgnr!!, antallNesteNiva!!);
              }
              catch (exception: Exception) {
-                 throw Exception(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
+                 throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
              }
         }
         return itererOverOrgtre(orgnr, orgledd.organisasjonsleddOver!!.get(0).organisasjonsledd!!, idToken)
