@@ -29,7 +29,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
 
     @SneakyThrows
-    fun hentNavnMedFnr(fnr: String): String {
+    suspend fun hentNavnMedFnr(fnr: String): String {
         val result: Navn? = getFraPdl(fnr)
         var navn = ""
         if (result?.fornavn != null) navn += result.fornavn
@@ -74,7 +74,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
         return lagManglerNavnException()
     }
 
-    fun getFraPdl(fnr: String): Navn? {
+    suspend fun getFraPdl(fnr: String): Navn? {
         return try {
             val variables = Variables(fnr);
             logger.error("AAREG arbeidsforhold variables er", variables);

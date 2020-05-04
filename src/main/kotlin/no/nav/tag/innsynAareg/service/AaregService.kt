@@ -1,5 +1,8 @@
 package no.nav.tag.innsynAareg.service
 
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
@@ -76,8 +79,8 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
                 val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
                 if (!fnr.isBlank()) {
-                    val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
-                    arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
+                    val navnPaArbeidstaker: Deferred<String> = GlobalScope.async {pdlService.hentNavnMedFnr(fnr)}
+                    arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker.getCompleted();
                 }
             }
         }
