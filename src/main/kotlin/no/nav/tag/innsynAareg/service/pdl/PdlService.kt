@@ -64,14 +64,14 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn? {
         try {
-            logger.info("PDL respons {} ", respons!!.data.hentPerson);
-            logger.info("PDL respon.datas {} ", respons!!.data);
+            logger.info("PDL respons {} ", respons?.data.hentPerson);
+            logger.info("PDL respon.datas {} ", respons?.data);
             return respons.data?.hentPerson?.navn!!.first()
         } catch (e: Exception) {
+            logger.error("PDL exception: respons {} ", respons);
             logger.error("PDL exception: {} ", e.message)
             logger.error("PDL exception: {} ", e);
             logger.error("PDL exception: {} ", e.cause);
-            logger.error("PDL respons: {} ", respons?.data.toString());
             if ( respons?.errors.isNullOrEmpty() ) {
                 logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
             }
