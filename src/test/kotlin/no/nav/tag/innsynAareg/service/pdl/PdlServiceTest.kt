@@ -17,6 +17,7 @@ class PdlServiceTest {
     val mockStsClient = Mockito.mock(STSClient::class.java)
     val mockRestTemplate = Mockito.mock(RestTemplate::class.java)
     val graphQlUtils = Mockito.mock(GraphQlUtils::class.java)
+
     val pdlService = PdlService(mockRestTemplate,mockStsClient,graphQlUtils,"http://test")
 
     fun lagPdlObjekt(): PdlRespons {

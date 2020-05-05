@@ -1,4 +1,4 @@
 package no.nav.tag.innsynAareg.models.pdlPerson
 
 
-data class PdlRequest(val query: String, val variable: Variables)
+data class PdlRequest(val query: String?, val variable: Variables)
