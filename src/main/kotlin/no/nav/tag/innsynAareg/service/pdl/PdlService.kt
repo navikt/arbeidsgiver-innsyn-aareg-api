@@ -65,6 +65,8 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn? {
         try {
+            logger.info("PDL respons {} ", respons);
+            logger.info("PDL respon.datas {} ", respons!!.data);
             return respons?.data?.hentPerson?.navn!!.first()
         } catch (e: Exception) {
             logger.error("PDL exception: {} ", e.message)
@@ -86,7 +88,8 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
             val variables = Variables(fnr);
             logger.error("AAREG arbeidsforhold variables ident {}", variables.ident);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
-            logger.error("pdl request query{}", pdlRequest.query);
+            logger.error("pdl request query: {}", pdlRequest.query);
+            logger.error("pdl request variable: {}", pdlRequest.variable);
            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
