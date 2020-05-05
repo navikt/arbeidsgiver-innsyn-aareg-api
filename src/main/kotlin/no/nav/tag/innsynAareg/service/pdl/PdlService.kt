@@ -54,7 +54,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     }
 
     private fun createRequestEntity(pdlRequest: PdlRequest): HttpEntity<Any?> {
-        return HttpEntity<Any?>(pdlRequest, createHeaders())
+        return HttpEntity(pdlRequest, createHeaders())
     }
 
     private fun lagManglerNavnException(): Navn {
@@ -68,9 +68,10 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
             return respons?.data?.hentPerson?.navn!!.first()
         } catch (e: Exception) {
             logger.error("PDL exception: {} ", e.message)
+            logger.error("PDL exception: {} ", e);
             logger.error("PDL exception: {} ", e.cause);
             logger.error("PDL respons: {} ", respons?.data.toString());
-            if ( !respons?.errors.isNullOrEmpty() ) {
+            if ( respons?.errors.isNullOrEmpty() ) {
                 logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
             }
             else {
@@ -83,8 +84,9 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     fun getFraPdl(fnr: String): Navn? {
         return try {
             val variables = Variables(fnr);
-            logger.error("AAREG arbeidsforhold variables er {}", variables);
+            logger.error("AAREG arbeidsforhold variables ident {}", variables.ident);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
+            logger.error("pdl request query{}", pdlRequest.query);
            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
         } catch (exception: RestClientException) {
