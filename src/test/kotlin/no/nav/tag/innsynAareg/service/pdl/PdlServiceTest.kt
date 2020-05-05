@@ -52,7 +52,7 @@ class PdlServiceTest {
     @Test
     @Throws(ExecutionException::class, InterruptedException::class)
     fun hentNavnMedFnr_skal_hente_sts_token_og_returnere_ikke_funnet_person_v_helt_tomPdlRespons() {
-        val tomRespons = PdlRespons(Data(null),null)
+        val tomRespons = PdlRespons(null,null)
         Mockito.`when`(mockRestTemplate.postForObject(Matchers.eq(PDL_URL), Matchers.any(org.springframework.http.HttpEntity::class.java), Matchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
         Assert.assertEquals("Kunne ikke hente navn", pdlService.hentNavnMedFnr(FNR))

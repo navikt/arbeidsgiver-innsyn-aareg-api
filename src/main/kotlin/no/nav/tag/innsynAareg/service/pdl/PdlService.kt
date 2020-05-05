@@ -66,7 +66,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons): Navn {
         return try {
-            respons.data.hentPerson!!.navn!!.first()
+            respons.data!!.hentPerson!!.navn!!.first()
         } catch (e: KotlinNullPointerException ) {
             logger.error("PDL exception: respons {} ", respons);
             logger.error("PDL exception: {} ", e.message)
