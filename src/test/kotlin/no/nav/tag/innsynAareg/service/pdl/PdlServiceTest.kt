@@ -20,13 +20,8 @@ class PdlServiceTest {
     val pdlService = PdlService(mockRestTemplate,mockStsClient,graphQlUtils,"http://test")
 
     fun lagPdlObjekt(): PdlRespons {
-        var respons = PdlRespons()
-        var testNavn = Navn()
-        testNavn.fornavn = "Ole"
-        testNavn.etternavn = "Dole"
-        respons.data = Data()
-        respons.data!!.hentPerson = HentPerson()
-        respons.data!!.hentPerson!!.navn = arrayOf(testNavn)
+
+        var respons = PdlRespons(Data(HentPerson(arrayOf(Navn("Ole",null,"Dole")))),ArrayList<Error>());
         return respons
     }
 
@@ -43,12 +38,10 @@ class PdlServiceTest {
 
     @Test
     fun hentNavnMedFnr_skal_hente_sts_token_og_returnere_ikke_funnet_person() {
-        var tomRespons = PdlRespons()
         val ingenPersonError = Error("Fant ikke Person");
-        tomRespons.data = Data()
-        tomRespons.data!!.hentPerson = null
-        tomRespons.errors = ArrayList<Error>()
-        tomRespons.errors?.add(ingenPersonError)
+        var errors = ArrayList<Error>()
+        errors.add(ingenPersonError)
+        var tomRespons = PdlRespons(Data(null), errors);
         Mockito.`when`(mockRestTemplate.postForObject(Matchers.eq(PDL_URL), Matchers.any(org.springframework.http.HttpEntity::class.java), Matchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
         Assert.assertEquals("Kunne ikke hente navn", pdlService.hentNavnMedFnr(FNR))
@@ -59,7 +52,7 @@ class PdlServiceTest {
     @Test
     @Throws(ExecutionException::class, InterruptedException::class)
     fun hentNavnMedFnr_skal_hente_sts_token_og_returnere_ikke_funnet_person_v_helt_tomPdlRespons() {
-        val tomRespons = PdlRespons()
+        val tomRespons = PdlRespons(Data(null),ArrayList<Error>())
         Mockito.`when`(mockRestTemplate.postForObject(Matchers.eq(PDL_URL), Matchers.any(org.springframework.http.HttpEntity::class.java), Matchers.eq(PdlRespons::class.java)))
                 .thenReturn(tomRespons)
         Assert.assertEquals("Kunne ikke hente navn", pdlService.hentNavnMedFnr(FNR))
