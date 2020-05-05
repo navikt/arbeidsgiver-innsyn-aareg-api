@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @ActiveProfiles("local")
 @TestPropertySource(properties = ["mock.port=8082"])
-internal class STSClientTest() {
+class STSClientTest() {
     @Autowired
     lateinit var stsClient: STSClient
 
