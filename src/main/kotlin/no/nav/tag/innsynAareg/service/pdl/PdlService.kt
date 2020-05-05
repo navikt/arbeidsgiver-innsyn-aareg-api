@@ -39,10 +39,14 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     }
 
     private fun createHeaders(): HttpHeaders {
-        val stsToken: String? = stsClient?.token?.access_token;
+        val stsToken: String? = stsClient.token?.access_token;
         val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        headers["Authorization"] = "Bearer $stsToken"
+
+        if (stsToken != null) {
+            headers.setBearerAuth(stsToken)
+        }else{
+            logger.error("fant ikke ststoken i pdlservice")
+        }
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
@@ -63,7 +67,9 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
         try {
             return respons?.data?.hentPerson?.navn!!.first()
         } catch (e: Exception) {
-            logger.error("AAREG exception: {} ", e.message)
+            logger.error("PDL exception: {} ", e.message)
+            logger.error("PDL exception: {} ", e.cause);
+            logger.error("PDL respons: {} ", respons?.data.toString());
             if ( !respons?.errors.isNullOrEmpty() ) {
                 logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
             }
@@ -77,7 +83,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     fun getFraPdl(fnr: String): Navn? {
         return try {
             val variables = Variables(fnr);
-            logger.error("AAREG arbeidsforhold variables er", variables);
+            logger.error("AAREG arbeidsforhold variables er {}", variables);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             lesNavnFraPdlRespons(respons)
