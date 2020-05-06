@@ -1,9 +1,6 @@
 package no.nav.tag.innsynAareg.service.aareg
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
@@ -30,7 +27,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     lateinit var aaregArbeidsforholdUrl: String
     @Value("\${aareg.aaregArbeidsgivere}")
     lateinit var aaregArbeidsgiverOversiktUrl: String
-    val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
+    val logger = LoggerFactory.getLogger(AaregService::class.java)
 
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
         val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!)?.first
@@ -109,15 +106,22 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
     }
 
-    @ExperimentalCoroutinesApi
     fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
         if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-            for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
-                val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
-                if (!fnr.isBlank()) {
-                    val navnPaArbeidstaker: Deferred<String> = GlobalScope.async {pdlService.hentNavnMedFnr(fnr)}
-                    arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker.getCompleted();
+            runBlocking {
+                val liste = mutableListOf<Deferred<Unit>>();
+                for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+                    val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
+                    if (!fnr.isBlank()) {
+                        val job = GlobalScope.async {
+                           val navn = pdlService.hentNavnMedFnr(fnr)
+                           arbeidsforhold.arbeidstaker.navn = navn
+                           logger.info("Navn i string: " + navn);
+                       }
+                        liste.add(job);
+                    }
                 }
+                liste.awaitAll();
             }
         }
         return arbeidsforholdOversikt
