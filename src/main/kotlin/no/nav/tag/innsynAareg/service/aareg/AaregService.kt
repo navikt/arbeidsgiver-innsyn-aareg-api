@@ -19,6 +19,7 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
@@ -30,7 +31,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     val logger = LoggerFactory.getLogger(AaregService::class.java)
 
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
-        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!)?.first
+        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
         return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
     }
@@ -107,23 +108,26 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-            runBlocking {
-                val liste = mutableListOf<Deferred<Unit>>();
-                for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
-                    val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
-                    if (!fnr.isBlank()) {
-                        val job = GlobalScope.async {
-                           val navn = pdlService.hentNavnMedFnr(fnr)
-                           arbeidsforhold.arbeidstaker.navn = navn
-                           logger.info("Navn i string: " + navn);
-                       }
-                        liste.add(job);
+        val time = measureTimeMillis {
+            if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
+                runBlocking {
+                    val liste = mutableListOf<Deferred<Unit>>();
+                    for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+                        val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
+                        if (!fnr.isBlank()) {
+                            val job = GlobalScope.async {
+                                val navn = pdlService.hentNavnMedFnr(fnr)
+                                arbeidsforhold.arbeidstaker.navn = navn
+                            }
+                            liste.add(job);
+                        }
                     }
+                    liste.awaitAll();
                 }
-                liste.awaitAll();
             }
         }
+        logger.info("ArbeidsgiverArbeidsforholdApi.hentNavn: Tid å hente ut navn: $time");
+
         return arbeidsforholdOversikt
     }
 
