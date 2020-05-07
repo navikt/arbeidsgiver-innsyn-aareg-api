@@ -1,5 +1,7 @@
 package no.nav.tag.innsynAareg.service.aareg
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
 import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
@@ -27,10 +29,10 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     lateinit var aaregArbeidsforholdUrl: String
     @Value("\${aareg.aaregArbeidsgivere}")
     lateinit var aaregArbeidsgiverOversiktUrl: String
-    val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
+    val logger = LoggerFactory.getLogger(AaregService::class.java)
 
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
-        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!)?.first
+        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
         return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
     }
@@ -50,29 +52,6 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
-
-    //Kode for nøsting uavhengig av antallkallet
-    /*fun finnOpplysningspliktigorg(orgnr: String, idToken: String?): OversiktOverArbeidsForhold? {
-        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
-        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
-        return if (!orgtreFraEnhetsregisteret?.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
-            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
-        } else return null;
-    }*/
-
-    /*fun itererOverOrgtre(orgnr: String, orgledd: Organisasjoneledd, idToken: String?): OversiktOverArbeidsForhold? {
-        val result: OversiktOverArbeidsForhold = hentArbeidsforholdFraAAReg(orgnr, orgledd!!.organisasjonsnummer, idToken)
-        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG itererOverOrgtre orgnr: " + orgnr + "orgledd: " + orgledd)
-        if (result.arbeidsforholdoversikter!!.isNotEmpty()) {
-            return result
-        } else if (orgledd.inngaarIJuridiskEnheter != null) {
-            val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer
-            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG itererOverOrgtre orgnr: " + orgnr + "juridiskEnhetOrgnr: " + juridiskEnhetOrgnr)
-            return hentArbeidsforholdFraAAReg(orgnr, juridiskEnhetOrgnr, idToken)
-        } else {
-            return itererOverOrgtre(orgnr, orgledd.organisasjonsleddOver!![0].organisasjonsledd!!, idToken)
-        }
-    }*/
 
     fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold :OversiktOverArbeidsForhold): OversiktOverArbeidsForhold?{
         val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
@@ -109,12 +88,22 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
         val time = measureTimeMillis {
             if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-                for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
-                    val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
-                    if (!fnr.isBlank()) {
-                        val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
-                        arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
+                val lock = Semaphore(4)
+                runBlocking {
+                    val liste = mutableListOf<Deferred<Unit>>();
+                    arbeidsforholdOversikt.arbeidsforholdoversikter.forEach {
+                        val fnr: String = it.arbeidstaker.offentligIdent;
+                        if (!fnr.isBlank()) {
+                            val job = GlobalScope.async {
+                                lock.acquire()
+                                val navn = pdlService.hentNavnMedFnr(fnr);
+                                it.arbeidstaker.navn = navn;
+                                lock.release();
+                            }
+                            liste.add(job);
+                        }
                     }
+                    liste.awaitAll();
                 }
             }
         }
