@@ -61,6 +61,15 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
     ))
     }
 
+    fun mockHentNavn( server: WireMockServer, path: String) {
+        server.stubFor(WireMock.get(WireMock.urlPathEqualTo(path))
+                .withHeader("Nav-Opplysningspliktigident", WireMock.equalTo("983887457")).withHeader("Nav-Arbeidsgiverident", WireMock.equalTo("910825518"))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(hentStringFraFil("arbeidsforholdrespons.json"))
+                ))
+    }
+
     fun mockAntallArbeidsforholdmedJuridiskEnhet( server: WireMockServer, path: String) {
         server.stubFor(WireMock.get(WireMock.urlPathEqualTo(path))
                 .withHeader("Nav-Opplysningspliktigident", WireMock.equalTo("983887457")).withHeader("Nav-Arbeidsgiverident", WireMock.equalTo("910825518"))
