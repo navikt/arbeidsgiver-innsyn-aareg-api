@@ -18,6 +18,7 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
@@ -106,15 +107,18 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-            for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
-                val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
-                if (!fnr.isBlank()) {
-                    val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
-                    arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
+        val time = measureTimeMillis {
+            if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
+                for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+                    val fnr: String = arbeidsforhold.arbeidstaker.offentligIdent;
+                    if (!fnr.isBlank()) {
+                        val navnPaArbeidstaker: String = pdlService.hentNavnMedFnr(fnr)
+                        arbeidsforhold.arbeidstaker.navn = navnPaArbeidstaker;
+                    }
                 }
             }
         }
+        logger.info("ArbeidsgiverArbeidsforholdApi.hentNavn: Tid å hente ut navn: $time");
         return arbeidsforholdOversikt
     }
 
