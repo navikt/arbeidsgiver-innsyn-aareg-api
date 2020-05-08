@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
-import no.nav.tag.innsynAareg.models.pdlPerson.Variables
+import no.nav.tag.innsynAareg.models.pdlPerson.Variable
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -84,9 +84,11 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     suspend fun getFraPdl(fnr: String): Navn? {
         return try {
-            val variables = Variables(fnr);
-            logger.error("AAREG arbeidsforhold variables ident {}", variables.ident);
-            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
+            val variable = Variable(fnr);
+            logger.error("AAREG arbeidsforhold variables ident {}", variable.ident);
+            //graphQlUtils skriver ikke om variabel så det kommer inn i requesten er $ident, uansett input
+            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variable)
+            logger.error("pdl request query: {}", pdlRequest.query)
             logger.error("pdl request query: {}", pdlRequest.query)
             logger.error("pdl request variable: {}", pdlRequest.variable)
             val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
