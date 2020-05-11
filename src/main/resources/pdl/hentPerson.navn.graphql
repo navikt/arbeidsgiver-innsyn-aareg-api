@@ -1,5 +1,5 @@
-query{
-    hentPerson(31058921087) {
+query($ident: ID!) {
+    hentPerson(ident: $ident) {
         navn {
             fornavn
             mellomnavn
