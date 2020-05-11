@@ -88,7 +88,7 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
             logger.error("AAREG arbeidsforhold variables ident {}", variables.ident);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
             logger.error("pdl request query: {}", pdlRequest.query)
-            logger.error("pdl request variable: {}", pdlRequest.variable)
+            logger.error("pdl request variable: {}", pdlRequest.variables)
             val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             if(respons!=null){
                 lesNavnFraPdlRespons(respons)}
