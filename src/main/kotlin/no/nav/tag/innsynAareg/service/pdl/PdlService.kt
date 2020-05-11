@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRespons
-import no.nav.tag.innsynAareg.models.pdlPerson.Variable
+import no.nav.tag.innsynAareg.models.pdlPerson.Variables
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -67,8 +67,12 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons): Navn {
         return try {
-            respons.data!!.hentPerson!!.navn!!.first()
-        } catch (e: KotlinNullPointerException ) {
+            if(respons.data!!.hentPerson!!.navn!!.size>0) {
+                respons.data.hentPerson!!.navn!!.first()
+            }else{
+                lagManglerNavnException()
+            }
+        } catch (e: KotlinNullPointerException) {
             logger.error("PDL exception: respons {} ", respons);
             logger.error("PDL exception: {} ", e.message)
             logger.error("PDL exception: {} ", e.cause);
@@ -84,17 +88,17 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     suspend fun getFraPdl(fnr: String): Navn? {
         return try {
-            val variable = Variable(fnr);
-            logger.error("AAREG arbeidsforhold variables ident {}", variable.ident);
-            //graphQlUtils skriver ikke om variabel så det kommer inn i requesten er $ident, uansett input
-            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variable)
-            logger.error("pdl request query: {}", pdlRequest.query)
-            logger.error("pdl request query: {}", pdlRequest.query)
-            logger.error("pdl request variable: {}", pdlRequest.variable)
+            val variables = Variables(fnr);
+            logger.info("AAREG arbeidsforhold variables ident {}", variables.ident);
+            val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
+            logger.info("pdl request query: {}", pdlRequest.query)
+            logger.info("pdl request variable: {}", pdlRequest.variables)
             val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             if(respons!=null){
+                logger.info("pdl respons: {}", respons)
                 lesNavnFraPdlRespons(respons)}
             else{
+                logger.error("tom pdl respons ")
                 lagManglerNavnException()
             }
 

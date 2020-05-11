@@ -1,3 +1,4 @@
 package no.nav.tag.innsynAareg.models.pdlPerson
 
-data class Variable (var ident: String)
+
+data class Variables (var ident: String)
