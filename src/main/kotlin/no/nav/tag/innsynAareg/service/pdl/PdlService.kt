@@ -67,10 +67,12 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons): Navn {
         return try {
-
-            respons.data!!.hentPerson!!.navn!!.first()
-
-        } catch (e: KotlinNullPointerException ) {
+            if(respons.data!!.hentPerson!!.navn!!.size>0) {
+                respons.data!!.hentPerson!!.navn!!.first()
+            }else{
+                lagManglerNavnException()
+            }
+        } catch (e: KotlinNullPointerException) {
             logger.error("PDL exception: respons {} ", respons);
             logger.error("PDL exception: {} ", e.message)
             logger.error("PDL exception: {} ", e.cause);
@@ -87,13 +89,13 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     suspend fun getFraPdl(fnr: String): Navn? {
         return try {
             val variables = Variables(fnr);
-            logger.error("AAREG arbeidsforhold variables ident {}", variables.ident);
+            logger.info("AAREG arbeidsforhold variables ident {}", variables.ident);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
-            logger.error("pdl request query: {}", pdlRequest.query)
-            logger.error("pdl request variable: {}", pdlRequest.variables)
+            logger.info("pdl request query: {}", pdlRequest.query)
+            logger.info("pdl request variable: {}", pdlRequest.variables)
             val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             if(respons!=null){
-                logger.error("pdl respons: {}", respons)
+                logger.info("pdl respons: {}", respons)
                 lesNavnFraPdlRespons(respons)}
             else{
                 logger.error("tom pdl respons ")
