@@ -98,13 +98,13 @@
         <!--tokensupport -->
         <dependency>
             <groupId>no.nav.security</groupId>
-            <artifactId>token-validation-spring</artifactId>
-            <version>1.1.4</version>
+            <artifactId>oidc-spring-support</artifactId>
+            <version>${oidc-support.version}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>
-            <artifactId>token-validation-test-support</artifactId>
-            <version>1.1.4</version>
+            <artifactId>oidc-test-support</artifactId>
+            <version>${oidc-support.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
