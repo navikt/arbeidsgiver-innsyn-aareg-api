@@ -40,10 +40,14 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     }
 
     private fun createHeaders(): HttpHeaders {
-        val stsToken: String? = stsClient?.token?.access_token;
+        val stsToken: String? = stsClient.token?.access_token;
         val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        headers["Authorization"] = "Bearer $stsToken"
+
+        if (stsToken != null) {
+            headers.setBearerAuth(stsToken)
+        }else{
+            logger.error("fant ikke ststoken i pdlservice")
+        }
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
@@ -51,37 +55,53 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
     }
 
     private fun createRequestEntity(pdlRequest: PdlRequest): HttpEntity<Any?> {
-        return HttpEntity<Any?>(pdlRequest, createHeaders())
+        return HttpEntity(pdlRequest, createHeaders())
     }
 
     private fun lagManglerNavnException(): Navn {
-        val exceptionNavn = Navn()
-        exceptionNavn.fornavn = "Kunne ikke hente navn"
+        logger.error("lag mangler exception navn ");
+        val exceptionNavn = Navn("Kunne ikke hente navn",null,null)
+        logger.error("lag mangler exception navn {}",exceptionNavn);
         return exceptionNavn
     }
 
-    private fun lesNavnFraPdlRespons(respons: PdlRespons?): Navn? {
-        try {
-            return respons?.data?.hentPerson?.navn!!.first()
-        } catch (e: Exception) {
-            logger.error("AAREG exception: {} ", e.message)
-            if ( !respons?.errors.isNullOrEmpty() ) {
-                logger.error("AAREG pdlerror: " + respons?.errors?.first().toString())
+    private fun lesNavnFraPdlRespons(respons: PdlRespons): Navn {
+        return try {
+            if(respons.data!!.hentPerson!!.navn!!.size>0) {
+                respons.data.hentPerson!!.navn!!.first()
+            }else{
+                lagManglerNavnException()
+            }
+        } catch (e: KotlinNullPointerException) {
+            logger.error("PDL exception: respons {} ", respons);
+            logger.error("PDL exception: {} ", e.message)
+            logger.error("PDL exception: {} ", e.cause);
+            if ( respons.errors.isNullOrEmpty() ) {
+                logger.error("AAREG pdlerror: " + respons.errors?.first().toString())
             }
             else {
                 logger.error("AAREG nullpointer: helt tom respons fra pdl")
             }
+            lagManglerNavnException()
         }
-        return lagManglerNavnException()
     }
 
     suspend fun getFraPdl(fnr: String): Navn? {
         return try {
             val variables = Variables(fnr);
-            logger.error("AAREG arbeidsforhold variables er", variables);
+            logger.info("AAREG arbeidsforhold variables ident {}", variables.ident);
             val pdlRequest = PdlRequest(graphQlUtils.resourceAsString(), variables)
-           val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
-            lesNavnFraPdlRespons(respons)
+            logger.info("pdl request query: {}", pdlRequest.query)
+            logger.info("pdl request variable: {}", pdlRequest.variables)
+            val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
+            if(respons!=null){
+                logger.info("pdl respons: {}", respons)
+                lesNavnFraPdlRespons(respons)}
+            else{
+                logger.error("tom pdl respons ")
+                lagManglerNavnException()
+            }
+
         } catch (exception: RestClientException) {
             logger.error("MSA-AAREG Exception: {}", exception.message)
             lagManglerNavnException()

@@ -1,5 +1,3 @@
 package no.nav.tag.innsynAareg.models.pdlPerson
 
-class Data {
-    var hentPerson: HentPerson? = null
-}
+data class Data (val hentPerson: HentPerson?)
