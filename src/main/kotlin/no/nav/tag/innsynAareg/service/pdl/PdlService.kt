@@ -67,7 +67,9 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
 
     private fun lesNavnFraPdlRespons(respons: PdlRespons): Navn {
         return try {
+
             respons.data!!.hentPerson!!.navn!!.first()
+
         } catch (e: KotlinNullPointerException ) {
             logger.error("PDL exception: respons {} ", respons);
             logger.error("PDL exception: {} ", e.message)
@@ -91,8 +93,10 @@ class PdlService @Autowired constructor(private val restTemplate: RestTemplate, 
             logger.error("pdl request variable: {}", pdlRequest.variables)
             val respons: PdlRespons? = restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlRespons::class.java)
             if(respons!=null){
+                logger.error("pdl respons: {}", respons)
                 lesNavnFraPdlRespons(respons)}
             else{
+                logger.error("tom pdl respons ")
                 lagManglerNavnException()
             }
 
