@@ -7,7 +7,6 @@ import no.nav.tag.innsynAareg.models.altinn.Role
 import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_CACHE
 import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
 import no.nav.tag.innsynAareg.utils.TokenUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
@@ -20,13 +19,10 @@ import java.util.*
 
 @Slf4j
 @Component
-class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
+class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
     private val headerEntity: HttpEntity<HttpHeaders?>
-    private val altinnUrl: String
-    private val altinnProxyUrl: String
     private val tokenUtils: TokenUtils
-
-
+    private val altinnConfig = altinnConfig;
 
     @Cacheable(ALTINN_CACHE)
     fun hentOrganisasjoner(fnr: String): List<Organisasjon> {
@@ -37,7 +33,7 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
 
     fun hentRoller(fnr: String, orgnr: String): List<Role> {
         val query = "&subject=$fnr&reportee=$orgnr"
-        val url = altinnUrl + "authorization/roles?ForceEIAuthentication" + query
+        val url = altinnConfig.altinnUrl + "authorization/roles?ForceEIAuthentication" + query
         val refTilListetype = typeReference<List<Role>>();
         //AltinnService.log.info("Henter roller fra Altinn")
         return getFromAltinn(refTilListetype, url, ALTINN_ROLE_PAGE_SIZE, headerEntity)
@@ -54,7 +50,7 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
     fun hentReporteesFraAltinn(query: String, fnr: String): List<Organisasjon> {
         var query = query
         val baseUrl: String
-        baseUrl = altinnProxyUrl
+        baseUrl = altinnConfig.proxyUrl;
         val headers = getAuthHeadersForInnloggetBruker()!!;
         query += "&subject=$fnr"
         val refTilListetype = typeReference<List<Organisasjon>>();
@@ -96,8 +92,6 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
     }
 
     init {
-        altinnUrl = altinnConfig.altinnurl!!
-        altinnProxyUrl = altinnConfig.proxyUrl!!
         this.tokenUtils = tokenUtils
         val headers = HttpHeaders()
         headers["X-NAV-APIKEY"] = altinnConfig.APIGwHeader
