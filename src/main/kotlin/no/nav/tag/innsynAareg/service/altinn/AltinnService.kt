@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import java.lang.reflect.Type
 import java.util.*
 
 @Slf4j
@@ -48,19 +49,20 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
         return hentReporteesFraAltinn(query, fnr)
     }
 
-    private fun hentReporteesFraAltinn(query: String, fnr: String): List<Organisasjon> {
+    fun hentReporteesFraAltinn(query: String, fnr: String): List<Organisasjon> {
         var query = query
         val baseUrl: String
         val headers: HttpEntity<HttpHeaders?>
         baseUrl = altinnUrl
         headers = headerEntity
         query += "&subject=$fnr"
+        val type = object : ParameterizedTypeReference<List<Organisasjon>>();
         val url = baseUrl + "reportees/?ForceEIAuthentication" + query
-        return getFromAltinn<Organisasjon>(object : emptyArray<T>() {}, url, ALTINN_ORG_PAGE_SIZE, headers)
+        return getFromAltinn(type, url, ALTINN_ORG_PAGE_SIZE, headers)
     }
 
-    fun getFromAltinn(typeReference: ParameterizedTypeReference<List<Organisasjon>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<Organisasjon> {
-        val response = mutableListOf<Organisasjon>()
+    fun <T> getFromAltinn(typeReference: ParameterizedTypeReference<List<T>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<T> {
+        val response = mutableListOf<T>()
         var pageNumber = 0
         var hasMore = true
         while (hasMore) {
