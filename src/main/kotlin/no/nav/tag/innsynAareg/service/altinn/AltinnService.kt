@@ -16,7 +16,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import java.lang.reflect.Type
 import java.util.*
 
 @Slf4j
@@ -26,6 +25,8 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
     private val altinnUrl: String
     private val altinnProxyUrl: String
     private val tokenUtils: TokenUtils
+
+
 
     @Cacheable(ALTINN_CACHE)
     fun hentOrganisasjoner(fnr: String): List<Organisasjon> {
@@ -37,8 +38,9 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
     fun hentRoller(fnr: String, orgnr: String): List<Role> {
         val query = "&subject=$fnr&reportee=$orgnr"
         val url = altinnUrl + "authorization/roles?ForceEIAuthentication" + query
+        val refTilListetype = typeReference<List<Role>>();
         //AltinnService.log.info("Henter roller fra Altinn")
-        //return getFromAltinn<T>(object : ParameterizedTypeReference<List<Role?>?>() {}, url, ALTINN_ROLE_PAGE_SIZE, headerEntity)
+        return getFromAltinn(refTilListetype, url, ALTINN_ROLE_PAGE_SIZE, headerEntity)
     }
 
     @Cacheable(ALTINN_TJENESTE_CACHE)
@@ -52,13 +54,12 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
     fun hentReporteesFraAltinn(query: String, fnr: String): List<Organisasjon> {
         var query = query
         val baseUrl: String
-        val headers: HttpEntity<HttpHeaders?>
-        baseUrl = altinnUrl
-        headers = headerEntity
+        baseUrl = altinnProxyUrl
+        val headers = getAuthHeadersForInnloggetBruker()!!;
         query += "&subject=$fnr"
-        val type = object : ParameterizedTypeReference<List<Organisasjon>>();
+        val refTilListetype = typeReference<List<Organisasjon>>();
         val url = baseUrl + "reportees/?ForceEIAuthentication" + query
-        return getFromAltinn(type, url, ALTINN_ORG_PAGE_SIZE, headers)
+        return getFromAltinn(refTilListetype, url, ALTINN_ORG_PAGE_SIZE, headers)
     }
 
     fun <T> getFromAltinn(typeReference: ParameterizedTypeReference<List<T>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<T> {
@@ -83,12 +84,11 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
         return ArrayList(response)
     }
 
-    private val authHeadersForInnloggetBruker: HttpEntity<HttpHeaders?>
-        private get() {
-            val headers = HttpHeaders()
-            headers.setBearerAuth(tokenUtils.tokenForInnloggetBruker)
-            return HttpEntity(headers)
-        }
+    private fun getAuthHeadersForInnloggetBruker(): HttpEntity<HttpHeaders?>? {
+        val headers = HttpHeaders()
+        headers.setBearerAuth(tokenUtils.tokenForInnloggetBruker)
+        return HttpEntity(headers)
+    }
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
@@ -105,3 +105,5 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
         headerEntity = HttpEntity(headers)
     }
 }
+
+inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
