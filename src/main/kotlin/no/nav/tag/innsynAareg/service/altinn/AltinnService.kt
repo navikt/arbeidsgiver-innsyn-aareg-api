@@ -16,11 +16,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.exchange
 import java.util.*
-import kotlin.collections.HashSet
-import kotlin.collections.List
-import kotlin.collections.MutableSet
 
 @Slf4j
 @Component
@@ -63,17 +59,20 @@ class AltinnService @Autowired constructor(altinnConfig: AltinnConfig, private v
         return getFromAltinn<Organisasjon>(object : emptyArray<T>() {}, url, ALTINN_ORG_PAGE_SIZE, headers)
     }
 
-    fun <T> getFromAltinn(typeReference: ParameterizedTypeReference<List<T>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<T> {
-        val response: MutableSet<T> = HashSet()
+    fun getFromAltinn(typeReference: ParameterizedTypeReference<List<Organisasjon>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<Organisasjon> {
+        val response = mutableListOf<Organisasjon>()
         var pageNumber = 0
         var hasMore = true
         while (hasMore) {
             pageNumber++
-            hasMore = try {
+            try {
                 val urlWithPagesizeAndOffset = url + "&\$top=" + pageSize + "&\$skip=" + (pageNumber - 1) * pageSize
-                val respons  = restTemplate.exchange(urlWithPagesizeAndOffset, HttpMethod.GET, headers, Array<Organisasjon>::class)
-                response.addAll(exchange.body)
-                exchange.size >= pageSize
+                val delRespons  = restTemplate.exchange(urlWithPagesizeAndOffset, HttpMethod.GET, headers, typeReference);
+                val delResponsBody = delRespons.body
+                if (delResponsBody != null) {
+                    response.addAll(delResponsBody)
+                    hasMore = (delResponsBody.size >= pageSize)
+                };
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn med spørring: " + url + " Exception: " + exception.message)
                 throw AltinnException("Feil fra Altinn", exception)
