@@ -3,7 +3,6 @@ package no.nav.tag.innsynAareg.service.altinn
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.models.altinn.Role
-import org.assertj.core.api.Assertions
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,10 +17,11 @@ const val SERVICE_CODE = "4936"
 const val FNR_MED_SKJEMATILGANG = "01065500791"
 const val FNR_MED_ORGANISASJONER = "00000000000"
 
-@RunWith(SpringRunner::class)
+
 @SpringBootTest
-@ActiveProfiles("dev")
-@TestPropertySource(properties = ["mock.port=8085"])
+@RunWith(SpringRunner::class)
+@ActiveProfiles("local")
+@TestPropertySource(properties = ["mock.port=8082"])
 class AltinnServiceIntegrationTest {
     @Autowired
     private val altinnService: AltinnService? = null
