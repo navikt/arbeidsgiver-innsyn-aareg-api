@@ -1,7 +1,6 @@
 package no.nav.tag.innsynAareg.service.altinn
 
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
-import no.nav.tag.innsynAareg.models.altinn.Role
 import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.junit.Test
 import org.mockito.Matchers
@@ -11,11 +10,9 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.client.RestTemplate
 import java.util.*
 
-@ActiveProfiles("local")
 class AltinnServiceTest {
     val restTemplate = Mockito.mock(RestTemplate::class.java)
     val tokenUtils: TokenUtils = Mockito.mock(TokenUtils::class.java)
