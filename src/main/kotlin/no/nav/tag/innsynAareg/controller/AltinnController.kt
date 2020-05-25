@@ -14,14 +14,13 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 @Protected
 @Slf4j
 @RestController
-class OrganisasjonController {
-    private val altinnService: AltinnService? = null
-    private val requestContextHolder: TokenValidationContextHolder? = null
+class OrganisasjonController ( val altinnService: AltinnService, val requestContextHolder: TokenValidationContextHolder){
 
     @GetMapping(value = ["/api/organisasjoner"])
     fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon>>? {
         val fnr: String = FnrExtractor.extract(requestContextHolder!!)
         val result: List<Organisasjon> = altinnService!!.hentOrganisasjoner(fnr)
+
         //no.nav.tag.dittNavArbeidsgiver.controller.OrganisasjonController.log.info("organisasjoner fra altinn:{}", result)
         return ResponseEntity.ok<List<Organisasjon>>(result)
     }
