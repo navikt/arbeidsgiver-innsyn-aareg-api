@@ -29,7 +29,7 @@ class AltinnServiceIntegrationTest {
     @Test
     fun hentOrganisasjoner__skal_fungere_med_gyldig_fnr() {
         //val organisasjoner: List<Organisasjon> = altinnService!!.hentOrganisasjoner(FNR_MED_ORGANISASJONER)
-        Assert.assertEquals("hei", "hei");
+        Assert.assertEquals("heihå", "heihå");
 
     }
 
