@@ -1,18 +1,11 @@
 package no.nav.tag.innsynAareg.service.altinn
 
-import lombok.Data
+import lombok.extern.slf4j.Slf4j
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
+@Slf4j
 @Component
-@Data
-class AltinnConfig {
-    @Value("\${altinn.altinnUrl}")
-    lateinit var altinnUrl: String;
-    @Value("\${altinn.proxyUrl}")
-    lateinit var proxyUrl: String;
-    @Value("\${altinn.altinnHeader}")
-    lateinit var altinnHeader: String;
-    @Value("\${altinn.APIGwHeader}")
-    lateinit var APIGwHeader: String;
-}
+class AltinnConfig @Autowired constructor(@Value("\${altinn.altinnUrl}") val altinnUrl: String, @Value("\${altinn.proxyUrl}") val proxyUrl: String,
+                                          @Value("\${altinn.altinnHeader}") val altinnHeader: String, @Value("\${altinn.APIGwHeader}") val APIGwHeader: String);
