@@ -47,8 +47,8 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return hentReporteesFraAltinn(query, fnr)
     }
 
-    fun hentReporteesFraAltinn(query: String, fnr: String): List<Organisasjon> {
-        var query = query
+    fun hentReporteesFraAltinn(altinnQuery: String, fnr: String): List<Organisasjon> {
+        var query = altinnQuery
         val baseUrl: String
         baseUrl = altinnConfig.proxyUrl;
         val headers = getAuthHeadersForInnloggetBruker()!!;
