@@ -10,7 +10,10 @@ import no.nav.tag.innsynAareg.models.OversiktOverArbeidsgiver
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.enhetsregisteret.EnhetsRegisterOrg
 import no.nav.tag.innsynAareg.models.enhetsregisteret.Organisasjoneledd
+import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
+import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.service.enhetsregisteret.EnhetsregisterService
+import no.nav.tag.innsynAareg.service.pdl.PdlBatchService
 import no.nav.tag.innsynAareg.service.pdl.PdlService
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.service.yrkeskoder.YrkeskodeverkService
@@ -20,11 +23,12 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import java.util.*
 import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService, val enhetsregisteretService: EnhetsregisterService){
+class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService, val pdlBatchService: PdlBatchService, val enhetsregisteretService: EnhetsregisterService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
     @Value("\${aareg.aaregArbeidsgivere}")
@@ -54,7 +58,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold :OversiktOverArbeidsForhold): OversiktOverArbeidsForhold?{
-        val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
+        val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold);
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
@@ -108,6 +112,60 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             }
         }
         logger.info("ArbeidsgiverArbeidsforholdApi.hentNavn: Tid å hente ut navn: $time");
+        return arbeidsforholdOversikt
+    }
+
+    fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
+        val maksHundreFnrs = fnrs.toTypedArray()
+        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("FODSELSNR MAX= " + maksHundreFnrs[0])
+        val respons: PdlBatchRespons = pdlBatchService.getBatchFraPdl(maksHundreFnrs)!!
+        for (i in 0 until respons.data!!.hentPersonBolk!!.size) {
+            for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
+                if (respons.data.hentPersonBolk!!.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
+                    try {
+                        val navnObjekt: Navn = respons.data.hentPersonBolk.get(i).person!!.navn!!.get(0)
+                        var navn = ""
+                        if (navnObjekt.fornavn != null) navn += navnObjekt.fornavn
+                        if (navnObjekt.mellomNavn != null) navn += " " + navnObjekt.mellomNavn
+                        if (navnObjekt.etternavn != null) navn += " " + navnObjekt.etternavn
+                        arbeidsforhold.arbeidstaker.navn = navn;
+                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("NAVN: " + arbeidsforhold.getArbeidstaker().getNavn())
+                    } catch (e: NullPointerException) {
+                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer exception i batch: {} ", e.message)
+                        if (respons.errors != null && !respons.errors.isEmpty()) {
+                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
+                        } else {
+                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+                        }
+                    } catch (e: ArrayIndexOutOfBoundsException) {
+                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer exception i batch: {} ", e.message)
+                        if (respons.errors != null && !respons.errors.isEmpty()) {
+                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
+                        } else {
+                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun settNavnPåArbeidsforholdBatch(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+        val lengde: Int = arbeidsforholdOversikt.arbeidsforholdoversikter!!.size;
+        val fnrs = ArrayList<String>(lengde)
+        for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+            fnrs.add(arbeidsforhold.arbeidstaker.offentligIdent)
+        }
+        var tempStartIndeks = 0
+        var gjenVarendelengde = lengde
+        while (gjenVarendelengde > 100) {
+            settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, tempStartIndeks + 100))
+            tempStartIndeks = tempStartIndeks + 100
+            gjenVarendelengde = gjenVarendelengde - 100
+        }
+        if (gjenVarendelengde > 0) {
+            settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, lengde))
+        }
         return arbeidsforholdOversikt
     }
 

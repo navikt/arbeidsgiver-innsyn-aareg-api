@@ -6,10 +6,8 @@ import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRequest
 import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
 import no.nav.tag.innsynAareg.models.pdlBatch.Variables
 import no.nav.tag.innsynAareg.models.pdlPerson.Navn
-import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlBatch
-import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -48,7 +46,7 @@ class PdlBatchService @Autowired constructor(private val restTemplate: RestTempl
     }
 
 
-    fun getBatchFraPdl(fnrs: Array<String?>?): PdlBatchRespons? {
+    fun getBatchFraPdl(fnrs: Array<String>?): PdlBatchRespons? {
         try {
             val pdlRequest = PdlBatchRequest(graphQlUtils.resourceAsString(), Variables(fnrs))
             val entity: HttpEntity<*> = createRequestEntity(pdlRequest)
