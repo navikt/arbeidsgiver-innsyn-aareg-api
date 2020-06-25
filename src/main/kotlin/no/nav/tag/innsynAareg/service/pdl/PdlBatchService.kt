@@ -8,6 +8,7 @@ import no.nav.tag.innsynAareg.models.pdlBatch.Variables
 import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.models.pdlPerson.PdlRequest
 import no.nav.tag.innsynAareg.service.sts.STSClient
+import no.nav.tag.innsynAareg.utils.GraphQlBatch
 import no.nav.tag.innsynAareg.utils.GraphQlUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -22,7 +23,7 @@ import java.io.IOException
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class PdlBatchService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlUtils, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
+class PdlBatchService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlBatch, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
     private val uriString: String = pdlUrl;
 
     val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
@@ -49,7 +50,7 @@ class PdlBatchService @Autowired constructor(private val restTemplate: RestTempl
 
     fun getBatchFraPdl(fnrs: Array<String?>?): PdlBatchRespons? {
         try {
-            val pdlRequest = PdlBatchRequest(graphQlUtilsBatch.resourceAsString(), Variables(fnrs))
+            val pdlRequest = PdlBatchRequest(graphQlUtils.resourceAsString(), Variables(fnrs))
             val entity: HttpEntity<*> = createRequestEntity(pdlRequest)
             //PdlService.log.info("MSA-AAREG-PDL: PDLBATCHREQUEST: " + createRequestEntityBatchSporring(pdlRequest))
             //PdlService.log.info("MSA-AAREG-PDL: requestEntity i batch $entity")
