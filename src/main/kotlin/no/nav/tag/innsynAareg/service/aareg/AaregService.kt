@@ -41,6 +41,12 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
     }
 
+    fun hentArbeidsforhold2(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
+        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
+        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
+        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
+    }
+
     fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
