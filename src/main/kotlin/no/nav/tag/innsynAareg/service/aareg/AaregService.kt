@@ -58,7 +58,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold :OversiktOverArbeidsForhold): OversiktOverArbeidsForhold?{
-        val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold);
+        val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
