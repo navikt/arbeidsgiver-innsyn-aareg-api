@@ -20,14 +20,6 @@ class AAregControllerTest {
     @Autowired
     lateinit var aAregController: AaregController;
 
-    /*@Test
-    fun hentArbeidsforhold() {
-        val responsMedInnhold =  aAregController.hentArbeidsforhold("910825518", "132", "132")
-        Assert.assertEquals(13, responsMedInnhold?.arbeidsforholdoversikter?.size)
-    }
-    *
-     */
-
     @Test(expected = AaregException::class)
     fun whenExceptionThrown_thenExpectationSatisfied() {
         aAregController.hentArbeidsforhold("910825517", "132", "132")

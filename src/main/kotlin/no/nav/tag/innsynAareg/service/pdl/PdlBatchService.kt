@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
+import java.lang.Exception
 
 @Slf4j
 @Service
@@ -49,24 +50,12 @@ class PdlBatchService @Autowired constructor(private val restTemplate: RestTempl
     fun getBatchFraPdl(fnrs: Array<String>?): PdlBatchRespons? {
         try {
             val pdlRequest = PdlBatchRequest(graphQlUtils.resourceAsString(), Variables(fnrs))
-            val entity: HttpEntity<*> = createRequestEntity(pdlRequest)
-            //PdlService.log.info("MSA-AAREG-PDL: PDLBATCHREQUEST: " + createRequestEntityBatchSporring(pdlRequest))
-            //PdlService.log.info("MSA-AAREG-PDL: requestEntity i batch $entity")
-            //return  restTemplate.postForObject(pdlUrl, createRequestEntityBatchSporring(), PdlBatchRespons.class);
-            return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)
-        } catch (exception: RestClientException) {
-            //PdlService.log.error("MSA-AAREG-PDL: Exception: {} i PDLBATCH" + exception.message)
-        } catch (exception: IOException) {
-            //PdlService.log.error("MSA-AAREG-PDL: Exception: {} i PDLBATCH" + exception.message)
+            logger.info("AG-ARBEIDSFORHOLD PDL henter navn");
+            return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)!!
+        } catch (exception: Exception) {
+            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", exception.message );
         }
         return null
-    }
-
-    private fun lagManglerNavnException(): Navn {
-        logger.error("lag mangler exception navn ");
-        val exceptionNavn = Navn("Kunne ikke hente navn",null,null)
-        logger.error("lag mangler exception navn {}",exceptionNavn);
-        return exceptionNavn
     }
 
 }

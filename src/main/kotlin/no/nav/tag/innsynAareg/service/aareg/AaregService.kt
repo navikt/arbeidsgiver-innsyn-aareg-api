@@ -111,39 +111,34 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
                 }
             }
         }
-        logger.info("ArbeidsgiverArbeidsforholdApi.hentNavn: Tid å hente ut navn: $time");
+        logger.info("AG-ARBEIDSFORHOLD PDL ");
         return arbeidsforholdOversikt
     }
 
     fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
         val maksHundreFnrs = fnrs.toTypedArray()
-        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("FODSELSNR MAX= " + maksHundreFnrs[0])
         val respons: PdlBatchRespons = pdlBatchService.getBatchFraPdl(maksHundreFnrs)!!
         for (i in 0 until respons.data!!.hentPersonBolk!!.size) {
             for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
                 if (respons.data.hentPersonBolk!!.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
                     try {
-                        val navnObjekt: Navn = respons.data.hentPersonBolk.get(i).person!!.navn!!.get(0)
+                        val navnObjekt: Navn = respons.data.hentPersonBolk[i].person!!.navn!![0]
                         var navn = ""
                         if (navnObjekt.fornavn != null) navn += navnObjekt.fornavn
                         if (navnObjekt.mellomNavn != null) navn += " " + navnObjekt.mellomNavn
                         if (navnObjekt.etternavn != null) navn += " " + navnObjekt.etternavn
                         arbeidsforhold.arbeidstaker.navn = navn;
-                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("NAVN: " + arbeidsforhold.getArbeidstaker().getNavn())
                     } catch (e: NullPointerException) {
-                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer exception i batch: {} ", e.message)
-                        if (respons.errors != null && !respons.errors.isEmpty()) {
-                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR nullpointer exception ", e.message);
+                        if (respons.data.hentPersonBolk[i].code != "ok") {
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  " + respons.data.hentPersonBolk[i].code);
                         } else {
-                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn");
                         }
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
                     } catch (e: ArrayIndexOutOfBoundsException) {
-                        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer exception i batch: {} ", e.message)
-                        if (respons.errors != null && !respons.errors.isEmpty()) {
-                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG pdlerror: " + respons.errors.get(0).message)
-                        } else {
-                            //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.error("MSA-AAREG nullpointer: helt tom respons fra pdl")
-                        }
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons ", e.message);
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
                     }
                 }
             }
