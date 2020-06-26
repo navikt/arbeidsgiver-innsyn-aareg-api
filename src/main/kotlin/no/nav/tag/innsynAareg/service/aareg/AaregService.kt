@@ -118,9 +118,9 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
         val maksHundreFnrs = fnrs.toTypedArray()
         val respons: PdlBatchRespons = pdlBatchService.getBatchFraPdl(maksHundreFnrs)!!
-        for (i in 0 until respons.data!!.hentPersonBolk!!.size) {
+        for (i in 0 until respons.data.hentPersonBolk.size) {
             for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
-                if (respons.data.hentPersonBolk!!.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
+                if (respons.data.hentPersonBolk.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
                     try {
                         val navnObjekt: Navn = respons.data.hentPersonBolk[i].person!!.navn!![0]
                         var navn = ""
@@ -137,7 +137,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
                         }
                         arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
                     } catch (e: ArrayIndexOutOfBoundsException) {
-                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons ", e.message);
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons " + respons.data.hentPersonBolk[i].code, e.message);
                         arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
                     }
                 }
