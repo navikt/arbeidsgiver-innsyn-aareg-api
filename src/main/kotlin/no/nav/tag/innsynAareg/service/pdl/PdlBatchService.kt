@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRequest
 import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
 import no.nav.tag.innsynAareg.models.pdlBatch.Variables
-import no.nav.tag.innsynAareg.models.pdlPerson.Navn
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.utils.GraphQlBatch
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +22,7 @@ import java.lang.Exception
 class PdlBatchService @Autowired constructor(private val restTemplate: RestTemplate, val stsClient: STSClient, val graphQlUtils: GraphQlBatch, @Value("\${pdl.pdlUrl}") pdlUrl: String) {
     private val uriString: String = pdlUrl;
 
-    val logger = org.slf4j.LoggerFactory.getLogger(PdlService::class.java)
+    val logger = org.slf4j.LoggerFactory.getLogger(PdlBatchService::class.java)
 
     private fun createRequestEntity(pdlRequest: PdlBatchRequest): HttpEntity<Any?> {
         return HttpEntity(pdlRequest, createHeaders())

@@ -31,14 +31,6 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return hentReporteesFraAltinn(query, fnr)
     }
 
-    fun hentRoller(fnr: String, orgnr: String): List<Role> {
-        val query = "&subject=$fnr&reportee=$orgnr"
-        val url = altinnConfig.altinnUrl + "authorization/roles?ForceEIAuthentication" + query
-        val refTilListetype = typeReference<List<Role>>();
-        //AltinnService.log.info("Henter roller fra Altinn")
-        return getFromAltinn(refTilListetype, url, ALTINN_ROLE_PAGE_SIZE, headerEntity)
-    }
-
     @Cacheable(ALTINN_TJENESTE_CACHE)
     fun hentOrganisasjonerBasertPaRettigheter(fnr: String, serviceKode: String, serviceEdition: String): List<Organisasjon> {
         val query = ("&serviceCode=" + serviceKode
@@ -88,7 +80,6 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
-        private const val ALTINN_ROLE_PAGE_SIZE = 50
     }
 
     init {
