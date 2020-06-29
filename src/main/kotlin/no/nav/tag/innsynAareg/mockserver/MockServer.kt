@@ -105,7 +105,7 @@ class MockServer @Autowired constructor(@Value("\${mock.port}")  val port: Int, 
                 ))
     }
 
-    fun mocktilgangTilSkjemForBedrift(server: WireMockServer, altinnPath: String) {
+    final fun mocktilgangTilSkjemForBedrift(server: WireMockServer, altinnPath: String) {
         server.stubFor(WireMock.get(WireMock.urlPathEqualTo(altinnPath + "reportees/"))
                 .withQueryParam("subject", WireMock.equalTo(FNR_MED_SKJEMATILGANG))
                 .withQueryParam("serviceCode", WireMock.equalTo(SERVICE_CODE))

@@ -1,7 +1,5 @@
 package no.nav.tag.innsynAareg.controller.aareg
 
-
-import kotlinx.coroutines.runBlocking
 import no.nav.tag.innsynAareg.controller.AaregController
 import no.nav.tag.innsynAareg.service.aareg.AaregException
 import org.junit.Assert
@@ -21,12 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner
 class AAregControllerTest {
     @Autowired
     lateinit var aAregController: AaregController;
-
-    @Test
-    fun hentArbeidsforhold() {
-        val responsMedInnhold =  aAregController.hentArbeidsforhold("910825518", "132", "132")
-        Assert.assertEquals(13, responsMedInnhold?.arbeidsforholdoversikter?.size)
-    }
 
     @Test(expected = AaregException::class)
     fun whenExceptionThrown_thenExpectationSatisfied() {
