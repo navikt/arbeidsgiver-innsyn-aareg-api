@@ -10,8 +10,10 @@ import no.nav.tag.innsynAareg.models.OversiktOverArbeidsgiver
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.enhetsregisteret.EnhetsRegisterOrg
 import no.nav.tag.innsynAareg.models.enhetsregisteret.Organisasjoneledd
+import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
+import no.nav.tag.innsynAareg.models.pdlBatch.Navn
 import no.nav.tag.innsynAareg.service.enhetsregisteret.EnhetsregisterService
-import no.nav.tag.innsynAareg.service.pdl.PdlService
+import no.nav.tag.innsynAareg.service.pdl.PdlBatchService
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.service.yrkeskoder.YrkeskodeverkService
 import org.slf4j.LoggerFactory
@@ -20,11 +22,12 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import java.util.*
 import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService, val enhetsregisteretService: EnhetsregisterService){
+class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService, val pdlBatchService: PdlBatchService, val enhetsregisteretService: EnhetsregisterService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
     @Value("\${aareg.aaregArbeidsgivere}")
@@ -32,12 +35,6 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     val logger = LoggerFactory.getLogger(AaregService::class.java)
 
     fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
-        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
-        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
-        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
-    }
-
-    fun hentArbeidsforhold2(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
         val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
         return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
@@ -60,7 +57,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold :OversiktOverArbeidsForhold): OversiktOverArbeidsForhold?{
-        val arbeidsforholdMedNavn = settNavnPaArbeidsforhold(arbeidsforhold);
+        val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold);
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
@@ -91,29 +88,52 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
     }
 
-    fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        val time = measureTimeMillis {
-            if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-                val lock = Semaphore(4)
-                runBlocking {
-                    val liste = mutableListOf<Deferred<Unit>>();
-                    arbeidsforholdOversikt.arbeidsforholdoversikter.forEach {
-                        val fnr: String = it.arbeidstaker.offentligIdent;
-                        if (!fnr.isBlank()) {
-                            val job = GlobalScope.async {
-                                lock.acquire()
-                                val navn = pdlService.hentNavnMedFnr(fnr);
-                                it.arbeidstaker.navn = navn;
-                                lock.release();
-                            }
-                            liste.add(job);
+    fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
+        val maksHundreFnrs = fnrs.toTypedArray()
+        val respons: PdlBatchRespons = pdlBatchService.getBatchFraPdl(maksHundreFnrs)!!
+        for (i in 0 until respons.data.hentPersonBolk.size) {
+            for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
+                if (respons.data.hentPersonBolk.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
+                    try {
+                        val navnObjekt: Navn = respons.data.hentPersonBolk[i].person!!.navn!![0]
+                        var navn = ""
+                        if (navnObjekt.fornavn != null) navn += navnObjekt.fornavn
+                        if (navnObjekt.mellomNavn != null) navn += " " + navnObjekt.mellomNavn
+                        if (navnObjekt.etternavn != null) navn += " " + navnObjekt.etternavn
+                        arbeidsforhold.arbeidstaker.navn = navn;
+                    } catch (e: NullPointerException) {
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR nullpointer exception ", e.message);
+                        if (respons.data.hentPersonBolk[i].code != "ok") {
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  " + respons.data.hentPersonBolk[i].code);
+                        } else {
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn");
                         }
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
+                    } catch (e: ArrayIndexOutOfBoundsException) {
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons " + respons.data.hentPersonBolk[i].code, e.message);
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
                     }
-                    liste.awaitAll();
                 }
             }
         }
-        logger.info("ArbeidsgiverArbeidsforholdApi.hentNavn: Tid å hente ut navn: $time");
+    }
+
+    fun settNavnPåArbeidsforholdBatch(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+        val lengde: Int = arbeidsforholdOversikt.arbeidsforholdoversikter!!.size;
+        val fnrs = ArrayList<String>(lengde)
+        for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
+            fnrs.add(arbeidsforhold.arbeidstaker.offentligIdent)
+        }
+        var tempStartIndeks = 0
+        var gjenVarendelengde = lengde
+        while (gjenVarendelengde > 100) {
+            settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, tempStartIndeks + 100))
+            tempStartIndeks = tempStartIndeks + 100
+            gjenVarendelengde = gjenVarendelengde - 100
+        }
+        if (gjenVarendelengde > 0) {
+            settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, lengde))
+        }
         return arbeidsforholdOversikt
     }
 
