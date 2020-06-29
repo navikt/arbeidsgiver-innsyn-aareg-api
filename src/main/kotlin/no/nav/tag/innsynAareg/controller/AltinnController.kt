@@ -10,16 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
+import no.nav.tag.innsynAareg.service.altinn.typeReference
 
 @Protected
 @Slf4j
 @RestController
 class OrganisasjonController ( val altinnService: AltinnService, val requestContextHolder: TokenValidationContextHolder){
 
-    @GetMapping(value = ["/api/organisasjoner"])
+    /*@GetMapping(value = ["/api/organisasjoner"])
     fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon>>? {
+        val refTilListetype = typeReference<List<Organisasjon>>();
         val fnr: String = FnrExtractor.extract(requestContextHolder)
-        val result: List<Organisasjon> = altinnService.hentOrganisasjoner(fnr)
+        val result: List<Organisasjon> = altinnService.getFromAltinn(refTilListetype);
 
         //no.nav.tag.dittNavArbeidsgiver.controller.OrganisasjonController.log.info("organisasjoner fra altinn:{}", result)
         return ResponseEntity.ok<List<Organisasjon>>(result)
@@ -31,6 +33,6 @@ class OrganisasjonController ( val altinnService: AltinnService, val requestCont
         val result: List<Organisasjon> = altinnService!!.hentOrganisasjonerBasertPaRettigheter(fnr, serviceKode!!, serviceEdition!!)
         return ResponseEntity.ok<List<Organisasjon>>(result)
     }
-
+*/
 }
 

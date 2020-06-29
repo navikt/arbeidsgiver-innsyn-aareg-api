@@ -1,13 +1,10 @@
 package no.nav.tag.innsynAareg.service.altinn
 
+
 import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
-import no.nav.tag.innsynAareg.models.altinn.Role
-import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_CACHE
-import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
 import no.nav.tag.innsynAareg.utils.TokenUtils
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -24,20 +21,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     private val tokenUtils: TokenUtils
     private val altinnConfig = altinnConfig;
 
-    @Cacheable(ALTINN_CACHE)
-    fun hentOrganisasjoner(fnr: String): List<Organisasjon> {
-        val query = "&\$filter=Type+ne+'Person'+and+Status+eq+'Active'"
-        //AltinnService.log.info("Henter organisasjoner fra Altinn")
-        return hentReporteesFraAltinn(query, fnr)
-    }
 
-    @Cacheable(ALTINN_TJENESTE_CACHE)
-    fun hentOrganisasjonerBasertPaRettigheter(fnr: String, serviceKode: String, serviceEdition: String): List<Organisasjon> {
-        val query = ("&serviceCode=" + serviceKode
-                + "&serviceEdition=" + serviceEdition)
-        //AltinnService.log.info("Henter rettigheter fra Altinn")
-        return hentReporteesFraAltinn(query, fnr)
-    }
 
     fun hentReporteesFraAltinn(altinnQuery: String, fnr: String): List<Organisasjon> {
         var query = altinnQuery
@@ -78,6 +62,34 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return HttpEntity(headers)
     }
 
+    /*fun getReporteesFromAltinnViaProxy(
+            tokenContext: TokenContext?,
+            subject: Subject?,
+            parametre: MutableMap<String?, String?>,
+            url: String,
+            pageSize: Int
+    ): List<Organisasjon?>? {
+        val response: MutableSet<Organisasjon?> = HashSet()
+        var pageNumber = 0
+        var hasMore = true
+        while (hasMore) {
+            pageNumber++
+            try {
+                parametre["\$top"] = pageSize.toString()
+                parametre["\$skip"] = ((pageNumber - 1) * pageSize).toString()
+                val collection: List<Organisasjon?> = klient.hentOrganisasjoner.mapTo(klient.hentOrganisasjoner(tokenContext, subject, parametre))
+                response.addAll(collection)
+                hasMore = collection.size >= pageSize
+            } catch (exception: RestClientException) {
+                AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
+                throw AltinnException("Feil fra Altinn", exception)
+            }
+        }
+        return ArrayList<Any?>(response)
+    }
+
+     */
+
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
     }
@@ -85,7 +97,6 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     init {
         this.tokenUtils = tokenUtils
         val headers = HttpHeaders()
-        headers["X-NAV-APIKEY"] = altinnConfig.APIGwHeader
         headers["APIKEY"] = altinnConfig.altinnHeader
         headerEntity = HttpEntity(headers)
     }
