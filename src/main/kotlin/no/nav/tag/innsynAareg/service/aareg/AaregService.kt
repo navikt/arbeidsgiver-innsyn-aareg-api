@@ -11,10 +11,9 @@ import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.enhetsregisteret.EnhetsRegisterOrg
 import no.nav.tag.innsynAareg.models.enhetsregisteret.Organisasjoneledd
 import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
-import no.nav.tag.innsynAareg.models.pdlPerson.Navn
+import no.nav.tag.innsynAareg.models.pdlBatch.Navn
 import no.nav.tag.innsynAareg.service.enhetsregisteret.EnhetsregisterService
 import no.nav.tag.innsynAareg.service.pdl.PdlBatchService
-import no.nav.tag.innsynAareg.service.pdl.PdlService
 import no.nav.tag.innsynAareg.service.sts.STSClient
 import no.nav.tag.innsynAareg.service.yrkeskoder.YrkeskodeverkService
 import org.slf4j.LoggerFactory
@@ -28,7 +27,7 @@ import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService ,val pdlService: PdlService, val pdlBatchService: PdlBatchService, val enhetsregisteretService: EnhetsregisterService){
+class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService, val pdlBatchService: PdlBatchService, val enhetsregisteretService: EnhetsregisterService){
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
     @Value("\${aareg.aaregArbeidsgivere}")
@@ -87,32 +86,6 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
         return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
-    }
-
-    fun settNavnPaArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        val time = measureTimeMillis {
-            if (!arbeidsforholdOversikt.arbeidsforholdoversikter.isNullOrEmpty()) {
-                val lock = Semaphore(4)
-                runBlocking {
-                    val liste = mutableListOf<Deferred<Unit>>();
-                    arbeidsforholdOversikt.arbeidsforholdoversikter.forEach {
-                        val fnr: String = it.arbeidstaker.offentligIdent;
-                        if (!fnr.isBlank()) {
-                            val job = GlobalScope.async {
-                                lock.acquire()
-                                val navn = pdlService.hentNavnMedFnr(fnr);
-                                it.arbeidstaker.navn = navn;
-                                lock.release();
-                            }
-                            liste.add(job);
-                        }
-                    }
-                    liste.awaitAll();
-                }
-            }
-        }
-        logger.info("AG-ARBEIDSFORHOLD PDL ");
-        return arbeidsforholdOversikt
     }
 
     fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
