@@ -2,6 +2,7 @@ package no.nav.tag.innsynAareg.service.altinn
 
 
 import lombok.extern.slf4j.Slf4j
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.utils.TokenUtils
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.*
+import javax.security.auth.Subject
 
 @Slf4j
 @Component
@@ -20,8 +22,6 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     private val headerEntity: HttpEntity<HttpHeaders?>
     private val tokenUtils: TokenUtils
     private val altinnConfig = altinnConfig;
-
-
 
     fun hentReporteesFraAltinn(altinnQuery: String, fnr: String): List<Organisasjon> {
         var query = altinnQuery
@@ -62,8 +62,8 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return HttpEntity(headers)
     }
 
-    /*fun getReporteesFromAltinnViaProxy(
-            tokenContext: TokenContext?,
+    fun getReporteesFromAltinnViaProxy(
+            tokenContext: TokenValidationContextHolder,
             subject: Subject?,
             parametre: MutableMap<String?, String?>,
             url: String,
@@ -81,14 +81,13 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                 response.addAll(collection)
                 hasMore = collection.size >= pageSize
             } catch (exception: RestClientException) {
-                AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
+                //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
                 throw AltinnException("Feil fra Altinn", exception)
             }
         }
         return ArrayList<Any?>(response)
     }
 
-     */
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
