@@ -2,11 +2,15 @@ package no.nav.tag.innsynAareg.service.altinn
 
 
 import lombok.extern.slf4j.Slf4j
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject
+
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.utils.TokenUtils
-
-import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -15,14 +19,15 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.*
-import javax.security.auth.Subject
 
 @Slf4j
 @Component
-class AltinnService constructor(altinnConfig: AltinnConfig, klient: AltinnrettigheterProxyKlient ,private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
+class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
     private val headerEntity: HttpEntity<HttpHeaders?>
     private val tokenUtils: TokenUtils
     private val altinnConfig = altinnConfig;
+    private val klient: AltinnrettigheterProxyKlient;
+
 
     fun hentReporteesFraAltinn(altinnQuery: String, fnr: String): List<Organisasjon> {
         var query = altinnQuery
@@ -34,6 +39,8 @@ class AltinnService constructor(altinnConfig: AltinnConfig, klient: Altinnrettig
         val url = baseUrl + "reportees/?ForceEIAuthentication" + query
         return getFromAltinn(refTilListetype, url, ALTINN_ORG_PAGE_SIZE, headers)
     }
+
+
 
     fun <T> getFromAltinn(typeReference: ParameterizedTypeReference<List<T>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<T> {
         val response = mutableListOf<T>()
@@ -100,6 +107,15 @@ class AltinnService constructor(altinnConfig: AltinnConfig, klient: Altinnrettig
         val headers = HttpHeaders()
         headers["APIKEY"] = altinnConfig.altinnHeader
         headerEntity = HttpEntity(headers)
+        val proxyKlientConfig = AltinnrettigheterProxyKlientConfig(
+                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("ditt-nav-arbeidsgiver-api", altinnConfig.proxyUrl),
+                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
+                        altinnConfig.fallBackUrl,
+                        altinnConfig.altinnHeader,
+                        altinnConfig.APIGwHeader
+                )
+        )
+        klient = AltinnrettigheterProxyKlient(proxyKlientConfig)
     }
 }
 
