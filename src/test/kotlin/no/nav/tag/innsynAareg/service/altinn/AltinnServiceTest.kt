@@ -1,5 +1,7 @@
 package no.nav.tag.innsynAareg.service.altinn
 
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
+
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.junit.Test
@@ -17,7 +19,8 @@ class AltinnServiceTest {
     val restTemplate = Mockito.mock(RestTemplate::class.java)
     val tokenUtils: TokenUtils = Mockito.mock(TokenUtils::class.java)
     val altinnconfigMock = Mockito.mock(AltinnConfig::class.java)
-    val altinnService = AltinnService(altinnconfigMock, restTemplate, tokenUtils)
+    val klientMock = Mockito.mock(AltinnrettigheterProxyKlient::class.java)
+    val altinnService = AltinnService( altinnconfigMock, klientMock,restTemplate, tokenUtils)
 
     @Test
     fun hentOrganisasjoner__skal_kalle_altinn_flere_ganger_ved_stor_respons() {
