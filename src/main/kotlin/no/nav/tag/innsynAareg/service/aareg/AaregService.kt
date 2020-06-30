@@ -52,6 +52,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             }
             respons.body!!
         } catch (exception: RestClientException) {
+            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold: ", exception.message)
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
