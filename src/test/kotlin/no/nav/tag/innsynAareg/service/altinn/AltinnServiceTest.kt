@@ -29,7 +29,7 @@ class AltinnServiceTest {
         Mockito.`when`<ResponseEntity<*>>(restTemplate.exchange(Matchers.any(String::class.java), Matchers.eq(HttpMethod.GET), Matchers.any(HttpEntity::class.java), Matchers.any(ParameterizedTypeReference::class.java)))
                 .thenReturn(ResponseEntity.ok(Arrays.asList<Any>(Organisasjon("ba","bla","bla","1231","bla","bla"))))
                 .thenReturn(ResponseEntity.ok(emptyList<Any>()))
-        altinnService.getFromAltinn(refTilListetype, "http://blabla", 1,HttpEntity(tomHeader));
+        //altinnService.getFromAltinn(refTilListetype, "http://blabla", 1,HttpEntity(tomHeader));
         Mockito.verify(restTemplate, Mockito.times(1)).exchange(Matchers.endsWith("&\$top=1&\$skip=0"), Matchers.eq(HttpMethod.GET), Matchers.any(HttpEntity::class.java), Matchers.any(ParameterizedTypeReference::class.java))
         Mockito.verify(restTemplate, Mockito.times(1)).exchange(Matchers.endsWith("&\$top=1&\$skip=1"), Matchers.eq(HttpMethod.GET), Matchers.any(HttpEntity::class.java), Matchers.any(ParameterizedTypeReference::class.java))
         Mockito.verifyNoMoreInteractions(restTemplate)
