@@ -17,22 +17,19 @@ import no.nav.tag.innsynAareg.service.altinn.typeReference
 @RestController
 class OrganisasjonController ( val altinnService: AltinnService, val requestContextHolder: TokenValidationContextHolder){
 
-    /*@GetMapping(value = ["/api/organisasjoner"])
-    fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon>>? {
-        val refTilListetype = typeReference<List<Organisasjon>>();
+    @GetMapping(value = ["/api/organisasjoner"])
+    fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon?>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
-        val result: List<Organisasjon> = altinnService.getFromAltinn(refTilListetype);
-
-        //no.nav.tag.dittNavArbeidsgiver.controller.OrganisasjonController.log.info("organisasjoner fra altinn:{}", result)
-        return ResponseEntity.ok<List<Organisasjon>>(result)
+        val result: List<Organisasjon?> = altinnService.hentOrganisasjoner(fnr);
+        return ResponseEntity.ok(result)
     }
 
-    @GetMapping(value = ["/api/rettigheter-til-skjema"])
-    fun hentRettigheter(@RequestParam serviceKode: String?, @RequestParam serviceEdition: String?): ResponseEntity<List<Organisasjon>>? {
-        val fnr: String = FnrExtractor.extract(requestContextHolder!!)
-        val result: List<Organisasjon> = altinnService!!.hentOrganisasjonerBasertPaRettigheter(fnr, serviceKode!!, serviceEdition!!)
-        return ResponseEntity.ok<List<Organisasjon>>(result)
+    @GetMapping(value = ["/api/rettigheter-til-tjeneste"])
+    fun hentRettigheter(@RequestParam serviceKode: String?, @RequestParam serviceEdition: String?): ResponseEntity<List<Organisasjon?>> {
+        val fnr: String = FnrExtractor.extract(requestContextHolder)
+        val result: List<Organisasjon?> = altinnService.hentOrganisasjonerBasertPaRettigheter(fnr, serviceKode!!, serviceEdition!!)!!
+        return ResponseEntity.ok(result)
     }
-*/
+
 }
 

@@ -8,19 +8,21 @@ import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject
 import no.nav.security.oidc.context.TokenContext
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
-
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
+import no.nav.tag.innsynAareg.service.aareg.AaregService
+import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
 import no.nav.tag.innsynAareg.utils.TokenUtils
+import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 @Slf4j
 @Component
@@ -30,41 +32,49 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     private val altinnConfig = altinnConfig;
     private val klient: AltinnrettigheterProxyKlient;
 
-
-    fun hentReporteesFraAltinn(altinnQuery: String, fnr: String): List<Organisasjon> {
-        var query = altinnQuery
-        val baseUrl: String
-        baseUrl = altinnConfig.proxyUrl;
-        val headers = getAuthHeadersForInnloggetBruker()!!;
-        query += "&subject=$fnr"
-        val refTilListetype = typeReference<List<Organisasjon>>();
-        val url = baseUrl + "reportees/?ForceEIAuthentication" + query
-        return getFromAltinn(refTilListetype, url, ALTINN_ORG_PAGE_SIZE, headers)
-    }
+    val logger = LoggerFactory.getLogger(AltinnService::class.java)
 
 
-
-    fun <T> getFromAltinn(typeReference: ParameterizedTypeReference<List<T>>, url: String, pageSize: Int, headers: HttpEntity<HttpHeaders?>?): List<T> {
-        val response = mutableListOf<T>()
-        var pageNumber = 0
-        var hasMore = true
-        while (hasMore) {
-            pageNumber++
+    @Cacheable(ALTINN_TJENESTE_CACHE)
+    fun hentOrganisasjonerBasertPaRettigheter(fnr: String?, serviceKode: String, serviceEdition: String): List<Organisasjon?>? {
+            val parametre: MutableMap<String, String> = ConcurrentHashMap()
+            parametre["serviceCode"] = serviceKode
+            parametre["serviceEdition"] = serviceEdition
+            //AltinnService.log.info("Henter rettigheter fra Altinn via proxy")
             try {
-                val urlWithPagesizeAndOffset = url + "&\$top=" + pageSize + "&\$skip=" + (pageNumber - 1) * pageSize
-                val delRespons  = restTemplate.exchange(urlWithPagesizeAndOffset, HttpMethod.GET, headers, typeReference);
-                val delResponsBody = delRespons.body
-                if (delResponsBody != null) {
-                    response.addAll(delResponsBody)
-                    hasMore = (delResponsBody.size >= pageSize)
-                };
-            } catch (exception: RestClientException) {
-                //AltinnService.log.error("Feil fra Altinn med spørring: " + url + " Exception: " + exception.message)
-                throw AltinnException("Feil fra Altinn", exception)
+                return getReporteesFromAltinnViaProxy(
+                    tokenUtils.getSelvbetjeningTokenContext(),
+                    no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject(fnr),
+                    parametre,
+                    altinnProxyUrl,
+                    ALTINN_ORG_PAGE_SIZE
+            )}
+            catch (error: Exception) {
+                logger.error("Klarte ikke hente organisasjoner med rett til arbeidsforhold: ", error.message)
             }
-        }
-        return ArrayList(response)
+        return null
     }
+
+    fun hentOrganisasjoner(fnr: String?): List<Organisasjon?> {
+        val filterParamVerdi = "Type+ne+'Person'+and+Status+eq+'Active'"
+            val parametre: MutableMap<String, String> = ConcurrentHashMap()
+            parametre["\$filter"] = filterParamVerdi
+            try {
+                return getReporteesFromAltinnViaProxy(
+                        tokenUtils.getSelvbetjeningTokenContext(),
+                        no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject(fnr),
+                        parametre,
+                        altinnProxyUrl,
+                        ALTINN_ORG_PAGE_SIZE
+                );
+
+            }
+            catch (error: Exception) {
+                logger.error("Klarte ikke hente organisasjoner fra Altinn: ", error.message)
+            }
+        return null;
+    }
+
 
     private fun getAuthHeadersForInnloggetBruker(): HttpEntity<HttpHeaders?>? {
         val headers = HttpHeaders()
@@ -87,7 +97,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = pageSize.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * pageSize).toString()
-                val collection: MutableList<Organisasjon?> = klient.hentOrganisasjoner(tokenContext, subject!!, parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner(tokenContext, subject!!, parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
                 response.addAll(collection)
                hasMore = collection.size >= pageSize
             } catch (exception: RestClientException) {
