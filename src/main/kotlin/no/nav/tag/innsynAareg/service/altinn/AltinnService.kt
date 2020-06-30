@@ -7,6 +7,8 @@ import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxy
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject
+import no.nav.security.oidc.context.TokenContext
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
@@ -70,13 +72,13 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return HttpEntity(headers)
     }
 
-    /*fun getReporteesFromAltinnViaProxy(
-            tokenContext: TokenValidationContextHolder,
+    fun getReporteesFromAltinnViaProxy(
+            tokenContext: TokenContext,
             subject: Subject?,
-            parametre: MutableMap<String?, String?>,
+            parametre: MutableMap<String, String>,
             url: String,
             pageSize: Int
-    ): List<Organisasjon?>? {
+    ): List<Organisasjon?> {
         val response: MutableSet<Organisasjon?> = HashSet()
         var pageNumber = 0
         var hasMore = true
@@ -85,18 +87,17 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = pageSize.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * pageSize).toString()
-                //val collection: List<Organisasjon?> = klient.hentOrganisasjoner.mapTo(klient.hentOrganisasjoner(tokenContext, subject, parametre))
-               // response.addAll(collection)
-               // hasMore = collection.size >= pageSize
+                val collection: MutableList<Organisasjon?> = klient.hentOrganisasjoner(tokenContext, subject!!, parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                response.addAll(collection)
+               hasMore = collection.size >= pageSize
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
                 throw AltinnException("Feil fra Altinn", exception)
             }
         }
-        return ArrayList<Any?>(response)
+        return response.toList()
     }
 
-     */
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
