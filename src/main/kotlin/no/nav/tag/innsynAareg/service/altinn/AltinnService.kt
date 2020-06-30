@@ -2,10 +2,11 @@ package no.nav.tag.innsynAareg.service.altinn
 
 
 import lombok.extern.slf4j.Slf4j
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.utils.TokenUtils
+
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -18,7 +19,7 @@ import javax.security.auth.Subject
 
 @Slf4j
 @Component
-class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
+class AltinnService constructor(altinnConfig: AltinnConfig, klient: AltinnrettigheterProxyKlient ,private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
     private val headerEntity: HttpEntity<HttpHeaders?>
     private val tokenUtils: TokenUtils
     private val altinnConfig = altinnConfig;
@@ -62,7 +63,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return HttpEntity(headers)
     }
 
-    fun getReporteesFromAltinnViaProxy(
+    /*fun getReporteesFromAltinnViaProxy(
             tokenContext: TokenValidationContextHolder,
             subject: Subject?,
             parametre: MutableMap<String?, String?>,
@@ -77,9 +78,9 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = pageSize.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * pageSize).toString()
-                val collection: List<Organisasjon?> = klient.hentOrganisasjoner.mapTo(klient.hentOrganisasjoner(tokenContext, subject, parametre))
-                response.addAll(collection)
-                hasMore = collection.size >= pageSize
+                //val collection: List<Organisasjon?> = klient.hentOrganisasjoner.mapTo(klient.hentOrganisasjoner(tokenContext, subject, parametre))
+               // response.addAll(collection)
+               // hasMore = collection.size >= pageSize
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
                 throw AltinnException("Feil fra Altinn", exception)
@@ -88,6 +89,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         return ArrayList<Any?>(response)
     }
 
+     */
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
