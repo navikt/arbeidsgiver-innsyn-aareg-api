@@ -20,8 +20,8 @@ class OrganisasjonController ( val altinnService: AltinnService, val requestCont
     @GetMapping(value = ["/api/organisasjoner"])
     fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon?>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
-        val result: List<Organisasjon?> = altinnService.hentOrganisasjoner(fnr);
-        return ResponseEntity.ok(result)
+        val result = altinnService.hentOrganisasjoner(fnr);
+        return ResponseEntity.ok(result!!)
     }
 
     @GetMapping(value = ["/api/rettigheter-til-tjeneste"])
