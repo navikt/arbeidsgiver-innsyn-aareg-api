@@ -86,8 +86,13 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = ALTINN_ORG_PAGE_SIZE.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
-                val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
-                response.addAll(collection)
+                try {
+                    val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre).toMap().map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                    response.addAll(collection);
+                }
+                catch (e: Exception) {
+                    logger.error("Klarte enten ikke å kalle, eller klarte ikke transformere objektet");
+                }
                hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
