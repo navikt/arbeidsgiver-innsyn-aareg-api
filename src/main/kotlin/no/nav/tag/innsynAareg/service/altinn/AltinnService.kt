@@ -7,7 +7,7 @@ import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxy
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject
-import no.nav.security.oidc.context.TokenContext
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.SelvbetjeningToken
 import no.nav.tag.innsynAareg.models.altinn.AltinnException
 import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
@@ -25,15 +25,13 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Slf4j
 @Component
-class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils, tokenContext: TokenContext) {
+class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
     private val headerEntity: HttpEntity<HttpHeaders?>
     private val tokenUtils: TokenUtils
-    private val tokenContext: TokenContext
     private val altinnConfig = altinnConfig;
     private val klient: AltinnrettigheterProxyKlient;
 
     val logger = LoggerFactory.getLogger(AltinnService::class.java)
-
 
     @Cacheable(ALTINN_TJENESTE_CACHE)
     fun hentOrganisasjonerBasertPaRettigheter(fnr: String, serviceKode: String, serviceEdition: String): List<Organisasjon?>? {
@@ -43,7 +41,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             //AltinnService.log.info("Henter rettigheter fra Altinn via proxy")
             try {
                 return getReporteesFromAltinnViaProxy(
-                    no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject(fnr),
+                    fnr,
                     parametre
             )}
             catch (error: Exception) {
@@ -58,7 +56,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             parametre["\$filter"] = filterParamVerdi
             try {
                 return getReporteesFromAltinnViaProxy(
-                        no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject(fnr),
+                        fnr,
                         parametre
                 );
 
@@ -77,7 +75,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     }
 
     fun getReporteesFromAltinnViaProxy(
-            subject: Subject?,
+            fnr: String,
             parametre: MutableMap<String, String>
     ): List<Organisasjon?> {
         val response: MutableSet<Organisasjon?> = HashSet()
@@ -88,7 +86,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = ALTINN_ORG_PAGE_SIZE.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
-                val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner(tokenContext, subject!!, parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre.toMap()).map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
                 response.addAll(collection)
                hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
             } catch (exception: RestClientException) {
@@ -106,12 +104,11 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
 
     init {
         this.tokenUtils = tokenUtils
-        this.tokenContext = tokenContext;
         val headers = HttpHeaders()
         headers["APIKEY"] = altinnConfig.altinnHeader
         headerEntity = HttpEntity(headers)
         val proxyKlientConfig = AltinnrettigheterProxyKlientConfig(
-                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("ditt-nav-arbeidsgiver-api", altinnConfig.proxyUrl),
+                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", altinnConfig.proxyUrl),
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
                         altinnConfig.fallBackUrl,
                         altinnConfig.altinnHeader,
