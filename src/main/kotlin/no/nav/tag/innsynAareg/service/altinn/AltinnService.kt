@@ -4,6 +4,7 @@ package no.nav.tag.innsynAareg.service.altinn
 import lombok.extern.slf4j.Slf4j
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.AltinnReportee
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.Subject
@@ -29,7 +30,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     private val headerEntity: HttpEntity<HttpHeaders?>
     private val tokenUtils: TokenUtils
     private val altinnConfig = altinnConfig;
-    private val klient: AltinnrettigheterProxyKlient;
+    private val klient: no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient;
 
     val logger = LoggerFactory.getLogger(AltinnService::class.java)
 
@@ -45,7 +46,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                     parametre
             )}
             catch (error: Exception) {
-                logger.error("Klarte ikke hente organisasjoner med rett til arbeidsforhold: ", error.message)
+                logger.error("DEBUG Klarte ikke hente organisasjoner med rett til arbeidsforhold: ", error.message)
             }
         return null
     }
@@ -59,14 +60,12 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                         fnr,
                         parametre
                 );
-
             }
             catch (error: Exception) {
-                logger.error("Klarte ikke hente organisasjoner fra Altinn: ", error.message)
+                logger.error("DEBUG Klarte ikke hente organisasjoner fra Altinn: ", error.message)
             }
         return null;
     }
-
 
     private fun getAuthHeadersForInnloggetBruker(): HttpEntity<HttpHeaders?>? {
         val headers = HttpHeaders()
@@ -88,10 +87,10 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
                 try {
                     val collectionRAW = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre);
-                    logger.info("RÅ respons" + collectionRAW );
+                    logger.info("DEBUG RÅ respons" + collectionRAW );
                     try {
                         val collection: MutableList<Organisasjon> = collectionRAW.toMap().map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
-                        logger.info("prossessert respons" + collection );
+                        logger.info(" DEBUG prossessert respons" + collection );
                     }
                     catch (e: Exception) {
 
@@ -104,7 +103,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
-                throw AltinnException("Feil fra Altinn", exception)
+                throw AltinnException("DEBUG Feil fra Altinn", exception)
             }
         }
         return response.toList()
@@ -119,7 +118,8 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         val headers = HttpHeaders()
         headers["APIKEY"] = altinnConfig.altinnHeader
         headerEntity = HttpEntity(headers)
-        val proxyKlientConfig = AltinnrettigheterProxyKlientConfig(
+        logger.info("proxy url: " +altinnConfig.proxyUrl, "fallback: " + altinnConfig.fallBackUrl);
+        val proxyKlientConfig = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig(
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", altinnConfig.proxyUrl),
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
                         altinnConfig.fallBackUrl,
@@ -127,7 +127,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                         altinnConfig.APIGwHeader
                 )
         )
-        klient = AltinnrettigheterProxyKlient(proxyKlientConfig)
+        klient = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient(proxyKlientConfig)
     }
 }
 
