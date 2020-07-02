@@ -52,6 +52,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             }
             respons.body!!
         } catch (exception: RestClientException) {
+            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold: ", exception.message)
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
@@ -85,7 +86,14 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
          return arbeidsforholdOversikt
     }
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
-        return yrkeskoderespons.betydninger.get(yrkeskodenokkel)?.get(0)?.beskrivelser?.nb?.tekst
+        try {
+            val betydning = yrkeskoderespons.betydninger.get(yrkeskodenokkel)!!.get(0).beskrivelser!!.nb!!.tekst;
+            return betydning;
+        }
+        catch (e: Exception) {
+            logger.error("Fant ikke betydning for yrkeskode: "+ yrkeskodenokkel, e.message)
+        }
+        return "Fant ikke yrkesbeskrivelse"
     }
 
     fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
