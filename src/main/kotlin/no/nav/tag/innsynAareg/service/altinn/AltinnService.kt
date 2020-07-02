@@ -118,7 +118,7 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         val headers = HttpHeaders()
         headers["APIKEY"] = altinnConfig.altinnHeader
         headerEntity = HttpEntity(headers)
-        logger.info("proxy url: " +altinnConfig.proxyUrl, "fallback: " + altinnConfig.fallBackUrl);
+        logger.info("DEBUG proxy url: " +altinnConfig.proxyUrl, "fallback: " + altinnConfig.fallBackUrl);
         val proxyKlientConfig = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig(
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", altinnConfig.proxyUrl),
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
