@@ -87,7 +87,15 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
                 parametre["\$top"] = ALTINN_ORG_PAGE_SIZE.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
                 try {
-                    val collection: MutableList<Organisasjon> = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre).toMap().map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                    val collectionRAW = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre);
+                    logger.info("RÅ respons" + collectionRAW );
+                    try {
+                        val collection: MutableList<Organisasjon> = collectionRAW.toMap().map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
+                        logger.info("prossessert respons" + collection );
+                    }
+                    catch (e: Exception) {
+
+                    }
                     response.addAll(collection);
                 }
                 catch (e: Exception) {
@@ -101,7 +109,6 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
         }
         return response.toList()
     }
-
 
     companion object {
         private const val ALTINN_ORG_PAGE_SIZE = 500
