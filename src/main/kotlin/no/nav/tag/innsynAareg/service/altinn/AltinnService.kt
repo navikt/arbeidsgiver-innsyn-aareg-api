@@ -14,6 +14,7 @@ import no.nav.tag.innsynAareg.models.altinn.Organisasjon
 import no.nav.tag.innsynAareg.service.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
 import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
@@ -26,10 +27,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Slf4j
 @Component
-class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemplate: RestTemplate, tokenUtils: TokenUtils) {
+class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: String,  tokenUtils: TokenUtils, @Value("\${altinn.altinnUrl") val fallBackUrl: String, @Value("\${altinn.altinnHeader}") val altinnHeader: String, @Value("\${altinn.APIGwHeader}") val APIGwHeader: String) {
     private val headerEntity: HttpEntity<HttpHeaders?>
-    private val tokenUtils: TokenUtils
-    private val altinnConfig = altinnConfig;
+    private val tokenUtils: TokenUtils = tokenUtils;
     private val klient: no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient;
 
     val logger = LoggerFactory.getLogger(AltinnService::class.java)
@@ -85,22 +85,12 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
             try {
                 parametre["\$top"] = ALTINN_ORG_PAGE_SIZE.toString()
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
-                try {
-                    val collectionRAW = klient.hentOrganisasjoner( SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre);
-                    logger.info("DEBUG RÅ respons" + collectionRAW );
-                    try {
-                        val collection: MutableList<Organisasjon> = collectionRAW.toMap().map { Organisasjon(it.name!!, it.type!!, it.parentOrganizationNumber!!, it.organizationNumber!!, it.organizationForm!!, it.status!!)}.toMutableList();
-                        logger.info(" DEBUG prossessert respons" + collection );
-                    }
-                    catch (e: Exception) {
-
-                    }
-                    response.addAll(collection);
-                }
-                catch (e: Exception) {
-                    logger.error("Klarte enten ikke å kalle, eller klarte ikke transformere objektet");
-                }
-               hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
+                val collectionRAW: List<AltinnReportee> = klient.hentOrganisasjoner(SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre);
+                logger.info("DEBUG RÅ respons" + collectionRAW );
+                val collection: List<Organisasjon> = mapTilOrganisasjon(collectionRAW);
+                logger.info(" DEBUG prossessert respons" + collection );
+                response.addAll(collection);
+                hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
             } catch (exception: RestClientException) {
                 //AltinnService.log.error("Feil fra Altinn-proxy med spørring: " + url + " Exception: " + exception.message)
                 throw AltinnException("DEBUG Feil fra Altinn", exception)
@@ -114,21 +104,29 @@ class AltinnService constructor(altinnConfig: AltinnConfig, private val restTemp
     }
 
     init {
-        this.tokenUtils = tokenUtils
         val headers = HttpHeaders()
-        headers["APIKEY"] = altinnConfig.altinnHeader
+        headers["APIKEY"] = altinnHeader;
         headerEntity = HttpEntity(headers)
-        logger.info("DEBUG proxy url: " +altinnConfig.proxyUrl, "fallback: " + altinnConfig.fallBackUrl);
+        logger.info("DEBUG proxy url: " +proxyUrl, "fallback: " + fallBackUrl);
         val proxyKlientConfig = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig(
-                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", altinnConfig.proxyUrl),
+                no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", proxyUrl),
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
-                        altinnConfig.fallBackUrl,
-                        altinnConfig.altinnHeader,
-                        altinnConfig.APIGwHeader
+                        fallBackUrl,
+                        altinnHeader,
+                        APIGwHeader
                 )
         )
         klient = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient(proxyKlientConfig)
     }
+}
+
+fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> {
+    val list: MutableList<Organisasjon> = mutableListOf();
+    for (i in originalListe.indices) {
+        val org = Organisasjon(originalListe[i].name!!, originalListe[i].type!!, originalListe[i].parentOrganizationNumber,originalListe[i].organizationNumber!!, originalListe[i].organizationForm!!, originalListe[i].status!!);
+        list.add(org);
+    }
+    return list.toList();
 }
 
 inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
