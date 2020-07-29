@@ -87,8 +87,9 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
                 parametre["\$skip"] = ((pageNumber - 1) * ALTINN_ORG_PAGE_SIZE).toString()
                 val collectionRAW: List<AltinnReportee> = klient.hentOrganisasjoner(SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker), Subject(fnr), parametre);
                 logger.info("DEBUG RÅ respons" + collectionRAW );
+                logger.info("DEBUG parametere i altinnkall" + collectionRAW );
                 val collection: List<Organisasjon> = mapTilOrganisasjon(collectionRAW);
-                logger.info(" DEBUG prossessert respons" + collection );
+                logger.info("DEBUG prossessert respons" + collection);
                 response.addAll(collection);
                 hasMore = collection.size >= ALTINN_ORG_PAGE_SIZE;
             } catch (exception: RestClientException) {
@@ -118,15 +119,16 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
         )
         klient = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient(proxyKlientConfig)
     }
-}
 
-fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> {
-    val list: MutableList<Organisasjon> = mutableListOf();
-    for (i in originalListe.indices) {
-        val org = Organisasjon(originalListe[i].name!!, originalListe[i].type!!, originalListe[i].parentOrganizationNumber,originalListe[i].organizationNumber!!, originalListe[i].organizationForm!!, originalListe[i].status!!);
-        list.add(org);
+    fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> {
+        val list: MutableList<Organisasjon> = mutableListOf();
+        for (i in originalListe.indices) {
+            val org = Organisasjon(originalListe[i].name!!, originalListe[i].type!!, originalListe[i].parentOrganizationNumber,originalListe[i].organizationNumber!!, originalListe[i].organizationForm!!, originalListe[i].status!!);
+            list.add(org);
+        }
+        logger.info("DEBUG liste prosessert i funksjon: ", list.toList());
+        return list.toList();
     }
-    return list.toList();
 }
 
 inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
