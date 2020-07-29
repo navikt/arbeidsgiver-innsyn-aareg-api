@@ -17,14 +17,14 @@ import no.nav.tag.innsynAareg.service.altinn.typeReference
 @RestController
 class OrganisasjonController ( val altinnService: AltinnService, val requestContextHolder: TokenValidationContextHolder){
 
-    @GetMapping(value = ["/api/organisasjoner"])
+    @GetMapping(value = ["/organisasjoner"])
     fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon?>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
         val result = altinnService.hentOrganisasjoner(fnr);
         return ResponseEntity.ok(result!!)
     }
 
-    @GetMapping(value = ["/api/rettigheter-til-tjeneste"])
+    @GetMapping(value = ["/rettigheter-til-tjeneste"])
     fun hentRettigheter(@RequestParam serviceKode: String?, @RequestParam serviceEdition: String?): ResponseEntity<List<Organisasjon?>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
         val result: List<Organisasjon?> = altinnService.hentOrganisasjonerBasertPaRettigheter(fnr, serviceKode!!, serviceEdition!!)!!
