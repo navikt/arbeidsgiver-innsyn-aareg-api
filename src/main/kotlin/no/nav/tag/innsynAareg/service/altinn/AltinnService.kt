@@ -25,8 +25,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Slf4j
 @Component
-class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: String,  tokenUtils: TokenUtils, @Value("\${altinn.altinnUrl") val fallBackUrl: String, @Value("\${altinn.altinnHeader}") val altinnHeader: String) {
-    private val headerEntity: HttpEntity<HttpHeaders?>
+class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: String,  tokenUtils: TokenUtils, @Value("\${altinn.altinnUrl") val fallBackUrl: String, @Value("\${altinn.altinnHeader}") val altinnHeader: String, @Value("\${altinn.APIGwHeader}") val APIGwHeader: String) {
     private val tokenUtils: TokenUtils = tokenUtils;
     private val klient: no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient;
 
@@ -93,9 +92,6 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
     }
 
     init {
-        val headers = HttpHeaders()
-        headers["APIKEY"] = altinnHeader;
-        headerEntity = HttpEntity(headers)
         val proxyKlientConfig = no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig(
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig("arbeidsgiver-arbeidsforhold-api", proxyUrl),
                 no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig(
