@@ -107,9 +107,15 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
         val list: MutableList<Organisasjon> = mutableListOf();
         logger.info("DEBUG altinnorganisasjoner");
         for (i in originalListe.indices) {
-            val org = Organisasjon(Name = originalListe[i].name, Type = originalListe[i].type, ParentOrganizationNumber =  originalListe[i].parentOrganizationNumber, OrganizationNumber = originalListe[i].organizationNumber, OrganizationForm = originalListe[i].organizationForm, Status = originalListe[i].status);
-            logger.info("Debugger log" + org.Name);
-            list.add(org);
+            val organisasjon = Organisasjon();
+            organisasjon.Name = originalListe[i].name;
+            organisasjon.Status = originalListe[i].status;
+            organisasjon.Type = originalListe[i].type;
+            organisasjon.ParentOrganizationNumber = originalListe[i].parentOrganizationNumber;
+            organisasjon.OrganizationForm= originalListe[i].organizationForm;
+            organisasjon.OrganizationNumber= originalListe[i].organizationNumber;
+            logger.info("Debugger log" + organisasjon.Name);
+            list.add(organisasjon);
         }
         return list.toList();
     }
