@@ -1,18 +1,10 @@
 package no.nav.tag.innsynAareg.models.altinn
 
-data class Organisasjon (var Name: String?,
-                         var Type: String?,
-                         var ParentOrganizationNumber: String?,
-                         var OrganizationNumber: String?,
-                         var OrganizationForm: String?,
-                         var Status: String?
-    ) {
-    constructor() {
-        Name = null;
-        Type = null;
-        ParentOrganizationNumber = null;
-        OrganizationForm = null;
-        Status = null;
-
-    }
+class Organisasjon {
+    var Name: String? = null;
+    var ParentOrganizationNumber: String? = null;
+    var OrganizationNumber: String? = null;
+    var OrganizationForm: String? = null;
+    var Status: String? = null;
+    var Type: String? = null;
 }
