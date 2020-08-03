@@ -108,7 +108,7 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
         logger.info("DEBUG altinnorganisasjoner");
         for (i in originalListe.indices) {
             val org = Organisasjon(Name = originalListe[i].name, Type = originalListe[i].type, ParentOrganizationNumber =  originalListe[i].parentOrganizationNumber, OrganizationNumber = originalListe[i].organizationNumber, OrganizationForm = originalListe[i].organizationForm, Status = originalListe[i].status);
-            logger.info("Debugger log", org);
+            logger.info("Debugger log" + org.Name);
             list.add(org);
         }
         return list.toList();
