@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.models.altinn
 
-data class Organisasjon (val Name: String?,
+data class Organisasjon (var Name: String?,
                          val Type: String?,
                          val ParentOrganizationNumber: String?,
                          val OrganizationNumber: String?,
