@@ -62,6 +62,8 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
+
+
     private fun getRequestEntity(bedriftsnr: String, juridiskEnhetOrgnr: String?, idPortenToken: String?): HttpEntity<String> {
         val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
@@ -164,6 +166,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             }
             respons.body!!
         } catch (exception: RestClientException) {
+            logger.error("Feiler ved å hente arbeidsgiveroversikt fra Aareg ", exception.message)
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
@@ -190,9 +193,11 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
         //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
         return try {
-            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.get(0).organisasjonsledd!!, idToken)
+            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd[0].organisasjonsledd!!, idToken)
         }
         catch (exception: Exception) {
+            logger.error("Klarte ikke itere over orgtre ", exception.message)
+
             throw AaregException(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
         }
     }
