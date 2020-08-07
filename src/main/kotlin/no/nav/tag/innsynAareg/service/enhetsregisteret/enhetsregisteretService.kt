@@ -28,7 +28,8 @@ class EnhetsregisterService(private val restTemplate: RestTemplate) {
         try {
             val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=false&inkluderHierarki=true"
             val response: ResponseEntity<EnhetsRegisterOrg> = restTemplate.exchange(eregurMedParam, HttpMethod.GET, requestEntity, EnhetsRegisterOrg::class.java)
-            logger.error("respons fra enhetsregisteret: ")
+            logger.info("respons fra enhetsregisteret: ", response.body)
+            logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
             return response.body
         }
         catch (e: Exception) {
