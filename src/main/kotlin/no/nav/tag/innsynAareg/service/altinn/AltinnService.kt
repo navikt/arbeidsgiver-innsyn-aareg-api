@@ -111,7 +111,7 @@ class AltinnService constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: Stri
             organisasjon.ParentOrganizationNumber = originalListe[i].parentOrganizationNumber;
             organisasjon.OrganizationForm= originalListe[i].organizationForm;
             organisasjon.OrganizationNumber= originalListe[i].organizationNumber;
-            logger.info("Debugger log" + organisasjon.Name);
+            logger.info("Debugger sjekk respons fra Altinn: navn" + organisasjon.Name + "nummer: " + organisasjon.OrganizationNumber );
             list.add(organisasjon);
         }
         return list.toList();
