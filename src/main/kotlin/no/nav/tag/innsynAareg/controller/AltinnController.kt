@@ -18,7 +18,7 @@ class OrganisasjonController(
 ) {
 
     @GetMapping(value = ["/organisasjoner"])
-    fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon?>> {
+    fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
         val result = altinnService.hentOrganisasjoner(fnr)
         return ResponseEntity.ok(result!!)
@@ -28,9 +28,9 @@ class OrganisasjonController(
     fun hentRettigheter(
         @RequestParam serviceKode: String?,
         @RequestParam serviceEdition: String?
-    ): ResponseEntity<List<Organisasjon?>> {
+    ): ResponseEntity<List<Organisasjon>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
-        val result: List<Organisasjon?> =
+        val result: List<Organisasjon> =
             altinnService.hentOrganisasjonerBasertPaRettigheter(fnr, serviceKode!!, serviceEdition!!)!!
         return ResponseEntity.ok(result)
     }
