@@ -7,26 +7,26 @@ import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.RestTemplate
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Protected
-class AaregController (val resttemplate: RestTemplate, val aAregService: AaregService) {
+class AaregController(val aAregService: AaregService) {
     @GetMapping(value = ["/arbeidsforhold"])
-    fun hentArbeidsforhold(@RequestHeader("orgnr") orgnr: String,
-                           @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): OversiktOverArbeidsForhold? {
-        val response: OversiktOverArbeidsForhold? = aAregService.hentArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken);
-        return response
+    fun hentArbeidsforhold(
+        @RequestHeader("orgnr") orgnr: String,
+        @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+        @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
+    ): OversiktOverArbeidsForhold? {
+        return aAregService.hentArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken)
     }
 
     @GetMapping(value = ["/antall-arbeidsforhold"])
-    fun hentAntallArbeidsforhold(@RequestHeader("orgnr") orgnr: String,
-                           @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-                           @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String): Pair<String, Number>? {
-        val response: Pair<String, Number> = aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken);
-        return response
+    fun hentAntallArbeidsforhold(
+        @RequestHeader("orgnr") orgnr: String,
+        @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+        @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
+    ): Pair<String, Number>? {
+        return aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken)
     }
 }
-

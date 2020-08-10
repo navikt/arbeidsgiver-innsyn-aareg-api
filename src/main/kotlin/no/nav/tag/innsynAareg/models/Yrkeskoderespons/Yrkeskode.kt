@@ -9,8 +9,10 @@ import lombok.Data
 class Yrkeskode {
     @JsonProperty("gyldigFra")
     val gyldigFra: String? = null
+
     @JsonProperty("gyldigTil")
     val gyldigTil: String? = null
+
     @JsonProperty("beskrivelser")
     val beskrivelser: Beskrivelser? = null
 }

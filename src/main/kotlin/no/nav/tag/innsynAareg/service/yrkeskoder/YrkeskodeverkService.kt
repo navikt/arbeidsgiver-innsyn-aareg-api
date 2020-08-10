@@ -19,9 +19,12 @@ import java.util.*
 
 @Slf4j
 @Service
-class YrkeskodeverkService @Autowired constructor(private val restTemplate: RestTemplate, @Value("\${yrkeskodeverk.yrkeskodeUrl}") yrkeskodeUrl: String) {
+class YrkeskodeverkService @Autowired constructor(
+    private val restTemplate: RestTemplate,
+    @Value("\${yrkeskodeverk.yrkeskodeUrl}") yrkeskodeUrl: String
+) {
     private val headerEntity: HttpEntity<String>
-    private val uriString: String = yrkeskodeUrl;
+    private val uriString: String = yrkeskodeUrl
 
     val logger = LoggerFactory.getLogger(YrkeskodeverkService::class.java)
 
@@ -34,10 +37,10 @@ class YrkeskodeverkService @Autowired constructor(private val restTemplate: Rest
             headers["Nav-Call-Id"] = UUID.randomUUID().toString()
             headers["Nav-Consumer-Id"] = "srvAG-Arbforhold"
             val respons: ResponseEntity<Yrkeskoderespons> = restTemplate.exchange(
-                    uriString,
-                    HttpMethod.GET,
-                    HttpEntity<Any>(headers),
-                    Yrkeskoderespons::class.java
+                uriString,
+                HttpMethod.GET,
+                HttpEntity<Any>(headers),
+                Yrkeskoderespons::class.java
             )
             if (respons.getStatusCode() != HttpStatus.OK) {
                 val message = "MSA-AAREG Kall mot kodeverksoversikt feiler med HTTP-" + respons.getStatusCode()

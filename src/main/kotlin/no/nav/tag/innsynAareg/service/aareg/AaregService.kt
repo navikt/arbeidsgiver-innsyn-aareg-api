@@ -1,7 +1,5 @@
 package no.nav.tag.innsynAareg.service.aareg
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Semaphore
 import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
@@ -23,32 +21,49 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.*
-import kotlin.system.measureTimeMillis
 
 @Slf4j
 @Service
-class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val yrkeskodeverkService: YrkeskodeverkService, val pdlBatchService: PdlBatchService, val enhetsregisteretService: EnhetsregisterService){
+class AaregService(
+    val restTemplate: RestTemplate,
+    val stsClient: STSClient,
+    val yrkeskodeverkService: YrkeskodeverkService,
+    val pdlBatchService: PdlBatchService,
+    val enhetsregisteretService: EnhetsregisterService
+) {
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
+
     @Value("\${aareg.aaregArbeidsgivere}")
     lateinit var aaregArbeidsgiverOversiktUrl: String
+
     val logger = LoggerFactory.getLogger(AaregService::class.java)
 
-    fun hentArbeidsforhold(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String?):OversiktOverArbeidsForhold {
-        val opplysningspliktigorgnr: String? = hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken!!).first
-        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr,opplysningspliktigorgnr,idPortenToken)
-        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!;
+    fun hentArbeidsforhold(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String?
+    ): OversiktOverArbeidsForhold {
+        val opplysningspliktigorgnr: String? =
+            hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken!!).first
+        val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
+        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!
     }
 
-    fun hentArbeidsforholdFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String?):OversiktOverArbeidsForhold {
+    fun hentArbeidsforholdFraAAReg(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String?,
+        idPortenToken: String?
+    ): OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
-            val respons = restTemplate.exchange(url,
-                    HttpMethod.GET, entity, OversiktOverArbeidsForhold::class.java)
+            val respons = restTemplate.exchange(
+                url,
+                HttpMethod.GET, entity, OversiktOverArbeidsForhold::class.java
+            )
             if (respons.statusCode != HttpStatus.OK) {
-                val message = "Kall mot aareg feiler med HTTP-" + respons.statusCode
-                throw RuntimeException(message)
+                throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
             }
             respons.body!!
         } catch (exception: RestClientException) {
@@ -57,14 +72,16 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         }
     }
 
-    fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold :OversiktOverArbeidsForhold): OversiktOverArbeidsForhold?{
-        val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold);
+    fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+        val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold)
         return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
     }
 
-
-
-    private fun getRequestEntity(bedriftsnr: String, juridiskEnhetOrgnr: String?, idPortenToken: String?): HttpEntity<String> {
+    private fun getRequestEntity(
+        bedriftsnr: String,
+        juridiskEnhetOrgnr: String?,
+        idPortenToken: String?
+    ): HttpEntity<String> {
         val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -72,64 +89,73 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         headers["Nav-Call-Id"] = appName
         headers["Nav-Arbeidsgiverident"] = bedriftsnr
         headers["Nav-Opplysningspliktigident"] = juridiskEnhetOrgnr
-        headers["Nav-Consumer-Token"] = stsClient.token?.access_token;
+        headers["Nav-Consumer-Token"] = stsClient.token?.access_token
         return HttpEntity(headers)
     }
 
-    fun settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+    fun settYrkeskodebetydningPaAlleArbeidsforhold(
+        arbeidsforholdOversikt: OversiktOverArbeidsForhold
+    ): OversiktOverArbeidsForhold? {
         val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
         val yrkeskodeBeskrivelser: Yrkeskoderespons = yrkeskodeverkService.hentBetydningerAvYrkeskoder()!!
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
             val yrkeskode: String = arbeidsforhold.yrke
             val yrkeskodeBeskrivelse: String = finnYrkeskodebetydningPaYrke(yrkeskode, yrkeskodeBeskrivelser)!!
-            arbeidsforhold.yrkesbeskrivelse =yrkeskodeBeskrivelse
+            arbeidsforhold.yrkesbeskrivelse = yrkeskodeBeskrivelse
         }
         hentYrkerTimer.stop().report()
-         return arbeidsforholdOversikt
+        return arbeidsforholdOversikt
     }
+
     fun finnYrkeskodebetydningPaYrke(yrkeskodenokkel: String?, yrkeskoderespons: Yrkeskoderespons): String? {
         try {
-            val betydning = yrkeskoderespons.betydninger.get(yrkeskodenokkel)!!.get(0).beskrivelser!!.nb!!.tekst;
-            return betydning;
-        }
-        catch (e: Exception) {
-            logger.error("Fant ikke betydning for yrkeskode: "+ yrkeskodenokkel, e.message)
+            return yrkeskoderespons.betydninger[yrkeskodenokkel]!![0].beskrivelser!!.nb!!.tekst
+        } catch (e: Exception) {
+            logger.error("Fant ikke betydning for yrkeskode: {}", yrkeskodenokkel, e.message)
         }
         return "Fant ikke yrkesbeskrivelse"
     }
 
-    fun settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt: OversiktOverArbeidsForhold, fnrs: List<String>) {
+    fun settNavnPåArbeidsforholdMedBatchMaxHundre(
+        arbeidsforholdOversikt: OversiktOverArbeidsForhold,
+        fnrs: List<String>
+    ) {
         val maksHundreFnrs = fnrs.toTypedArray()
         val respons: PdlBatchRespons = pdlBatchService.getBatchFraPdl(maksHundreFnrs)!!
         for (i in 0 until respons.data.hentPersonBolk.size) {
             for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
-                if (respons.data.hentPersonBolk.get(i).ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
+                if (respons.data.hentPersonBolk[i].ident.equals(arbeidsforhold.arbeidstaker.offentligIdent)) {
                     try {
                         val navnObjekt: Navn = respons.data.hentPersonBolk[i].person!!.navn!![0]
                         var navn = ""
                         if (navnObjekt.fornavn != null) navn += navnObjekt.fornavn
                         if (navnObjekt.mellomNavn != null) navn += " " + navnObjekt.mellomNavn
                         if (navnObjekt.etternavn != null) navn += " " + navnObjekt.etternavn
-                        arbeidsforhold.arbeidstaker.navn = navn;
+                        arbeidsforhold.arbeidstaker.navn = navn
                     } catch (e: NullPointerException) {
-                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR nullpointer exception ", e.message);
+                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR nullpointer exception ", e.message)
                         if (respons.data.hentPersonBolk[i].code != "ok") {
-                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  " + respons.data.hentPersonBolk[i].code);
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  " + respons.data.hentPersonBolk[i].code)
                         } else {
-                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn");
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn")
                         }
-                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
                     } catch (e: ArrayIndexOutOfBoundsException) {
-                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons " + respons.data.hentPersonBolk[i].code, e.message);
-                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn";
+                        logger.error(
+                            "AG-ARBEIDSFORHOLD PDL ERROR fant ikke person i respons " + respons.data.hentPersonBolk[i].code,
+                            e.message
+                        )
+                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
                     }
                 }
             }
         }
     }
 
-    fun settNavnPåArbeidsforholdBatch(arbeidsforholdOversikt: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
-        val lengde: Int = arbeidsforholdOversikt.arbeidsforholdoversikter!!.size;
+    fun settNavnPåArbeidsforholdBatch(
+        arbeidsforholdOversikt: OversiktOverArbeidsForhold
+    ): OversiktOverArbeidsForhold? {
+        val lengde: Int = arbeidsforholdOversikt.arbeidsforholdoversikter!!.size
         val fnrs = ArrayList<String>(lengde)
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
             fnrs.add(arbeidsforhold.arbeidstaker.offentligIdent)
@@ -137,9 +163,12 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         var tempStartIndeks = 0
         var gjenVarendelengde = lengde
         while (gjenVarendelengde > 100) {
-            settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, tempStartIndeks + 100))
-            tempStartIndeks = tempStartIndeks + 100
-            gjenVarendelengde = gjenVarendelengde - 100
+            settNavnPåArbeidsforholdMedBatchMaxHundre(
+                arbeidsforholdOversikt,
+                fnrs.subList(tempStartIndeks, tempStartIndeks + 100)
+            )
+            tempStartIndeks += 100
+            gjenVarendelengde -= 100
         }
         if (gjenVarendelengde > 0) {
             settNavnPåArbeidsforholdMedBatchMaxHundre(arbeidsforholdOversikt, fnrs.subList(tempStartIndeks, lengde))
@@ -148,18 +177,33 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     //Kode for nøsting basert på antall-kall
-    fun hentAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, overOrdnetEnhetOrgnr:String,idPortenToken: String):Pair<String, Int> {
+    fun hentAntallArbeidsforholdPaUnderenhet(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String
+    ): Pair<String, Int> {
         //respons er tomt array dersom det er feil opplysningpliktig
-        val respons: Array<OversiktOverArbeidsgiver> = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken);
-        return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons, overOrdnetEnhetOrgnr, idPortenToken);
+        val respons: Array<OversiktOverArbeidsgiver> =
+            hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
+                bedriftsnr,
+                overOrdnetEnhetOrgnr,
+                idPortenToken
+            )
+        return finnAntallArbeidsforholdPaUnderenhet(bedriftsnr, respons, overOrdnetEnhetOrgnr, idPortenToken)
     }
 
-    fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(bedriftsnr:String, overOrdnetEnhetOrgnr:String?,idPortenToken: String):Array<OversiktOverArbeidsgiver> {
+    fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String?,
+        idPortenToken: String
+    ): Array<OversiktOverArbeidsgiver> {
         val url = aaregArbeidsgiverOversiktUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
-            val respons = restTemplate.exchange(url,
-                    HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java)
+            val respons = restTemplate.exchange(
+                url,
+                HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java
+            )
             if (respons.statusCode != HttpStatus.OK) {
                 val message = "Kall mot aareg feiler med HTTP-" + respons.statusCode
                 throw RuntimeException(message)
@@ -171,12 +215,16 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         }
     }
 
-    fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>, juridiskEnhetOrgnr: String, idPortenToken: String): Pair<String, Int> {
-        val antall: Int? = finnAntallGittListe(bedriftsnr,oversikt);
-        return if (antall != null && antall>=0) {
-            Pair(juridiskEnhetOrgnr, antall);
-        }
-        else {
+    fun finnAntallArbeidsforholdPaUnderenhet(
+        bedriftsnr: String,
+        oversikt: Array<OversiktOverArbeidsgiver>,
+        juridiskEnhetOrgnr: String,
+        idPortenToken: String
+    ): Pair<String, Int> {
+        val antall: Int? = finnAntallGittListe(bedriftsnr, oversikt)
+        return if (antall != null && antall >= 0) {
+            Pair(juridiskEnhetOrgnr, antall)
+        } else {
             finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken, juridiskEnhetOrgnr)
         }
     }
@@ -185,44 +233,61 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         if (oversikt.isEmpty()) {
             logger.info("Aareg oversikt over arbeidsgiver respons er tom for orgnr: $orgnr")
         }
-        val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == orgnr };
+
+        val valgUnderenhetOVersikt: OversiktOverArbeidsgiver? =
+            oversikt.find { it.arbeidsgiver.organisasjonsnummer == orgnr }
+
         if (valgUnderenhetOVersikt != null) {
-            return valgUnderenhetOVersikt.aktiveArbeidsforhold + valgUnderenhetOVersikt.inaktiveArbeidsforhold;
+            return valgUnderenhetOVersikt.aktiveArbeidsforhold + valgUnderenhetOVersikt.inaktiveArbeidsforhold
         }
-        return null;
+        return null
     }
 
-    fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String, juridiskEnhetsNr: String): Pair<String, Int> {
-        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
+    fun finnOpplysningspliktigOrgOgAntallAnsatte(
+        orgnr: String,
+        idToken: String,
+        juridiskEnhetsNr: String
+    ): Pair<String, Int> {
+        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? =
+            enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
         if (orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd == null) {
             return Pair(juridiskEnhetsNr, 0)
         }
         return try {
-            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!, idToken)
-        }
-        catch (exception: Exception) {
+            itererOverOrgtre(
+                orgnr,
+                orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!,
+                idToken
+            )
+        } catch (exception: Exception) {
             logger.error("Klarte ikke itere over orgtre ", exception.message)
             throw AaregException(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
         }
     }
 
     fun itererOverOrgtre(orgnr: String, orgledd: Organisasjoneledd, idToken: String): Pair<String, Int> {
-        val oversikt  = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(orgnr, orgledd.organisasjonsnummer, idToken)
-        val antall = finnAntallGittListe(orgnr, oversikt);
+        val oversikt = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
+            orgnr,
+            orgledd.organisasjonsnummer,
+            idToken
+        )
+        val antall = finnAntallGittListe(orgnr, oversikt)
         if (antall != null && antall != 0) {
             return Pair(orgledd.organisasjonsnummer!!, antall)
+        } else if (orgledd.inngaarIJuridiskEnheter != null) {
+            try {
+                val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
+                val oversiktNesteNiva = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
+                    orgnr,
+                    juridiskEnhetOrgnr,
+                    idToken
+                )
+                val antallNesteNiva = finnAntallGittListe(orgnr, oversiktNesteNiva)
+                return Pair(juridiskEnhetOrgnr!!, antallNesteNiva!!)
+            } catch (exception: Exception) {
+                throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
+            }
         }
-        else if (orgledd.inngaarIJuridiskEnheter != null) {
-             try {
-                 val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
-                 val oversiktNesteNiva = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(orgnr, juridiskEnhetOrgnr, idToken);
-                 val antallNesteNiva = finnAntallGittListe(orgnr, oversiktNesteNiva);
-                 return Pair(juridiskEnhetOrgnr!!, antallNesteNiva!!);
-             }
-             catch (exception: Exception) {
-                 throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
-             }
-        }
-        return itererOverOrgtre(orgnr, orgledd.organisasjonsleddOver!!.get(0).organisasjonsledd!!, idToken)
+        return itererOverOrgtre(orgnr, orgledd.organisasjonsleddOver!![0].organisasjonsledd!!, idToken)
     }
-};
+}

@@ -10,22 +10,26 @@ import java.util.concurrent.TimeUnit
 class AltinnCacheConfig {
     @Bean
     fun altinnCache(): CaffeineCache {
-        return CaffeineCache(ALTINN_CACHE,
-                Caffeine.newBuilder()
-                        .maximumSize(10000)
-                        .expireAfterWrite(30, TimeUnit.MINUTES)
-                        .recordStats()
-                        .build())
+        return CaffeineCache(
+            ALTINN_CACHE,
+            Caffeine.newBuilder()
+                .maximumSize(10000)
+                .expireAfterWrite(30, TimeUnit.MINUTES)
+                .recordStats()
+                .build()
+        )
     }
 
     @Bean
     fun altinnTjenesteCache(): CaffeineCache {
-        return CaffeineCache(ALTINN_TJENESTE_CACHE,
-                Caffeine.newBuilder()
-                        .maximumSize(10000)
-                        .expireAfterWrite(30, TimeUnit.MINUTES)
-                        .recordStats()
-                        .build())
+        return CaffeineCache(
+            ALTINN_TJENESTE_CACHE,
+            Caffeine.newBuilder()
+                .maximumSize(10000)
+                .expireAfterWrite(30, TimeUnit.MINUTES)
+                .recordStats()
+                .build()
+        )
     }
 
     companion object {

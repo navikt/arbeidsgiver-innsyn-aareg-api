@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@EnableJwtTokenValidation(ignore=["org.springframework", "springfox.documentation.swagger.web.ApiResourceController"])
+@EnableJwtTokenValidation(
+    ignore = ["org.springframework", "springfox.documentation.swagger.web.ApiResourceController"]
+)
 class InnsynAaregApplication
 
 fun main(args: Array<String>) {
