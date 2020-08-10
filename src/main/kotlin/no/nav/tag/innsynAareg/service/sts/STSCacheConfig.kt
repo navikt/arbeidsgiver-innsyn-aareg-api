@@ -13,16 +13,17 @@ class STSCacheConfig {
 
     @Bean
     fun stsCache(): CaffeineCache {
-        return CaffeineCache(STS_CACHE,
-                Caffeine.newBuilder()
-                        .maximumSize(1)
-                        .expireAfterWrite(59, TimeUnit.MINUTES)
-                        .recordStats()
-                        .build())
+        return CaffeineCache(
+            STS_CACHE,
+            Caffeine.newBuilder()
+                .maximumSize(1)
+                .expireAfterWrite(59, TimeUnit.MINUTES)
+                .recordStats()
+                .build()
+        )
     }
 
     companion object {
-
         const val STS_CACHE = "sts_cache"
     }
 }

@@ -7,5 +7,9 @@ import org.springframework.stereotype.Component
 
 @Slf4j
 @Component
-class AltinnConfig @Autowired constructor(@Value("\${altinn.proxyUrl}") val proxyUrl: String,@Value("\${altinn.altinnUrl") val fallBackUrl: String,
-                                          @Value("\${altinn.altinnHeader}") val altinnHeader: String, @Value("\${altinn.APIGwHeader}") val APIGwHeader: String );
+class AltinnConfig @Autowired constructor(
+    @Value("\${altinn.proxyUrl}") val proxyUrl: String,
+    @Value("\${altinn.altinnUrl") val fallBackUrl: String,
+    @Value("\${altinn.altinnHeader}") val altinnHeader: String,
+    @Value("\${altinn.APIGwHeader}") val APIGwHeader: String
+)
