@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.service.aareg
 
-import lombok.extern.slf4j.Slf4j
 import no.nav.metrics.MetricsFactory
 import no.nav.metrics.Timer
 import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
@@ -22,7 +21,6 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.util.*
 
-@Slf4j
 @Service
 class AaregService(
     val restTemplate: RestTemplate,
