@@ -177,7 +177,7 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
             Pair(juridiskEnhetOrgnr, antall);
         }
         else {
-            finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken)
+            finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken, juridiskEnhetOrgnr)
         }
     }
 
@@ -192,14 +192,16 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
         return null;
     }
 
-    fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String): Pair<String, Int> {
+    fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String, juridiskEnhetsNr: String): Pair<String, Int> {
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
+        if (orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd == null) {
+            return Pair(juridiskEnhetsNr, 0)
+        }
         return try {
-            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd[0].organisasjonsledd!!, idToken)
+            itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!, idToken)
         }
         catch (exception: Exception) {
             logger.error("Klarte ikke itere over orgtre ", exception.message)
-
             throw AaregException(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
         }
     }
