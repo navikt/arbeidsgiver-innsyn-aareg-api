@@ -9,6 +9,7 @@ import lombok.Data
 class Sprak {
     @JsonProperty("term")
     val term: String? = null
+
     @JsonProperty("tekst")
     val tekst: String? = null
 }

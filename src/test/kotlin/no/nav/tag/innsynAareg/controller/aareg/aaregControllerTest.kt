@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @TestPropertySource(properties = ["mock.port=8082"])
 class AAregControllerTest {
     @Autowired
-    lateinit var aAregController: AaregController;
+    lateinit var aAregController: AaregController
 
     @Test(expected = AaregException::class)
     fun whenExceptionThrown_thenExpectationSatisfied() {
