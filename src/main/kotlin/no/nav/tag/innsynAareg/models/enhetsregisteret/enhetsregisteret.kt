@@ -12,8 +12,11 @@ import kotlin.collections.LinkedHashMap
 class EnhetsRegisterOrg {
     @JsonProperty("organisasjonsnummer")
     private val organisasjonsnummer: String? = null
+
     var orgTre: Map<String, Any> = LinkedHashMap()
-    var bestaarAvOrganisasjonsledd: ArrayList<BestaarAvOrganisasjonsledd>? = ArrayList<BestaarAvOrganisasjonsledd>()
+
+    var bestaarAvOrganisasjonsledd: ArrayList<BestaarAvOrganisasjonsledd>? = ArrayList()
+
     @JsonProperty("ansatte")
     var ansatte: ArrayList<Ansatte> = ArrayList<Ansatte>()
 }

@@ -1,4 +1,4 @@
-package no.nav.tag.innsynAareg.service.sts;
+package no.nav.tag.innsynAareg.service.sts
 
 import lombok.Data
 

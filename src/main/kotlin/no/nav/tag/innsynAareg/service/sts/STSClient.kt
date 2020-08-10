@@ -1,8 +1,6 @@
 package no.nav.tag.innsynAareg.service.sts
 
-import lombok.extern.slf4j.Slf4j
 import no.nav.tag.innsynAareg.service.sts.STSCacheConfig.Companion.STS_CACHE
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.CacheEvict
@@ -12,12 +10,13 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
-@Slf4j
 @Component
 class STSClient @Autowired
-constructor(@Value("\${sts.stsPass}") stsPass: String,
-            @Value("\${sts.stsUrl}") stsUrl: String,
-            private val restTemplate: RestTemplate ) {
+constructor(
+    @Value("\${sts.stsPass}") stsPass: String,
+    @Value("\${sts.stsUrl}") stsUrl: String,
+    private val restTemplate: RestTemplate
+) {
     private val requestEntity: HttpEntity<String>
     private val uriString: String
 
@@ -41,7 +40,7 @@ constructor(@Value("\${sts.stsPass}") stsPass: String,
 
     init {
         this.requestEntity = getRequestEntity(stsPass)
-        this.uriString = buildUriString(stsUrl);
+        this.uriString = buildUriString(stsUrl)
     }
 
     private fun getRequestEntity(stsPass: String): HttpEntity<String> {
@@ -52,10 +51,11 @@ constructor(@Value("\${sts.stsPass}") stsPass: String,
     }
 
     private fun buildUriString(stsUrl: String): String {
-        return UriComponentsBuilder.fromHttpUrl(stsUrl)
-                .queryParam("grant_type", "client_credentials")
-                .queryParam("scope", "openid")
-                .toUriString()
+        return UriComponentsBuilder
+            .fromHttpUrl(stsUrl)
+            .queryParam("grant_type", "client_credentials")
+            .queryParam("scope", "openid")
+            .toUriString()
     }
 
     @CacheEvict(STS_CACHE)
