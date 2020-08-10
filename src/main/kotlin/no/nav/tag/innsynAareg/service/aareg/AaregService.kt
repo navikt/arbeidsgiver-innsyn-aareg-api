@@ -250,7 +250,8 @@ class AaregService(
     ): Pair<String, Int> {
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? =
             enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
-        if (orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd == null) {
+        if (orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
+            logger.info("Fant null arbeidsforhold for organisasjon: $orgnr");
             return Pair(juridiskEnhetsNr, 0)
         }
         return try {
