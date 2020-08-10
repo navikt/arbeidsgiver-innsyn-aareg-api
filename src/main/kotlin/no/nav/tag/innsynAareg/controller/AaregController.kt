@@ -17,7 +17,7 @@ class AaregController(val aAregService: AaregService) {
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): OversiktOverArbeidsForhold? {
+    ): OversiktOverArbeidsForhold {
         return aAregService.hentArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken)
     }
 
@@ -26,7 +26,7 @@ class AaregController(val aAregService: AaregService) {
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): Pair<String, Number>? {
+    ): Pair<String, Number> {
         return aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken)
     }
 }
