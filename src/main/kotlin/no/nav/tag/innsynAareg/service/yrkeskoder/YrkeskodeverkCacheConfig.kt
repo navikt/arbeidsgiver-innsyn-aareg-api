@@ -6,17 +6,18 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.concurrent.TimeUnit
 
-
 @Configuration
 class YrkeskodeverkCacheConfig {
     @Bean
     fun kodeverkCache(): CaffeineCache {
-        return CaffeineCache(YRKESKODE_CACHE,
-                Caffeine.newBuilder()
-                        .maximumSize(1)
-                        .expireAfterWrite(59, TimeUnit.MINUTES)
-                        .recordStats()
-                        .build())
+        return CaffeineCache(
+            YRKESKODE_CACHE,
+            Caffeine.newBuilder()
+                .maximumSize(1)
+                .expireAfterWrite(59, TimeUnit.MINUTES)
+                .recordStats()
+                .build()
+        )
     }
 
     companion object {
