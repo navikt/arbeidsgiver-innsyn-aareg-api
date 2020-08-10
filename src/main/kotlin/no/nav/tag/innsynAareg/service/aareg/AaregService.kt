@@ -173,11 +173,11 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
 
     fun finnAntallArbeidsforholdPaUnderenhet(bedriftsnr:String, oversikt: Array<OversiktOverArbeidsgiver>, juridiskEnhetOrgnr: String, idPortenToken: String): Pair<String, Int> {
         val antall: Int? = finnAntallGittListe(bedriftsnr,oversikt);
-        if (antall != null || antall == 0) {
-            return Pair(juridiskEnhetOrgnr, antall);
+        return if (antall != null && antall>=0) {
+            Pair(juridiskEnhetOrgnr, antall);
         }
         else {
-            return finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken)
+            finnOpplysningspliktigOrgOgAntallAnsatte(bedriftsnr, idPortenToken)
         }
     }
 
@@ -191,7 +191,6 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
 
     fun finnOpplysningspliktigOrgOgAntallAnsatte(orgnr: String, idToken: String): Pair<String, Int> {
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg? = enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnr)
-        //no.nav.tag.dittNavArbeidsgiver.controller.AAregController.log.info("MSA-AAREG finnOpplysningspliktigorg, orgtreFraEnhetsregisteret: $orgtreFraEnhetsregisteret")
         return try {
             itererOverOrgtre(orgnr, orgtreFraEnhetsregisteret!!.bestaarAvOrganisasjonsledd[0].organisasjonsledd!!, idToken)
         }
