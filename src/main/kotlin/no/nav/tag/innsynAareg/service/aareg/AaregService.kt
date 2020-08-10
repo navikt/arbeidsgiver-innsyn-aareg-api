@@ -182,6 +182,9 @@ class AaregService (val restTemplate: RestTemplate, val stsClient: STSClient,val
     }
 
     fun finnAntallGittListe(orgnr: String, oversikt: Array<OversiktOverArbeidsgiver>): Int? {
+        if (oversikt.isEmpty()) {
+            logger.info("Aareg oversikt over arbeidsgiver respons er tom for orgnr: $orgnr")
+        }
         val valgUnderenhetOVersikt: OversiktOverArbeidsgiver?  = oversikt.find { it.arbeidsgiver.organisasjonsnummer == orgnr };
         if (valgUnderenhetOVersikt != null) {
             return valgUnderenhetOVersikt.aktiveArbeidsforhold + valgUnderenhetOVersikt.inaktiveArbeidsforhold;
