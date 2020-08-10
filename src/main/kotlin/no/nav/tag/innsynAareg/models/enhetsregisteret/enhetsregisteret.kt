@@ -13,7 +13,15 @@ class EnhetsRegisterOrg {
     @JsonProperty("organisasjonsnummer")
     private val organisasjonsnummer: String? = null
     var orgTre: Map<String, Any> = LinkedHashMap()
-    var bestaarAvOrganisasjonsledd: ArrayList<BestaarAvOrganisasjonsledd> = ArrayList<BestaarAvOrganisasjonsledd>()
+    var bestaarAvOrganisasjonsledd: ArrayList<BestaarAvOrganisasjonsledd>? = ArrayList<BestaarAvOrganisasjonsledd>()
+    @JsonProperty("ansatte")
+    var ansatte: ArrayList<Ansatte> = ArrayList<Ansatte>()
+}
+
+@Data
+class Ansatte {
+    @JsonProperty("antall")
+    var antall: Int? = null
 }
 
 @Data
