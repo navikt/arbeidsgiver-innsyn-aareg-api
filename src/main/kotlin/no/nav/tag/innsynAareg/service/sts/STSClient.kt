@@ -35,7 +35,6 @@ constructor(
                 //log.error("Feil ved oppslag i STS", e)
                 throw RuntimeException(e)
             }
-
         }
 
     init {
