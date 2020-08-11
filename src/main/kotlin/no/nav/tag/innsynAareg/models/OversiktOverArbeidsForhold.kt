@@ -52,8 +52,8 @@ data class ArbeidsForhold(
 )
 
 data class OversiktOverArbeidsForhold(
-    val antall: Long,
+    val antall: Long?,
     val arbeidsforholdoversikter: Array<ArbeidsForhold>?,
-    val startrad: String,
-    val totalAntall: String
+    val startrad: String?,
+    val totalAntall: String?
 )
