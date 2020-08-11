@@ -7,8 +7,8 @@ import no.nav.tag.innsynAareg.models.OversiktOverArbeidsgiver
 import no.nav.tag.innsynAareg.models.Yrkeskoderespons.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.enhetsregisteret.EnhetsRegisterOrg
 import no.nav.tag.innsynAareg.models.enhetsregisteret.Organisasjoneledd
-import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
 import no.nav.tag.innsynAareg.models.pdlBatch.Navn
+import no.nav.tag.innsynAareg.models.pdlBatch.PdlBatchRespons
 import no.nav.tag.innsynAareg.service.enhetsregisteret.EnhetsregisterService
 import no.nav.tag.innsynAareg.service.pdl.PdlBatchService
 import no.nav.tag.innsynAareg.service.sts.STSClient
@@ -40,18 +40,18 @@ class AaregService(
     fun hentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String?
+        idPortenToken: String
     ): OversiktOverArbeidsForhold {
-        val opplysningspliktigorgnr: String? =
-            hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken!!).first
+        val opplysningspliktigorgnr: String =
+            hentAntallArbeidsforholdPaUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
         val arbeidsforhold = hentArbeidsforholdFraAAReg(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
-        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)!!
+        return settPaNavnOgYrkesbeskrivelse(arbeidsforhold)
     }
 
     fun hentArbeidsforholdFraAAReg(
         bedriftsnr: String,
-        overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String?
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String
     ): OversiktOverArbeidsForhold {
         val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
@@ -70,15 +70,15 @@ class AaregService(
         }
     }
 
-    fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold? {
+    fun settPaNavnOgYrkesbeskrivelse(arbeidsforhold: OversiktOverArbeidsForhold): OversiktOverArbeidsForhold {
         val arbeidsforholdMedNavn = settNavnPåArbeidsforholdBatch(arbeidsforhold)
-        return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn!!)!!
+        return settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforholdMedNavn)
     }
 
     private fun getRequestEntity(
         bedriftsnr: String,
         juridiskEnhetOrgnr: String?,
-        idPortenToken: String?
+        idPortenToken: String
     ): HttpEntity<String> {
         val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
@@ -93,7 +93,7 @@ class AaregService(
 
     fun settYrkeskodebetydningPaAlleArbeidsforhold(
         arbeidsforholdOversikt: OversiktOverArbeidsForhold
-    ): OversiktOverArbeidsForhold? {
+    ): OversiktOverArbeidsForhold {
         val hentYrkerTimer: Timer = MetricsFactory.createTimer("DittNavArbeidsgiverApi.hentYrker").start()
         val yrkeskodeBeskrivelser: Yrkeskoderespons = yrkeskodeverkService.hentBetydningerAvYrkeskoder()!!
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
@@ -152,7 +152,7 @@ class AaregService(
 
     fun settNavnPåArbeidsforholdBatch(
         arbeidsforholdOversikt: OversiktOverArbeidsForhold
-    ): OversiktOverArbeidsForhold? {
+    ): OversiktOverArbeidsForhold {
         val lengde: Int = arbeidsforholdOversikt.arbeidsforholdoversikter!!.size
         val fnrs = ArrayList<String>(lengde)
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter) {
@@ -275,14 +275,14 @@ class AaregService(
             return Pair(orgledd.organisasjonsnummer!!, antall)
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
             try {
-                val juridiskEnhetOrgnr: String? = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
+                val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
                 val oversiktNesteNiva = hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
                     orgnr,
                     juridiskEnhetOrgnr,
                     idToken
                 )
                 val antallNesteNiva = finnAntallGittListe(orgnr, oversiktNesteNiva)
-                return Pair(juridiskEnhetOrgnr!!, antallNesteNiva!!)
+                return Pair(juridiskEnhetOrgnr, antallNesteNiva!!)
             } catch (exception: Exception) {
                 throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
             }

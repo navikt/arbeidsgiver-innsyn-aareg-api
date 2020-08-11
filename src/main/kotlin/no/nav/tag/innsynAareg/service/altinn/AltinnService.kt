@@ -37,7 +37,7 @@ class AltinnService constructor(
         fnr: String,
         serviceKode: String,
         serviceEdition: String
-    ): List<Organisasjon?>? {
+    ): List<Organisasjon>? {
         val parametre: MutableMap<String, String> = ConcurrentHashMap()
         parametre["serviceCode"] = serviceKode
         parametre["serviceEdition"] = serviceEdition
@@ -53,7 +53,7 @@ class AltinnService constructor(
         return null
     }
 
-    fun hentOrganisasjoner(fnr: String): List<Organisasjon?>? {
+    fun hentOrganisasjoner(fnr: String): List<Organisasjon>? {
         val filterParamVerdi = "Type+ne+'Person'+and+Status+eq+'Active'"
         val parametre: MutableMap<String, String> = ConcurrentHashMap()
         parametre["\$filter"] = filterParamVerdi
@@ -71,8 +71,8 @@ class AltinnService constructor(
     fun getReporteesFromAltinnViaProxy(
         fnr: String,
         parametre: MutableMap<String, String>
-    ): List<Organisasjon?> {
-        val response: MutableSet<Organisasjon?> = HashSet()
+    ): List<Organisasjon> {
+        val response: MutableSet<Organisasjon> = HashSet()
         var pageNumber = 0
         var hasMore = true
         while (hasMore) {
@@ -107,18 +107,15 @@ class AltinnService constructor(
         klient = AltinnrettigheterProxyKlient(proxyKlientConfig)
     }
 
-    fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> {
-        val list: MutableList<Organisasjon> = mutableListOf()
-        for (i in originalListe.indices) {
-            val organisasjon = Organisasjon()
-            organisasjon.Name = originalListe[i].name
-            organisasjon.Status = originalListe[i].status
-            organisasjon.Type = originalListe[i].type
-            organisasjon.ParentOrganizationNumber = originalListe[i].parentOrganizationNumber
-            organisasjon.OrganizationForm= originalListe[i].organizationForm
-            organisasjon.OrganizationNumber= originalListe[i].organizationNumber
-            list.add(organisasjon)
+    fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> =
+        originalListe.map {
+            Organisasjon(
+                Name = it.name,
+                Status = it.status,
+                Type = it.type,
+                ParentOrganizationNumber = it.parentOrganizationNumber,
+                OrganizationForm = it.organizationForm,
+                OrganizationNumber = it.organizationNumber
+            )
         }
-        return list.toList()
-    }
 }
