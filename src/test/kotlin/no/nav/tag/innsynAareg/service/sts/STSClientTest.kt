@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.service.sts
 
+import no.nav.tag.innsynAareg.client.sts.STSClient
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

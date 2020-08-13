@@ -1,7 +1,7 @@
 package no.nav.tag.innsynAareg.controller.aareg
 
 import no.nav.tag.innsynAareg.controller.AaregController
-import no.nav.tag.innsynAareg.service.aareg.AaregException
+import no.nav.tag.innsynAareg.client.aareg.AaregException
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
