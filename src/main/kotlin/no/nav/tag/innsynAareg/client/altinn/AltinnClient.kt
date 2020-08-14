@@ -113,11 +113,7 @@ class AltinnClient constructor(
         originalListe.map {
             Organisasjon(
                 Name = it.name,
-                Status = it.status,
-                Type = it.type,
-                ParentOrganizationNumber = it.parentOrganizationNumber,
-                OrganizationForm = it.organizationForm,
-                OrganizationNumber = it.organizationNumber
+                Type = it.type
             )
         }
 }
