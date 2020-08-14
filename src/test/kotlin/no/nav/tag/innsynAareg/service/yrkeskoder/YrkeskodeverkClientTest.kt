@@ -20,8 +20,16 @@ internal class YrkeskodeverkClientTest {
 
     @Test
     fun hentBetydningerAvYrkeskoder() {
-        val respons = yrkeskodeservice.hentBetydningerAvYrkeskoder()
-        val betydning = respons?.betydninger?.get("1227184")?.get(0)?.beskrivelser?.nb?.tekst
+        val respons = yrkeskodeservice.hentBetydningAvYrkeskoder()
+        val betydning = respons.betydningPåYrke("1227184")
         Assert.assertEquals("PLANSJEF (OFFENTLIG VIRKSOMHET)", betydning)
     }
+
+    @Test
+    fun `Ukjent yrkeskode gir passende feilmelding`() {
+        val respons = yrkeskodeservice.hentBetydningAvYrkeskoder()
+        val betydning = respons.betydningPåYrke("111111111111111")
+        Assert.assertEquals("Fant ikke yrkesbeskrivelse", betydning)
+    }
+
 }

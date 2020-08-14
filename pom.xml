@@ -96,6 +96,7 @@
             <artifactId>wiremock</artifactId>
             <version>2.24.1</version>
         </dependency>
+
         <!--tokensupport -->
         <dependency>
             <groupId>no.nav.security</groupId>

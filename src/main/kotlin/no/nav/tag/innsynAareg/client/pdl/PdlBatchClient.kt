@@ -45,7 +45,7 @@ class PdlBatchClient @Autowired constructor(
         return headers
     }
 
-    fun getBatchFraPdl(fnrs: Array<String>?): PdlBatchRespons? {
+    fun getBatchFraPdl(fnrs: List<String>): PdlBatchRespons? {
         try {
             val pdlRequest = PdlBatchRequest(
                 graphQlUtils.resourceAsString(),
