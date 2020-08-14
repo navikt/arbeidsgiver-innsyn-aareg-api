@@ -1,4 +1,4 @@
-package no.nav.tag.innsynAareg.models.yrkeskoder
+package no.nav.tag.innsynAareg.client.yrkeskoder.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

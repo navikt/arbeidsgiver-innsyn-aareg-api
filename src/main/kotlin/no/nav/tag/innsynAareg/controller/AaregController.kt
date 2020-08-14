@@ -1,7 +1,7 @@
 package no.nav.tag.innsynAareg.controller
 
 import no.nav.security.token.support.core.api.Protected
-import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.service.InnsynService
 import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,6 +27,6 @@ class AaregController(val aAregService: InnsynService) {
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): Pair<String, Number> {
-        return aAregService.hentAntallArbeidsforholdPaUnderenhet(orgnr, juridiskEnhetOrgnr, idToken)
+        return aAregService.hentAntallArbeidsforholdPåUnderenhet(orgnr, juridiskEnhetOrgnr, idToken)
     }
 }
