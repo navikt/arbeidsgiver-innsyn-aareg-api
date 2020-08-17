@@ -1,4 +1,4 @@
-package no.nav.tag.innsynAareg.models
+package no.nav.tag.innsynAareg.client.aareg.dto
 
 val varselKodeOppslag: HashMap<String, String> = hashMapOf(
     "ERKONK" to "Maskinell sluttdato: Konkurs",
@@ -46,14 +46,17 @@ data class ArbeidsForhold(
     val sistBekreftet: String,
     val stillingsprosent: String,
     val type: String,
-    val varsler: Array<ArbeidsforholdVarsel>?,
+    val varsler: List<ArbeidsforholdVarsel>?,
     val yrke: String,
     var yrkesbeskrivelse: String?
 )
 
 data class OversiktOverArbeidsForhold(
     val antall: Long?,
-    val arbeidsforholdoversikter: Array<ArbeidsForhold>?,
+    val arbeidsforholdoversikter: List<ArbeidsForhold>?,
     val startrad: String?,
     val totalAntall: String?
 )
+
+sealed class AaregFeil
+object IngenRettigheter : AaregFeil()

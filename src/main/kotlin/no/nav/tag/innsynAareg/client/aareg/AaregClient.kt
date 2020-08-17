@@ -1,8 +1,8 @@
 package no.nav.tag.innsynAareg.client.aareg
 
 import no.nav.tag.innsynAareg.client.sts.STSClient
-import no.nav.tag.innsynAareg.models.OversiktOverArbeidsForhold
-import no.nav.tag.innsynAareg.models.OversiktOverArbeidsgiver
+import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsgiver
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
@@ -12,8 +12,8 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class AaregClient(
-    val restTemplate: RestTemplate,
-    val stsClient: STSClient
+    private val restTemplate: RestTemplate,
+    private val stsClient: STSClient
 ) {
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
@@ -23,16 +23,15 @@ class AaregClient(
 
     val logger = LoggerFactory.getLogger(AaregClient::class.java)!!
 
-    fun hentArbeidsforholdFraAAReg(
+    fun hentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
         idPortenToken: String
     ): OversiktOverArbeidsForhold {
-        val url = aaregArbeidsforholdUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
             val respons = restTemplate.exchange(
-                url,
+                aaregArbeidsforholdUrl,
                 HttpMethod.GET, entity, OversiktOverArbeidsForhold::class.java
             )
             if (respons.statusCode != HttpStatus.OK) {
@@ -45,16 +44,32 @@ class AaregClient(
         }
     }
 
-    fun hentOVersiktOverAntallArbeidsforholdForOpplysningspliktigFraAAReg(
+    fun antallArbeidsforholdForOpplysningspliktig(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String?,
+        idPortenToken: String
+    ): Int? {
+        val oversikt = hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
+            bedriftsnr,
+            overOrdnetEnhetOrgnr,
+            idPortenToken
+        )
+        if (oversikt.isEmpty()) {
+            logger.info("Aareg oversikt over arbeidsgiver respons er tom for orgnr: $bedriftsnr")
+        }
+        return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr}
+            ?.let { it.aktiveArbeidsforhold + it.inaktiveArbeidsforhold }
+    }
+
+    private fun hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
         idPortenToken: String
     ): Array<OversiktOverArbeidsgiver> {
-        val url = aaregArbeidsgiverOversiktUrl
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
             val respons = restTemplate.exchange(
-                url,
+                aaregArbeidsgiverOversiktUrl,
                 HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java
             )
             if (respons.statusCode != HttpStatus.OK) {
