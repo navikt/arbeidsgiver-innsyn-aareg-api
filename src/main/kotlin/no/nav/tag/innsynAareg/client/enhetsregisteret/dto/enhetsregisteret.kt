@@ -8,7 +8,10 @@ import kotlin.collections.LinkedHashMap
 @JsonIgnoreProperties(ignoreUnknown = true)
 class EnhetsRegisterOrg {
     @JsonProperty("organisasjonsnummer")
-    private val organisasjonsnummer: String? = null
+    val Organisasjonsnummer: String? = null
+
+    @JsonProperty("navn")
+    val Navn: Navn? = null
 
     var orgTre: Map<String, Any> = LinkedHashMap()
 
@@ -16,11 +19,18 @@ class EnhetsRegisterOrg {
 
     @JsonProperty("ansatte")
     var ansatte: ArrayList<Ansatte> = ArrayList<Ansatte>()
+    @JsonProperty("driverVirksomheter")
+    val driverVirksomheter: List<EnhetsRegisterOrg>? = null
 }
 
 class Ansatte {
     @JsonProperty("antall")
     var antall: Int? = null
+}
+
+class Navn {
+    @JsonProperty("redigertnavn")
+    val redigertnavn: String? = null
 }
 
 class BestaarAvOrganisasjonsledd {
