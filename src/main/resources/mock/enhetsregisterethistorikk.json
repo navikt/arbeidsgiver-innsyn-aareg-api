@@ -1,0 +1,1558 @@
+{
+  "organisasjonsnummer": "983426387",
+  "type": "JuridiskEnhet",
+  "navn": {
+    "redigertnavn": "VITA AS",
+    "navnelinje1": "VITA AS",
+    "bruksperiode": {
+      "fom": "2015-02-23T08:04:53.2"
+    },
+    "gyldighetsperiode": {
+      "fom": "2001-06-06"
+    }
+  },
+  "organisasjonDetaljer": {
+    "registreringsdato": "2001-06-06T00:00:00",
+    "stiftelsesdato": "2001-05-28",
+    "enhetstyper": [
+      {
+        "enhetstype": "AS",
+        "bruksperiode": {
+          "fom": "2014-05-21T21:03:53.437"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-06-06"
+        }
+      }
+    ],
+    "statuser": [
+      {
+        "kode": "KONK",
+        "bruksperiode": {
+          "fom": "2019-10-22T04:02:31.98"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-10-21"
+        }
+      },
+      {
+        "kode": "FITA",
+        "bruksperiode": {
+          "fom": "2014-08-04T08:33:08.197"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-08-22",
+          "tom": "2014-07-31"
+        }
+      }
+    ],
+    "naeringer": [
+      {
+        "naeringskode": "47.750",
+        "hjelpeenhet": false,
+        "bruksperiode": {
+          "fom": "2014-05-22T01:06:55.28"
+        },
+        "gyldighetsperiode": {
+          "fom": "2002-04-25"
+        }
+      }
+    ],
+    "navn": [
+      {
+        "redigertnavn": "VITA AS",
+        "navnelinje1": "VITA AS",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-06-06"
+        }
+      }
+    ],
+    "forretningsadresser": [
+      {
+        "type": "Forretningsadresse",
+        "adresselinje1": "Bertrand Narvesensvei 2",
+        "postnummer": "0661",
+        "landkode": "NO",
+        "kommunenummer": "0301",
+        "bruksperiode": {
+          "fom": "2014-05-23T13:59:01.299"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-06-06",
+          "tom": "2008-02-12"
+        }
+      },
+      {
+        "type": "Forretningsadresse",
+        "adresselinje1": "Haslevangen 15",
+        "postnummer": "0579",
+        "landkode": "NO",
+        "kommunenummer": "0301",
+        "bruksperiode": {
+          "fom": "2015-02-23T10:38:34.403"
+        },
+        "gyldighetsperiode": {
+          "fom": "2008-02-13"
+        }
+      }
+    ],
+    "postadresser": [
+      {
+        "type": "Postadresse",
+        "adresselinje1": "Postboks 6125 Etterstad",
+        "postnummer": "0602",
+        "landkode": "NO",
+        "kommunenummer": "0301",
+        "bruksperiode": {
+          "fom": "2014-05-23T13:59:01.3"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-06-06",
+          "tom": "2003-06-05"
+        }
+      },
+      {
+        "type": "Postadresse",
+        "adresselinje1": "Postboks 6013 Etterstad",
+        "postnummer": "0601",
+        "landkode": "NO",
+        "kommunenummer": "0301",
+        "bruksperiode": {
+          "fom": "2015-02-23T10:38:34.403"
+        },
+        "gyldighetsperiode": {
+          "fom": "2003-06-06"
+        }
+      }
+    ],
+    "internettadresser": [
+      {
+        "adresse": "www.vita.no",
+        "bruksperiode": {
+          "fom": "2014-05-21T21:03:53.19"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17"
+        }
+      }
+    ],
+    "telefonnummer": [
+      {
+        "nummer": "22 57 69 50",
+        "telefontype": "TFON",
+        "bruksperiode": {
+          "fom": "2014-05-21T21:03:53.437"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17"
+        }
+      }
+    ],
+    "telefaksnummer": [
+      {
+        "nummer": "22 57 69 99",
+        "bruksperiode": {},
+        "gyldighetsperiode": {}
+      }
+    ],
+    "formaal": [
+      {
+        "formaal": "Grossist- og detaljistsalg av hudpleie, hårpleie, helsekost og annen\nvirksomhet som står i forbindelse med dette.\nSelskapet kan ved aksjeinnskudd eller på annen måte delta i annen\nnæringsvirksomhet.",
+        "bruksperiode": {
+          "fom": "2014-05-22T00:08:57.235"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17"
+        }
+      }
+    ],
+    "maalform": "NB",
+    "sistEndret": "2019-11-11",
+    "registrertMVA": [
+      {
+        "registrertIMVA": true,
+        "bruksperiode": {
+          "fom": "2019-11-01T04:02:37.358"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17",
+          "tom": "2019-10-30"
+        }
+      }
+    ],
+    "ansatte": [
+      {
+        "antall": 118,
+        "bruksperiode": {
+          "fom": "2019-05-09T21:51:57.81"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-10-15",
+          "tom": "2018-11-12"
+        }
+      },
+      {
+        "antall": 128,
+        "bruksperiode": {
+          "fom": "2019-10-16T01:04:58.754"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-09-12",
+          "tom": "2019-10-13"
+        }
+      },
+      {
+        "antall": 16,
+        "bruksperiode": {
+          "fom": "2019-05-09T11:24:22.512"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-02-10",
+          "tom": "2018-02-14"
+        }
+      },
+      {
+        "antall": 105,
+        "bruksperiode": {
+          "fom": "2019-05-09T16:23:05.642"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-02-15",
+          "tom": "2018-03-12"
+        }
+      },
+      {
+        "antall": 118,
+        "bruksperiode": {
+          "fom": "2019-05-09T20:32:12.078"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-08-14",
+          "tom": "2018-09-11"
+        }
+      },
+      {
+        "antall": 120,
+        "bruksperiode": {
+          "fom": "2019-05-09T21:13:59.071"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-09-12",
+          "tom": "2018-10-14"
+        }
+      },
+      {
+        "antall": 121,
+        "bruksperiode": {
+          "fom": "2019-08-16T10:05:58.774"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-07-15",
+          "tom": "2019-08-13"
+        }
+      },
+      {
+        "antall": 125,
+        "bruksperiode": {
+          "fom": "2019-09-16T01:04:08.676"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-08-14",
+          "tom": "2019-09-11"
+        }
+      },
+      {
+        "antall": 129,
+        "bruksperiode": {
+          "fom": "2019-11-16T00:50:23.058"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-10-14",
+          "tom": "2019-11-10"
+        }
+      },
+      {
+        "antall": 0,
+        "bruksperiode": {
+          "fom": "2019-11-16T00:50:23.058"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-11-11"
+        }
+      },
+      {
+        "antall": 106,
+        "bruksperiode": {
+          "fom": "2019-05-09T18:17:09.951"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-03-13",
+          "tom": "2018-05-14"
+        }
+      },
+      {
+        "antall": 107,
+        "bruksperiode": {
+          "fom": "2019-05-09T18:43:11.43"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-05-15",
+          "tom": "2018-06-11"
+        }
+      },
+      {
+        "antall": 108,
+        "bruksperiode": {
+          "fom": "2019-05-09T19:23:02.328"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-06-12",
+          "tom": "2018-07-11"
+        }
+      },
+      {
+        "antall": 116,
+        "bruksperiode": {
+          "fom": "2019-05-09T20:02:13.176"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-07-12",
+          "tom": "2018-08-13"
+        }
+      },
+      {
+        "antall": 120,
+        "bruksperiode": {
+          "fom": "2019-05-09T22:54:50.817"
+        },
+        "gyldighetsperiode": {
+          "fom": "2018-11-13",
+          "tom": "2019-01-13"
+        }
+      },
+      {
+        "antall": 113,
+        "bruksperiode": {
+          "fom": "2019-05-09T23:34:42.239"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-01-14",
+          "tom": "2019-02-13"
+        }
+      },
+      {
+        "antall": 116,
+        "bruksperiode": {
+          "fom": "2019-05-10T00:05:54.921"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-02-14",
+          "tom": "2019-03-11"
+        }
+      },
+      {
+        "antall": 113,
+        "bruksperiode": {
+          "fom": "2019-05-10T00:32:09.739"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-03-12",
+          "tom": "2019-04-12"
+        }
+      },
+      {
+        "antall": 115,
+        "bruksperiode": {
+          "fom": "2019-05-20T16:29:25.993"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-04-13",
+          "tom": "2019-05-14"
+        }
+      },
+      {
+        "antall": 118,
+        "bruksperiode": {
+          "fom": "2019-07-16T07:47:30.237"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-05-15",
+          "tom": "2019-07-14"
+        }
+      }
+    ]
+  },
+  "juridiskEnhetDetaljer": {
+    "enhetstype": "AS",
+    "sektorkode": "2100",
+    "kapitalopplysninger": [
+      {
+        "kapital": 2000000,
+        "kapitalInnbetalt": 2000000,
+        "valuta": "NOK",
+        "fritekst": "null",
+        "bruksperiode": {
+          "fom": "2014-08-04T08:32:45.965"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17",
+          "tom": "2014-07-31"
+        }
+      },
+      {
+        "kapital": 2200000,
+        "kapitalInnbetalt": 2200000,
+        "valuta": "NOK",
+        "fritekst": "null",
+        "bruksperiode": {
+          "fom": "2014-08-04T08:32:45.965"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-08-01"
+        }
+      }
+    ],
+    "foretaksregisterRegistreringer": [
+      {
+        "registrert": true,
+        "bruksperiode": {
+          "fom": "2014-05-21T21:03:53.437"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-02-17"
+        }
+      }
+    ]
+  },
+  "driverVirksomheter": [
+    {
+      "organisasjonsnummer": "913448278",
+      "navn": {
+        "redigertnavn": "VITA DETALJ AS",
+        "navnelinje1": "VITA DETALJ AS",
+        "navnelinje3": "AVD LOGISTIKK",
+        "bruksperiode": {
+          "fom": "2019-11-19T04:01:14.406"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-11-18"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2019-10-29T04:01:23.579"
+      },
+      "gyldighetsperiode": {
+        "fom": "2014-03-31",
+        "tom": "2019-10-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135694",
+      "navn": {
+        "redigertnavn": "VITA DETALJ AS",
+        "navnelinje1": "VITA DETALJ AS",
+        "navnelinje3": "AVD ADMINISTRASJON",
+        "bruksperiode": {
+          "fom": "2019-11-19T04:01:59.426"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-11-18"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2019-10-29T04:02:24.913"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2019-10-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "998388716",
+      "navn": {
+        "redigertnavn": "VITA DETALJ AS",
+        "navnelinje1": "VITA DETALJ AS",
+        "navnelinje3": "AVD NETTBUTIKK",
+        "bruksperiode": {
+          "fom": "2019-11-19T04:02:11.824"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-11-18"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2019-10-29T04:02:41.922"
+      },
+      "gyldighetsperiode": {
+        "fom": "2012-05-16",
+        "tom": "2019-10-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "873135972",
+      "navn": {
+        "redigertnavn": "VITA AVD 1672",
+        "navnelinje1": "VITA AVD 1672",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T15:17:49.514"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-08-08"
+      }
+    },
+    {
+      "organisasjonsnummer": "873136162",
+      "navn": {
+        "redigertnavn": "VITA AVD 1465",
+        "navnelinje1": "VITA AVD 1465",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T15:17:49.685"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-06-23"
+      }
+    },
+    {
+      "organisasjonsnummer": "874167312",
+      "navn": {
+        "redigertnavn": "VITA AVD 1258",
+        "navnelinje1": "VITA AVD 1258",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2000-09-22"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T15:21:02.85"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-06-11"
+      }
+    },
+    {
+      "organisasjonsnummer": "877539342",
+      "navn": {
+        "redigertnavn": "VITA AVD 2808",
+        "navnelinje1": "VITA AVD 2808",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2000-06-01"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T15:26:01.294"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-05-23"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135880",
+      "navn": {
+        "redigertnavn": "VITA AVD 1702",
+        "navnelinje1": "VITA AVD 1702",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.708"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-01-09"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135899",
+      "navn": {
+        "redigertnavn": "VITA AVD 1302",
+        "navnelinje1": "VITA AVD 1302",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2010-01-12"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.724"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-02-08"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135910",
+      "navn": {
+        "redigertnavn": "VITA AVD 1403",
+        "navnelinje1": "VITA AVD 1403",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.784"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-03-17"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135929",
+      "navn": {
+        "redigertnavn": "VITA AVD 1303",
+        "navnelinje1": "VITA AVD 1303",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.803"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-01-28"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135937",
+      "navn": {
+        "redigertnavn": "VITA AVD 1501",
+        "navnelinje1": "VITA AVD 1501",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.818"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-01-04"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135961",
+      "navn": {
+        "redigertnavn": "VITA AVD 1256",
+        "navnelinje1": "VITA AVD 1256",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.871"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-02-01"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135996",
+      "navn": {
+        "redigertnavn": "VITA AVD 1801",
+        "navnelinje1": "VITA AVD 1801",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.911"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2004-11-06"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136011",
+      "navn": {
+        "redigertnavn": "VITA AVD 1563",
+        "navnelinje1": "VITA AVD 1563",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2000-09-30"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.979"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-03-04"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136046",
+      "navn": {
+        "redigertnavn": "VITA AVD 1111",
+        "navnelinje1": "VITA AVD 1111",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.069"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2008-04-21"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136062",
+      "navn": {
+        "redigertnavn": "VITA AVD 1462",
+        "navnelinje1": "VITA AVD 1462",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.114"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-03-17"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136070",
+      "navn": {
+        "redigertnavn": "VITA AVD 1112",
+        "navnelinje1": "VITA AVD 1112",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.144"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-06-22"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136097",
+      "navn": {
+        "redigertnavn": "VITA 1105 DRAMMENSVEIEN",
+        "navnelinje1": "VITA 1105 DRAMMENSVEIEN",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2005-07-20"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.191"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-05-18"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136119",
+      "navn": {
+        "redigertnavn": "VITA AVD 1802",
+        "navnelinje1": "VITA AVD 1802",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.276"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-11-14"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136135",
+      "navn": {
+        "redigertnavn": "VITA AVD 1531",
+        "navnelinje1": "VITA AVD 1531",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.329"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-01-04"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136143",
+      "navn": {
+        "redigertnavn": "VITA EXCLUSIVE HORTEN",
+        "navnelinje1": "VITA EXCLUSIVE HORTEN",
+        "bruksperiode": {
+          "fom": "2014-11-09T04:02:50.228"
+        },
+        "gyldighetsperiode": {
+          "fom": "2014-11-08"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.365"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-04-01"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135716",
+      "navn": {
+        "redigertnavn": "VITA AVD 1102",
+        "navnelinje1": "VITA AVD 1102",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.026"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2004-08-04"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135759",
+      "navn": {
+        "redigertnavn": "VITA AVD 1301",
+        "navnelinje1": "VITA AVD 1301",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.136"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-01-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135767",
+      "navn": {
+        "redigertnavn": "VITA AVD 1461",
+        "navnelinje1": "VITA AVD 1461",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.164"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-11-12"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135775",
+      "navn": {
+        "redigertnavn": "VITA AVD 1202",
+        "navnelinje1": "VITA AVD 1202",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.199"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-02-22"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135805",
+      "navn": {
+        "redigertnavn": "VITA AVD 1251",
+        "navnelinje1": "VITA AVD 1251",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.269"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2005-08-22"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135821",
+      "navn": {
+        "redigertnavn": "VITA AVD 1108 TVEITA",
+        "navnelinje1": "VITA AVD 1108 TVEITA",
+        "bruksperiode": {
+          "fom": "2017-02-08T04:02:12.991"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-07"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.381"
+      },
+      "gyldighetsperiode": {
+        "fom": "2003-06-07",
+        "tom": "2004-01-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135848",
+      "navn": {
+        "redigertnavn": "VITA AVD 1253",
+        "navnelinje1": "VITA AVD 1253",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2010-01-26"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.45"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-01-06"
+      }
+    },
+    {
+      "organisasjonsnummer": "973135856",
+      "navn": {
+        "redigertnavn": "VITA 1564 STRAEN SENTER",
+        "navnelinje1": "VITA 1564 STRAEN SENTER",
+        "bruksperiode": {
+          "fom": "2017-02-08T04:02:12.992"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-07"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:44.536"
+      },
+      "gyldighetsperiode": {
+        "fom": "2003-06-30",
+        "tom": "2003-12-09"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136178",
+      "navn": {
+        "redigertnavn": "VITA AVD 1803",
+        "navnelinje1": "VITA AVD 1803",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1998-04-17"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.498"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2004-11-01"
+      }
+    },
+    {
+      "organisasjonsnummer": "973136216",
+      "navn": {
+        "redigertnavn": "VITA AVD 1110 STORO STORSENTER",
+        "navnelinje1": "VITA AVD 1110 STORO STORSENTER",
+        "bruksperiode": {
+          "fom": "2017-02-10T04:02:05.329"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-09"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T16:52:45.569"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-05-18"
+      }
+    },
+    {
+      "organisasjonsnummer": "973731475",
+      "navn": {
+        "redigertnavn": "VITA AVD 1204",
+        "navnelinje1": "VITA AVD 1204",
+        "navnelinje3": "TREKANTEN SENTER",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2003-06-25"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T17:05:15.655"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-10-21",
+        "tom": "2003-06-24"
+      }
+    },
+    {
+      "organisasjonsnummer": "973731505",
+      "navn": {
+        "redigertnavn": "VITA AVD 1115",
+        "navnelinje1": "VITA AVD 1115",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2013-03-01"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T17:05:15.796"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-03-03"
+      }
+    },
+    {
+      "organisasjonsnummer": "973731513",
+      "navn": {
+        "redigertnavn": "VITA AVD 1566 KVADRAT KJØPESENTER",
+        "navnelinje1": "VITA AVD 1566 KVADRAT KJØPESENTER",
+        "bruksperiode": {
+          "fom": "2017-02-12T04:02:05.77"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-11"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T17:05:15.846"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-06-11"
+      }
+    },
+    {
+      "organisasjonsnummer": "976160088",
+      "navn": {
+        "redigertnavn": "VITA 1116 ULLEVÅL SYKEHUS",
+        "navnelinje1": "VITA 1116 ULLEVÅL SYKEHUS",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "1997-09-06"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T17:37:14.859"
+      },
+      "gyldighetsperiode": {
+        "fom": "2004-03-02",
+        "tom": "2004-09-20"
+      }
+    },
+    {
+      "organisasjonsnummer": "976036883",
+      "navn": {
+        "redigertnavn": "VITA AVD 2122 SJØLYST",
+        "navnelinje1": "VITA AVD 2122 SJØLYST",
+        "bruksperiode": {
+          "fom": "2017-02-12T04:02:06.201"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-11"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T17:36:08.595"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2003-06-11"
+      }
+    },
+    {
+      "organisasjonsnummer": "978604684",
+      "navn": {
+        "redigertnavn": "ANDREASSEN MAYLIZ SUNDSTRØM",
+        "navnelinje1": "MAYLIZ SUNDSTRØM ANDREASSEN",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2011-01-04"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T18:08:30.193"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2004-10-04"
+      }
+    },
+    {
+      "organisasjonsnummer": "979295286",
+      "navn": {
+        "redigertnavn": "VITA MAXIS 2502",
+        "navnelinje1": "VITA MAXIS 2502",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2001-01-19"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T18:18:41.301"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-09-03"
+      }
+    },
+    {
+      "organisasjonsnummer": "980511162",
+      "navn": {
+        "redigertnavn": "VITA MORTENSRUD 1120",
+        "navnelinje1": "VITA MORTENSRUD 1120",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2003-03-16"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T18:29:35.011"
+      },
+      "gyldighetsperiode": {
+        "fom": "2003-08-26",
+        "tom": "2004-09-09"
+      }
+    },
+    {
+      "organisasjonsnummer": "982611326",
+      "navn": {
+        "redigertnavn": "VITA AVD 1809",
+        "navnelinje1": "VITA AVD 1809",
+        "navnelinje3": "AMFISENTERET",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2004-11-02"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T18:50:30.871"
+      },
+      "gyldighetsperiode": {
+        "fom": "2003-06-24",
+        "tom": "2004-11-01"
+      }
+    },
+    {
+      "organisasjonsnummer": "983474667",
+      "navn": {
+        "redigertnavn": "VITA METRO AVD 1203",
+        "navnelinje1": "VITA METRO AVD 1203",
+        "bruksperiode": {
+          "fom": "2017-02-16T04:02:06.28"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T19:00:16.046"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-09-26"
+      }
+    },
+    {
+      "organisasjonsnummer": "983388744",
+      "navn": {
+        "redigertnavn": "VITA AVD 1125",
+        "navnelinje1": "VITA AVD 1125",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2013-09-10"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T18:59:32.804"
+      },
+      "gyldighetsperiode": {
+        "fom": "2002-04-08",
+        "tom": "2002-05-27"
+      }
+    },
+    {
+      "organisasjonsnummer": "984415613",
+      "navn": {
+        "redigertnavn": "VITA MANGLERUDSENTER AVD 1126",
+        "navnelinje1": "VITA MANGLERUDSENTER AVD 1126",
+        "bruksperiode": {
+          "fom": "2017-02-16T04:02:06.487"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-15"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T19:09:51.323"
+      },
+      "gyldighetsperiode": {
+        "fom": "2003-06-17",
+        "tom": "2003-11-11"
+      }
+    },
+    {
+      "organisasjonsnummer": "990292213",
+      "navn": {
+        "redigertnavn": "VITA 1201 STRØMMEN",
+        "navnelinje1": "VITA 1201 STRØMMEN",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2012-05-03"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:10:50.161"
+      },
+      "gyldighetsperiode": {
+        "fom": "2006-09-20",
+        "tom": "2008-01-17"
+      }
+    },
+    {
+      "organisasjonsnummer": "990292248",
+      "navn": {
+        "redigertnavn": "VITA MAXI HAMAR AVD 1354",
+        "navnelinje1": "VITA MAXI HAMAR AVD 1354",
+        "bruksperiode": {
+          "fom": "2017-02-17T04:02:30.649"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-02-16"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:10:50.234"
+      },
+      "gyldighetsperiode": {
+        "fom": "2006-09-20",
+        "tom": "2007-03-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "991599932",
+      "navn": {
+        "redigertnavn": "VITA AVD 1407 RORTUNET",
+        "navnelinje1": "VITA AVD 1407 RORTUNET",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2007-08-20"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:23:45.239"
+      },
+      "gyldighetsperiode": {
+        "fom": "2007-08-20",
+        "tom": "2007-09-19"
+      }
+    },
+    {
+      "organisasjonsnummer": "992414952",
+      "navn": {
+        "redigertnavn": "VITA 1207 SANDVIKA STORSENTER",
+        "navnelinje1": "VITA 1207 SANDVIKA STORSENTER",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2012-05-06"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:31:35.673"
+      },
+      "gyldighetsperiode": {
+        "fom": "2008-03-08",
+        "tom": "2012-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "992415029",
+      "navn": {
+        "redigertnavn": "VITA 1423",
+        "navnelinje1": "VITA 1423",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2008-03-08"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:31:35.727"
+      },
+      "gyldighetsperiode": {
+        "fom": "2008-03-08",
+        "tom": "2009-03-21"
+      }
+    },
+    {
+      "organisasjonsnummer": "992415053",
+      "navn": {
+        "redigertnavn": "VITA 1581",
+        "navnelinje1": "VITA 1581",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2008-03-08"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T20:31:35.74"
+      },
+      "gyldighetsperiode": {
+        "fom": "2008-03-08",
+        "tom": "2009-03-20"
+      }
+    },
+    {
+      "organisasjonsnummer": "998296463",
+      "navn": {
+        "redigertnavn": "MATHISEN MARTHE STRAND 1254",
+        "navnelinje1": "MARTHE STRAND MATHISEN 1254",
+        "bruksperiode": {
+          "fom": "2015-02-23T08:04:53.2"
+        },
+        "gyldighetsperiode": {
+          "fom": "2013-01-22"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-05-23T21:31:35.614"
+      },
+      "gyldighetsperiode": {
+        "fom": "2012-04-25",
+        "tom": "2012-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "973104160",
+      "navn": {
+        "redigertnavn": "FREDRIK & LOUISA LAMBERTSETER",
+        "navnelinje1": "FREDRIK & LOUISA LAMBERTSETER",
+        "bruksperiode": {
+          "fom": "2019-12-11T04:02:30.423"
+        },
+        "gyldighetsperiode": {
+          "fom": "2019-12-10"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-11-11T04:04:32.683"
+      },
+      "gyldighetsperiode": {
+        "fom": "2014-10-02",
+        "tom": "2014-11-09"
+      }
+    },
+    {
+      "organisasjonsnummer": "914396077",
+      "navn": {
+        "redigertnavn": "FREDRIK & LOUISA AS",
+        "navnelinje1": "FREDRIK & LOUISA AS",
+        "navnelinje3": "AVD DRØBAK",
+        "bruksperiode": {
+          "fom": "2020-01-24T04:01:25.593"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-01-23"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2014-11-11T04:04:33.285"
+      },
+      "gyldighetsperiode": {
+        "fom": "2014-11-03",
+        "tom": "2014-11-09"
+      }
+    },
+    {
+      "organisasjonsnummer": "918022902",
+      "navn": {
+        "redigertnavn": "VITA AS",
+        "navnelinje1": "VITA AS",
+        "navnelinje3": "AVD 1143 ARKADEN",
+        "bruksperiode": {
+          "fom": "2017-03-19T04:00:59.074"
+        },
+        "gyldighetsperiode": {
+          "fom": "2017-03-18"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2016-11-09T04:03:59.878"
+      },
+      "gyldighetsperiode": {
+        "fom": "2016-11-08"
+      }
+    }
+  ],
+  "fisjoner": [
+    {
+      "juridiskEnhet": {
+        "organisasjonsnummer": "976135709",
+        "type": "JuridiskEnhet",
+        "navn": {
+          "redigertnavn": "PARFYMELLE AS",
+          "navnelinje1": "PARFYMELLE AS",
+          "bruksperiode": {
+            "fom": "2015-02-23T08:04:53.2"
+          },
+          "gyldighetsperiode": {
+            "fom": "1996-03-12"
+          }
+        },
+        "organisasjonDetaljer": {
+          "navn": [
+            {
+              "redigertnavn": "PARFYMELLE AS",
+              "navnelinje1": "PARFYMELLE AS",
+              "bruksperiode": {
+                "fom": "2015-02-23T08:04:53.2"
+              },
+              "gyldighetsperiode": {
+                "fom": "1996-03-12"
+              }
+            }
+          ]
+        },
+        "juridiskEnhetDetaljer": {}
+      },
+      "bruksperiode": {
+        "fom": "2014-08-04T08:32:53.138"
+      },
+      "gyldighetsperiode": {
+        "fom": "2014-05-31",
+        "tom": "2014-07-31"
+      }
+    }
+  ]
+}

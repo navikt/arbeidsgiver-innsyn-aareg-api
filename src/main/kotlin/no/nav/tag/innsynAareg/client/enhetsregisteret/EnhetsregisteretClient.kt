@@ -30,12 +30,12 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         try {
             val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=true&inkluderHierarki=true"
             val response: ResponseEntity<EnhetsRegisterOrg> = restTemplate.exchange(
-                eregurMedParam,
-                HttpMethod.GET,
-                requestEntity,
-                EnhetsRegisterOrg::class.java
+                    eregurMedParam,
+                    HttpMethod.GET,
+                    requestEntity,
+                    EnhetsRegisterOrg::class.java
             )
-            logger.info("respons fra enhetsregisteret: ", response.body)
+            logger.info("respons fra enhetsregisteret: {}", response.body?.Navn?.redigertnavn ?: "fant ingen ting")
             logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
             return response.body
         } catch (e: Exception) {
@@ -51,12 +51,12 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
             val organisasjonerFraAltinn = altinnClient.hentOrganisasjoner(fnr)
             val organisasjonerTilhorendeJuridiskEnhet = organisasjonerFraAltinn?.filter { organisasjon -> organisasjon.ParentOrganizationNumber == juridiskEnhet }
             if (!organisasjonerTilhorendeJuridiskEnhet.isNullOrEmpty()) {
-                return underEnheterFraEregRespons.filterNot { organisasjon -> organisasjonerTilhorendeJuridiskEnhet.any { it.OrganizationNumber == organisasjon.OrganizationNumber }}
+                return underEnheterFraEregRespons.filterNot { organisasjon -> organisasjonerTilhorendeJuridiskEnhet.any { it.OrganizationNumber == organisasjon.OrganizationNumber } }
             }
             return underEnheterFraEregRespons;
-            }
+        }
 
-    return null
+        return null
     }
 
     fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<EnhetsRegisterOrg>, juridiskEnhet: String): List<Organisasjon> {
