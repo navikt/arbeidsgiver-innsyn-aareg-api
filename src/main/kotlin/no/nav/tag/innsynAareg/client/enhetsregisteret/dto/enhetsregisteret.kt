@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class OrganisasjonFraEreg(
-        val organisasjonsnummer: String?,
+        val organisasjonsnummer: String,
         val bestaarAvOrganisasjonsledd: List<Organisasjoneledd>?,
         val organisasjonsleddOver: List<Organisasjoneledd>?,
         val inngaarIJuridiskEnheter: List<OrganisasjonFraEreg>?,

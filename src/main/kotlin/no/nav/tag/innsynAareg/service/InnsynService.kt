@@ -71,10 +71,10 @@ class InnsynService(
             idToken
         )
         if (antall != null && antall != 0) {
-            return Pair(orgledd.organisasjonsnummer!!, antall)
+            return Pair(orgledd.organisasjonsnummer, antall)
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
             try {
-                val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
+                val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter[0].organisasjonsnummer
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
                     orgnrUnderenhet,
                     juridiskEnhetOrgnr,
@@ -85,7 +85,7 @@ class InnsynService(
                 throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
             }
         } else {
-            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd!!, idToken)
+            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd, idToken)
         }
     }
 
