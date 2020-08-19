@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
+import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 
 @Service
@@ -42,11 +43,13 @@ class AaregClient(
 
             when (respons.statusCode) {
                 HttpStatus.OK -> ArbeidsforholdFunnet(respons.body!!)
-                HttpStatus.FORBIDDEN -> IngenRettigheter
                 else -> throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
             }
         } catch (exception: RestClientException) {
-            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold: ", exception.message)
+            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold.", exception)
+            if (exception is RestClientResponseException && exception.rawStatusCode == 403) {
+                return IngenRettigheter
+            }
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
