@@ -1,43 +1,19 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class EnhetsRegisterOrg {
-    @JsonProperty("organisasjonsnummer")
-    private val organisasjonsnummer: String? = null
+data class OrganisasjonFraEreg(
+        val organisasjonsnummer: String?,
+        val bestaarAvOrganisasjonsledd: List<Organisasjoneledd>?,
+        val organisasjonsleddOver: List<Organisasjoneledd>?,
+        val inngaarIJuridiskEnheter: List<OrganisasjonFraEreg>?,
+        val gyldighetsperiode: Gyldighetsperiode?,
+        val navn: Navn?
+)
 
-    var orgTre: Map<String, Any> = LinkedHashMap()
+data class Organisasjoneledd(val organisasjonsledd: OrganisasjonFraEreg)
 
-    var bestaarAvOrganisasjonsledd: ArrayList<BestaarAvOrganisasjonsledd>? = ArrayList()
+data class Navn(val redigertnavn: String?)
 
-    @JsonProperty("ansatte")
-    var ansatte: ArrayList<Ansatte> = ArrayList<Ansatte>()
-}
-
-class Ansatte {
-    @JsonProperty("antall")
-    var antall: Int? = null
-}
-
-class BestaarAvOrganisasjonsledd {
-    var organisasjonsledd: Organisasjoneledd? = null
-}
-
-class InngaarIJuridiskEnheter {
-    val organisasjonsnummer: String? = null
-}
-
-class Organisasjoneledd {
-    var organisasjonsnummer: String? = null
-    var organisasjonsleddOver: ArrayList<OrganisasjonsleddOver>? = null
-    var inngaarIJuridiskEnheter: ArrayList<InngaarIJuridiskEnheter>? = null
-}
-
-class OrganisasjonsleddOver {
-    var organisasjonsledd: Organisasjoneledd? = null
-}
-
+data class Gyldighetsperiode(val fom: String?, val tom: String?);

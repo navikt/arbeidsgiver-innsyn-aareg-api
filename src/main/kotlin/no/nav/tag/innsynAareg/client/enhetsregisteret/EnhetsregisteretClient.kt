@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret
 
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.EnhetsRegisterOrg
+import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -24,14 +24,14 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate) {
         return HttpEntity(headers)
     }
 
-    fun hentOrgnaisasjonFraEnhetsregisteret(orgnr: String): EnhetsRegisterOrg? {
+    fun hentOrgnaisasjonFraEnhetsregisteret(orgnr: String): OrganisasjonFraEreg? {
         try {
             val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=false&inkluderHierarki=true"
-            val response: ResponseEntity<EnhetsRegisterOrg> = restTemplate.exchange(
+            val response: ResponseEntity<OrganisasjonFraEreg> = restTemplate.exchange(
                 eregurMedParam,
                 HttpMethod.GET,
                 requestEntity,
-                EnhetsRegisterOrg::class.java
+                OrganisasjonFraEreg::class.java
             )
             logger.info("respons fra enhetsregisteret: ", response.body)
             logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")

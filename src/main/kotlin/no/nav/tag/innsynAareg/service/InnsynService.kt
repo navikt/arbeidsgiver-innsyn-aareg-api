@@ -3,8 +3,7 @@ package no.nav.tag.innsynAareg.service
 import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.aareg.AaregException
 import no.nav.tag.innsynAareg.client.enhetsregisteret.EnhetsregisteretClient
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.EnhetsRegisterOrg
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.Organisasjoneledd
+import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import no.nav.tag.innsynAareg.client.pdl.PdlBatchClient
 import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
@@ -40,7 +39,7 @@ class InnsynService(
             return Pair(orgnrHovedenhet, antall)
         }
 
-        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg =
+        val orgtreFraEnhetsregisteret: OrganisasjonFraEreg =
             enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnrUnderenhet)
                 ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
@@ -62,9 +61,9 @@ class InnsynService(
     }
 
     private fun itererOverOrgtre(
-        orgnrUnderenhet: String,
-        orgledd: Organisasjoneledd,
-        idToken: String
+            orgnrUnderenhet: String,
+            orgledd: OrganisasjonFraEreg,
+            idToken: String
     ): Pair<String, Int> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
