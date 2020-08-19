@@ -11,7 +11,7 @@ class Yrkeskoder(
 
     fun betydningPåYrke(yrkeskodenokkel: String): String =
         betydninger[yrkeskodenokkel] ?: run {
-            logger.error("Fant ikke betydning for yrkeskode '{}'", yrkeskodenokkel)
+            logger.info("Fant ikke betydning for yrkeskode '{}'", yrkeskodenokkel)
             "Fant ikke yrkesbeskrivelse"
         }
 }
