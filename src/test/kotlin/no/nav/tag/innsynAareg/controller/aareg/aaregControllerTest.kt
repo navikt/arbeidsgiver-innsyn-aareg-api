@@ -1,7 +1,6 @@
 package no.nav.tag.innsynAareg.controller.aareg
 
 import no.nav.tag.innsynAareg.controller.AaregController
-import no.nav.tag.innsynAareg.client.aareg.AaregException
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,11 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner
 class AAregControllerTest {
     @Autowired
     lateinit var aAregController: AaregController
-
-    @Test(expected = AaregException::class)
-    fun whenExceptionThrown_thenExpectationSatisfied() {
-        aAregController.hentArbeidsforhold("910825517", "132", "132")
-    }
 
     @Test
     fun hentAntallArbeidsforhold() {
