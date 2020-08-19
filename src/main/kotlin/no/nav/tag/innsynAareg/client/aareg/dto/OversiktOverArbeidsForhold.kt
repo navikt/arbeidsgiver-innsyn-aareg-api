@@ -1,5 +1,7 @@
 package no.nav.tag.innsynAareg.client.aareg.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 val varselKodeOppslag: HashMap<String, String> = hashMapOf(
     "ERKONK" to "Maskinell sluttdato: Konkurs",
     "EROPPH" to "Maskinell sluttdato: Opphørt i Enhetsregisteret",
@@ -35,6 +37,7 @@ data class ArbeidsforholdVarsel(
     var varslingskodeForklaring: String? = null
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ArbeidsForhold(
     val ansattFom: String,
     val ansattTom: String?,
