@@ -60,6 +60,3 @@ data class OversiktOverArbeidsForhold(
     val startrad: String?,
     val totalAntall: String?
 )
-
-sealed class AaregFeil
-object IngenRettigheter : AaregFeil()
