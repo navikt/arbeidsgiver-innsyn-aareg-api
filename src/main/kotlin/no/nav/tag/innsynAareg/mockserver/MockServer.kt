@@ -170,8 +170,8 @@ class MockServer @Autowired constructor(
     final fun mockEregHierarkiHistorikk(server: WireMockServer, url: URL) {
         server.stubFor(
                 get(urlPathEqualTo(url.path))
-                        .withQueryParam("inkluderHistorikk", WireMock.equalTo("true"))
-                        .withQueryParam("inkluderHierarki", WireMock.equalTo("true"))
+                        .withQueryParam("inkluderHistorikk",equalTo("true"))
+                        .withQueryParam("inkluderHierarki", equalTo("true"))
                         .willReturn(
                                 WireMock.aResponse()
                                         .withHeader("Content-Type", "application/json")

@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import java.time.LocalDate
 
 @Service
 class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnClient: AltinnClient) {
@@ -39,7 +40,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
             logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
             return response.body
         } catch (e: Exception) {
-            logger.error("Feil ved oppslag mot EnhetsRegisteret: orgnr: $orgnr", e.message)
+            logger.error("Feil ved oppslag mot EnhetsRegisteret: orgnr: $orgnr {}", e.message)
         }
         return null
     }
@@ -47,16 +48,16 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
     fun finnTidligereVirksomheter(juridiskEnhet: String, fnr: String): List<Organisasjon>? {
         val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
-            val underEnheterFraEregRespons = mapFraOrganisasjonFraEregTilAltinn(organisasjonsInfoFraEreg.driverVirksomheter, juridiskEnhet);
-            val organisasjonerFraAltinn = altinnClient.hentOrganisasjoner(fnr)
-            val organisasjonerTilhorendeJuridiskEnhet = organisasjonerFraAltinn?.filter { organisasjon -> organisasjon.ParentOrganizationNumber == juridiskEnhet }
-            if (!organisasjonerTilhorendeJuridiskEnhet.isNullOrEmpty()) {
-                return underEnheterFraEregRespons.filterNot { organisasjon -> organisasjonerTilhorendeJuridiskEnhet.any { it.OrganizationNumber == organisasjon.OrganizationNumber } }
-            }
-            return underEnheterFraEregRespons;
+            logger.info("organisasjonsInfoFraEreg {}",organisasjonsInfoFraEreg)
+           val gamleEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
+           return mapFraOrganisasjonFraEregTilAltinn(gamleEregOrgs, juridiskEnhet);
         }
-
         return null
+    }
+    fun sjekkOmDatoErFørDagensDato (dato :String?):Boolean{
+        return if(dato.isNullOrBlank()) false
+        else
+            LocalDate.parse(dato).isBefore(LocalDate.now())
     }
 
     fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<OrganisasjonFraEreg>, juridiskEnhet: String): List<Organisasjon> {
