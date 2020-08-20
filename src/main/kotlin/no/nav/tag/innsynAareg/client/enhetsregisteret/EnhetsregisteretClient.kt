@@ -26,9 +26,9 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         return HttpEntity(headers)
     }
 
-    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String): EnhetsRegisterOrg? {
+    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String, inkluderHistorikk:Boolean): EnhetsRegisterOrg? {
         try {
-            val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=true&inkluderHierarki=true"
+            val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=$inkluderHistorikk&inkluderHierarki=true"
             val response: ResponseEntity<EnhetsRegisterOrg> = restTemplate.exchange(
                     eregurMedParam,
                     HttpMethod.GET,
@@ -45,7 +45,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
     }
 
     fun finnTidligereVirksomheter(juridiskEnhet: String, fnr: String): List<Organisasjon>? {
-        val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet);
+        val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
             val underEnheterFraEregRespons = mapFraOrganisasjonFraEregTilAltinn(organisasjonsInfoFraEreg.driverVirksomheter, juridiskEnhet);
             val organisasjonerFraAltinn = altinnClient.hentOrganisasjoner(fnr)

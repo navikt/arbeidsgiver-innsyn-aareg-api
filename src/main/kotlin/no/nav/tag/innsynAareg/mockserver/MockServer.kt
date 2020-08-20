@@ -47,6 +47,7 @@ class MockServer @Autowired constructor(
         mockForPath(server,pdlPath,"pdlRespons.json")
         val eregPath2= URL(eregUrl+ "910825517").path
         val altinnPath = URL(altinnProxyUrl).path
+
         mockForPath(server, eregPath1, "enhetsregisteret.json")
         mockForPath(server, eregPath2, "enhetsregisteret.json")
         mockEregHierarkiHistorikk(server)

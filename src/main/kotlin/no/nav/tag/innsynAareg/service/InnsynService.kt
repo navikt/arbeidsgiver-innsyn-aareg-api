@@ -41,7 +41,7 @@ class InnsynService(
         }
 
         val orgtreFraEnhetsregisteret: EnhetsRegisterOrg =
-            enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet)
+            enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet,false)
                 ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
