@@ -1,8 +1,8 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret
 
+import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.EnhetsRegisterOrg
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -26,16 +26,16 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         return HttpEntity(headers)
     }
 
-    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String, inkluderHistorikk:Boolean): EnhetsRegisterOrg? {
+    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String, inkluderHistorikk:Boolean): OrganisasjonFraEreg? {
         try {
             val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=$inkluderHistorikk&inkluderHierarki=true"
-            val response: ResponseEntity<EnhetsRegisterOrg> = restTemplate.exchange(
-                    eregurMedParam,
-                    HttpMethod.GET,
-                    requestEntity,
-                    EnhetsRegisterOrg::class.java
+            val response: ResponseEntity<OrganisasjonFraEreg> = restTemplate.exchange(
+                eregurMedParam,
+                HttpMethod.GET,
+                requestEntity,
+                OrganisasjonFraEreg::class.java
             )
-            logger.info("respons fra enhetsregisteret: {}", response.body?.Navn?.redigertnavn ?: "fant ingen ting")
+            logger.info("respons fra enhetsregisteret: {}", response.body?.navn?.redigertnavn ?: "fant ingen ting")
             logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
             return response.body
         } catch (e: Exception) {
@@ -59,12 +59,12 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         return null
     }
 
-    fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<EnhetsRegisterOrg>, juridiskEnhet: String): List<Organisasjon> {
+    fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<OrganisasjonFraEreg>, juridiskEnhet: String): List<Organisasjon> {
         return virksomheter.map {
             Organisasjon(
-                    Name = it.Navn?.redigertnavn,
+                    Name = it.navn?.redigertnavn,
                     ParentOrganizationNumber = juridiskEnhet,
-                    OrganizationNumber = it.Organisasjonsnummer
+                    OrganizationNumber = it.organisasjonsnummer
             )
         }
     }
