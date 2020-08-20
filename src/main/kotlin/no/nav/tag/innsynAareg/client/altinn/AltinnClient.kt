@@ -7,6 +7,9 @@ import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.ProxyConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.model.*
 import no.nav.tag.innsynAareg.client.altinn.AltinnCacheConfig.Companion.ALTINN_TJENESTE_CACHE
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
+import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
+import no.nav.tag.innsynAareg.models.AltinnOppslagResultat
+import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
 import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -39,48 +42,43 @@ class AltinnClient constructor(
         fnr: String,
         serviceKode: String,
         serviceEdition: String
-    ): List<Organisasjon>? {
+    ): AltinnOppslagResultat =
+        run {
+            klient.hentOrganisasjoner(
+                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                Subject(fnr),
+                ServiceCode(serviceKode),
+                ServiceEdition(serviceEdition),
+                false
+            )
+        }
+
+    fun hentOrganisasjoner(fnr: String): AltinnOppslagResultat =
+        run {
+            klient.hentOrganisasjoner(
+                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                Subject(fnr),
+                true
+            )
+        }
+
+    private fun run(action: () -> List<AltinnReportee>) =
         try {
-            return mapTilOrganisasjon(
-                klient.hentOrganisasjoner(
-                    SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
-                    Subject(fnr),
-                    ServiceCode(serviceKode),
-                    ServiceEdition(serviceEdition),
-                    false
-                )
-            )
+            action()
+                .map {
+                    Organisasjon(
+                        Name = it.name,
+                        ParentOrganizationNumber = it.parentOrganizationNumber,
+                        OrganizationNumber = it.organizationNumber,
+                        OrganizationForm = it.organizationForm,
+                        Status = it.status,
+                        Type = it.type
+                    )
+                }
+                .let { AltinnOppslagVellykket(it) }
         } catch (error: Exception) {
-            logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner med rett til arbeidsforhold: ", error.message)
+            logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra altinn.", error)
+            if (error.message?.contains("403") == true) AltinnIngenRettigheter else throw error
         }
-        return null
-    }
 
-    fun hentOrganisasjoner(fnr: String): List<Organisasjon>? {
-        try {
-            return mapTilOrganisasjon(
-                klient.hentOrganisasjoner(
-                    SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
-                    Subject(fnr),
-                    true
-                )
-            )
-        } catch (error: Exception) {
-            logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra Altinn: ", error.message)
-        }
-        return null
-    }
-
-
-    fun mapTilOrganisasjon(originalListe: List<AltinnReportee>): List<Organisasjon> =
-        originalListe.map {
-            Organisasjon(
-                Name = it.name,
-                ParentOrganizationNumber = it.parentOrganizationNumber,
-                OrganizationNumber = it.organizationNumber,
-                OrganizationForm = it.organizationForm,
-                Status = it.status,
-                Type = it.type
-            )
-        }
 }
