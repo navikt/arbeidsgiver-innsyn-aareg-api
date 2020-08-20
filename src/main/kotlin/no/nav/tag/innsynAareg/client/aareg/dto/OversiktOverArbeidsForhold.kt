@@ -47,7 +47,7 @@ data class ArbeidsForhold(
     val navArbeidsforholdId: String,
     val opplysningspliktig: Opplysningspliktig,
     val sistBekreftet: String,
-    val stillingsprosent: String?,
+    val stillingsprosent: String,
     val type: String,
     val varsler: List<ArbeidsforholdVarsel>?,
     val yrke: String,
