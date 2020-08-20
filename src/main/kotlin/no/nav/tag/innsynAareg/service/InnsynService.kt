@@ -10,6 +10,8 @@ import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
 import no.nav.tag.innsynAareg.client.aareg.dto.ArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
+import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.Yrkeskoder
 import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
@@ -94,12 +96,19 @@ class InnsynService(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
         idPortenToken: String
-    ): OversiktOverArbeidsForhold {
+    ): ArbeidsforholdOppslagResultat {
         val opplysningspliktigorgnr: String =
-            hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
+            try {
+                hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
+            } catch (e: Exception) {
+                logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
+                overOrdnetEnhetOrgnr
+            }
         val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
-        settNavnPåArbeidsforholdBatch(arbeidsforhold)
-        settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold)
+        if (arbeidsforhold is ArbeidsforholdFunnet) {
+            settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
+            settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+        }
         return arbeidsforhold
     }
 

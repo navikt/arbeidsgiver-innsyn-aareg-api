@@ -1,13 +1,17 @@
 package no.nav.tag.innsynAareg.client.aareg
 
-import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsgiver
+import no.nav.tag.innsynAareg.client.sts.STSClient
+import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
+import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
+import no.nav.tag.innsynAareg.models.IngenRettigheter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
+import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 
 @Service
@@ -27,19 +31,25 @@ class AaregClient(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
         idPortenToken: String
-    ): OversiktOverArbeidsForhold {
+    ): ArbeidsforholdOppslagResultat {
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
             val respons = restTemplate.exchange(
                 aaregArbeidsforholdUrl,
-                HttpMethod.GET, entity, OversiktOverArbeidsForhold::class.java
+                HttpMethod.GET,
+                entity,
+                OversiktOverArbeidsForhold::class.java
             )
-            if (respons.statusCode != HttpStatus.OK) {
-                throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
+
+            when (respons.statusCode) {
+                HttpStatus.OK -> ArbeidsforholdFunnet(respons.body!!)
+                else -> throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
             }
-            respons.body!!
         } catch (exception: RestClientException) {
-            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold: ", exception.message)
+            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold.", exception)
+            if (exception is RestClientResponseException && exception.rawStatusCode == 403) {
+                return IngenRettigheter
+            }
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
