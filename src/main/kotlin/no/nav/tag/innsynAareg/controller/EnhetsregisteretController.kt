@@ -24,7 +24,7 @@ class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretCli
             @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<List<Organisasjon>> {
         val fnr: String = FnrExtractor.extract(requestContextHolder)
-        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr,fnr )
+        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr )
         return ResponseEntity.ok(result!!)
     }
 

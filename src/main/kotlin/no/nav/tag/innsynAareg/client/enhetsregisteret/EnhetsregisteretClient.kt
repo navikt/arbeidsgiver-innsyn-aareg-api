@@ -45,7 +45,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         return null
     }
 
-    fun finnTidligereVirksomheter(juridiskEnhet: String, fnr: String): List<Organisasjon>? {
+    fun finnTidligereVirksomheter(juridiskEnhet: String): List<Organisasjon>? {
         val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
             logger.info("organisasjonsInfoFraEreg {}",organisasjonsInfoFraEreg)
