@@ -48,10 +48,10 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
     fun finnTidligereVirksomheter(juridiskEnhet: String): List<Organisasjon>? {
         val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
-           val gamleEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-           val aktiveorgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-           val inaktiveOrgs = gamleEregOrgs.filterNot { organisasjon -> aktiveorgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
-           return mapFraOrganisasjonFraEregTilAltinn(inaktiveOrgs, juridiskEnhet);
+           val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
+           val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
+           val komplementTilaktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
+           return mapFraOrganisasjonFraEregTilAltinn(komplementTilaktiveOrgs, juridiskEnhet);
         }
         return null
     }
