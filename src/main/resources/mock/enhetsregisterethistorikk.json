@@ -1,554 +1,303 @@
 {
-  "organisasjonsnummer": "983426387",
+  "organisasjonsnummer": "810825472",
   "type": "JuridiskEnhet",
   "navn": {
-    "redigertnavn": "VITA AS",
-    "navnelinje1": "VITA AS",
+    "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+    "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
     "bruksperiode": {
-      "fom": "2015-02-23T08:04:53.2"
+      "fom": "2020-05-14T14:56:00.191"
     },
     "gyldighetsperiode": {
-      "fom": "2001-06-06"
+      "fom": "2020-05-14"
     }
   },
   "organisasjonDetaljer": {
-    "registreringsdato": "2001-06-06T00:00:00",
-    "stiftelsesdato": "2001-05-28",
+    "registreringsdato": "2020-02-12T00:00:00",
     "enhetstyper": [
       {
         "enhetstype": "AS",
         "bruksperiode": {
-          "fom": "2014-05-21T21:03:53.437"
+          "fom": "2020-02-12T13:25:49.584"
         },
         "gyldighetsperiode": {
-          "fom": "2001-06-06"
-        }
-      }
-    ],
-    "statuser": [
-      {
-        "kode": "KONK",
-        "bruksperiode": {
-          "fom": "2019-10-22T04:02:31.98"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-10-21"
-        }
-      },
-      {
-        "kode": "FITA",
-        "bruksperiode": {
-          "fom": "2014-08-04T08:33:08.197"
-        },
-        "gyldighetsperiode": {
-          "fom": "2001-08-22",
-          "tom": "2014-07-31"
-        }
-      }
-    ],
-    "naeringer": [
-      {
-        "naeringskode": "47.750",
-        "hjelpeenhet": false,
-        "bruksperiode": {
-          "fom": "2014-05-22T01:06:55.28"
-        },
-        "gyldighetsperiode": {
-          "fom": "2002-04-25"
+          "fom": "2020-02-12"
         }
       }
     ],
     "navn": [
       {
-        "redigertnavn": "VITA AS",
-        "navnelinje1": "VITA AS",
+        "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
         "bruksperiode": {
-          "fom": "2015-02-23T08:04:53.2"
+          "fom": "2020-05-14T14:56:00.191"
         },
         "gyldighetsperiode": {
-          "fom": "2001-06-06"
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
+        }
+      },
+      {
+        "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+        "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.191"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      {
+        "navnelinje1": "Malmefjord og Ridabu Regnskap",
+        "bruksperiode": {
+          "fom": "2020-05-06T10:40:44.455"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-02-12",
+          "tom": "2020-05-05"
         }
       }
     ],
     "forretningsadresser": [
       {
         "type": "Forretningsadresse",
-        "adresselinje1": "Bertrand Narvesensvei 2",
-        "postnummer": "0661",
+        "adresselinje1": "RÅDHUSET",
+        "postnummer": "6440",
+        "poststed": "ELNESVÅGEN",
         "landkode": "NO",
-        "kommunenummer": "0301",
+        "kommunenummer": "1579",
         "bruksperiode": {
-          "fom": "2014-05-23T13:59:01.299"
+          "fom": "2020-05-14T14:56:00.19"
         },
         "gyldighetsperiode": {
-          "fom": "2001-06-06",
-          "tom": "2008-02-12"
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
         }
       },
       {
         "type": "Forretningsadresse",
-        "adresselinje1": "Haslevangen 15",
-        "postnummer": "0579",
+        "adresselinje1": "RÅDHUSET",
+        "postnummer": "6440",
+        "poststed": "ELNESVÅGEN",
         "landkode": "NO",
-        "kommunenummer": "0301",
+        "kommunenummer": "1579",
         "bruksperiode": {
-          "fom": "2015-02-23T10:38:34.403"
+          "fom": "2020-05-14T14:56:00.19"
         },
         "gyldighetsperiode": {
-          "fom": "2008-02-13"
+          "fom": "2020-05-14"
         }
       }
     ],
     "postadresser": [
       {
         "type": "Postadresse",
-        "adresselinje1": "Postboks 6125 Etterstad",
-        "postnummer": "0602",
+        "adresselinje1": "Postboks 4120",
+        "postnummer": "2307",
+        "poststed": "Hamar",
         "landkode": "NO",
-        "kommunenummer": "0301",
+        "kommunenummer": "0403",
         "bruksperiode": {
-          "fom": "2014-05-23T13:59:01.3"
+          "fom": "2020-05-06T10:40:44.446"
         },
         "gyldighetsperiode": {
-          "fom": "2001-06-06",
-          "tom": "2003-06-05"
+          "fom": "2020-02-12",
+          "tom": "2020-05-05"
         }
       },
       {
         "type": "Postadresse",
-        "adresselinje1": "Postboks 6013 Etterstad",
-        "postnummer": "0601",
+        "adresselinje1": "POSTBOKS 4120",
+        "postnummer": "2307",
+        "poststed": "HAMAR",
         "landkode": "NO",
-        "kommunenummer": "0301",
+        "kommunenummer": "3403",
         "bruksperiode": {
-          "fom": "2015-02-23T10:38:34.403"
+          "fom": "2020-05-14T14:56:00.189"
         },
         "gyldighetsperiode": {
-          "fom": "2003-06-06"
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
+        }
+      },
+      {
+        "type": "Postadresse",
+        "adresselinje1": "POSTBOKS 4120",
+        "postnummer": "2307",
+        "poststed": "HAMAR",
+        "landkode": "NO",
+        "kommunenummer": "3403",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.189"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
         }
       }
     ],
-    "internettadresser": [
-      {
-        "adresse": "www.vita.no",
-        "bruksperiode": {
-          "fom": "2014-05-21T21:03:53.19"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17"
-        }
-      }
-    ],
-    "telefonnummer": [
-      {
-        "nummer": "22 57 69 50",
-        "telefontype": "TFON",
-        "bruksperiode": {
-          "fom": "2014-05-21T21:03:53.437"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17"
-        }
-      }
-    ],
-    "telefaksnummer": [
-      {
-        "nummer": "22 57 69 99",
-        "bruksperiode": {},
-        "gyldighetsperiode": {}
-      }
-    ],
-    "formaal": [
-      {
-        "formaal": "Grossist- og detaljistsalg av hudpleie, hårpleie, helsekost og annen\nvirksomhet som står i forbindelse med dette.\nSelskapet kan ved aksjeinnskudd eller på annen måte delta i annen\nnæringsvirksomhet.",
-        "bruksperiode": {
-          "fom": "2014-05-22T00:08:57.235"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17"
-        }
-      }
-    ],
-    "maalform": "NB",
-    "sistEndret": "2019-11-11",
-    "registrertMVA": [
-      {
-        "registrertIMVA": true,
-        "bruksperiode": {
-          "fom": "2019-11-01T04:02:37.358"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17",
-          "tom": "2019-10-30"
-        }
-      }
-    ],
-    "ansatte": [
-      {
-        "antall": 118,
-        "bruksperiode": {
-          "fom": "2019-05-09T21:51:57.81"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-10-15",
-          "tom": "2018-11-12"
-        }
-      },
-      {
-        "antall": 128,
-        "bruksperiode": {
-          "fom": "2019-10-16T01:04:58.754"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-09-12",
-          "tom": "2019-10-13"
-        }
-      },
-      {
-        "antall": 16,
-        "bruksperiode": {
-          "fom": "2019-05-09T11:24:22.512"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-02-10",
-          "tom": "2018-02-14"
-        }
-      },
-      {
-        "antall": 105,
-        "bruksperiode": {
-          "fom": "2019-05-09T16:23:05.642"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-02-15",
-          "tom": "2018-03-12"
-        }
-      },
-      {
-        "antall": 118,
-        "bruksperiode": {
-          "fom": "2019-05-09T20:32:12.078"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-08-14",
-          "tom": "2018-09-11"
-        }
-      },
-      {
-        "antall": 120,
-        "bruksperiode": {
-          "fom": "2019-05-09T21:13:59.071"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-09-12",
-          "tom": "2018-10-14"
-        }
-      },
-      {
-        "antall": 121,
-        "bruksperiode": {
-          "fom": "2019-08-16T10:05:58.774"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-07-15",
-          "tom": "2019-08-13"
-        }
-      },
-      {
-        "antall": 125,
-        "bruksperiode": {
-          "fom": "2019-09-16T01:04:08.676"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-08-14",
-          "tom": "2019-09-11"
-        }
-      },
-      {
-        "antall": 129,
-        "bruksperiode": {
-          "fom": "2019-11-16T00:50:23.058"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-10-14",
-          "tom": "2019-11-10"
-        }
-      },
-      {
-        "antall": 0,
-        "bruksperiode": {
-          "fom": "2019-11-16T00:50:23.058"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-11-11"
-        }
-      },
-      {
-        "antall": 106,
-        "bruksperiode": {
-          "fom": "2019-05-09T18:17:09.951"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-03-13",
-          "tom": "2018-05-14"
-        }
-      },
-      {
-        "antall": 107,
-        "bruksperiode": {
-          "fom": "2019-05-09T18:43:11.43"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-05-15",
-          "tom": "2018-06-11"
-        }
-      },
-      {
-        "antall": 108,
-        "bruksperiode": {
-          "fom": "2019-05-09T19:23:02.328"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-06-12",
-          "tom": "2018-07-11"
-        }
-      },
-      {
-        "antall": 116,
-        "bruksperiode": {
-          "fom": "2019-05-09T20:02:13.176"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-07-12",
-          "tom": "2018-08-13"
-        }
-      },
-      {
-        "antall": 120,
-        "bruksperiode": {
-          "fom": "2019-05-09T22:54:50.817"
-        },
-        "gyldighetsperiode": {
-          "fom": "2018-11-13",
-          "tom": "2019-01-13"
-        }
-      },
-      {
-        "antall": 113,
-        "bruksperiode": {
-          "fom": "2019-05-09T23:34:42.239"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-01-14",
-          "tom": "2019-02-13"
-        }
-      },
-      {
-        "antall": 116,
-        "bruksperiode": {
-          "fom": "2019-05-10T00:05:54.921"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-02-14",
-          "tom": "2019-03-11"
-        }
-      },
-      {
-        "antall": 113,
-        "bruksperiode": {
-          "fom": "2019-05-10T00:32:09.739"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-03-12",
-          "tom": "2019-04-12"
-        }
-      },
-      {
-        "antall": 115,
-        "bruksperiode": {
-          "fom": "2019-05-20T16:29:25.993"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-04-13",
-          "tom": "2019-05-14"
-        }
-      },
-      {
-        "antall": 118,
-        "bruksperiode": {
-          "fom": "2019-07-16T07:47:30.237"
-        },
-        "gyldighetsperiode": {
-          "fom": "2019-05-15",
-          "tom": "2019-07-14"
-        }
-      }
-    ]
+    "sistEndret": "2020-05-14"
   },
   "juridiskEnhetDetaljer": {
-    "enhetstype": "AS",
-    "sektorkode": "2100",
-    "kapitalopplysninger": [
-      {
-        "kapital": 2000000,
-        "kapitalInnbetalt": 2000000,
-        "valuta": "NOK",
-        "fritekst": "null",
-        "bruksperiode": {
-          "fom": "2014-08-04T08:32:45.965"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17",
-          "tom": "2014-07-31"
-        }
-      },
-      {
-        "kapital": 2200000,
-        "kapitalInnbetalt": 2200000,
-        "valuta": "NOK",
-        "fritekst": "null",
-        "bruksperiode": {
-          "fom": "2014-08-04T08:32:45.965"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-08-01"
-        }
-      }
-    ],
-    "foretaksregisterRegistreringer": [
-      {
-        "registrert": true,
-        "bruksperiode": {
-          "fom": "2014-05-21T21:03:53.437"
-        },
-        "gyldighetsperiode": {
-          "fom": "2014-02-17"
-        }
-      }
-    ]
+    "enhetstype": "AS"
   },
   "driverVirksomheter": [
     {
-      "organisasjonsnummer": "913448278",
+      "organisasjonsnummer": "910825518",
       "navn": {
-        "redigertnavn": "VITA DETALJ AS",
-        "navnelinje1": "VITA DETALJ AS",
-        "navnelinje3": "AVD LOGISTIKK",
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
         "bruksperiode": {
-          "fom": "2019-11-19T04:01:14.406"
+          "fom": "2020-05-14T14:56:00.003"
         },
         "gyldighetsperiode": {
-          "fom": "2019-11-18"
+          "fom": "2020-05-14"
         }
       },
       "bruksperiode": {
-        "fom": "2019-10-29T04:01:23.579"
+        "fom": "2020-05-14T14:55:59.992"
       },
       "gyldighetsperiode": {
-        "fom": "2014-03-31",
-        "tom": "2019-10-27"
+        "fom": "2020-05-06"
       }
     },
     {
-      "organisasjonsnummer": "973135694",
+      "organisasjonsnummer": "910825518",
       "navn": {
-        "redigertnavn": "VITA DETALJ AS",
-        "navnelinje1": "VITA DETALJ AS",
-        "navnelinje3": "AVD ADMINISTRASJON",
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
         "bruksperiode": {
-          "fom": "2019-11-19T04:01:59.426"
+          "fom": "2020-05-14T14:56:00.003"
         },
         "gyldighetsperiode": {
-          "fom": "2019-11-18"
+          "fom": "2020-05-14"
         }
       },
       "bruksperiode": {
-        "fom": "2019-10-29T04:02:24.913"
+        "fom": "2020-05-14T14:55:59.992"
       },
       "gyldighetsperiode": {
-        "fom": "2002-04-08",
-        "tom": "2019-10-27"
+        "fom": "2020-05-14"
       }
     },
     {
-      "organisasjonsnummer": "914396077",
+      "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "FREDRIK & LOUISA AS",
-        "navnelinje1": "FREDRIK & LOUISA AS",
-        "navnelinje3": "AVD DRØBAK",
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
         "bruksperiode": {
-          "fom": "2020-01-24T04:01:25.593"
+          "fom": "2020-05-14T14:56:00.225"
         },
         "gyldighetsperiode": {
-          "fom": "2020-01-23"
+          "fom": "2020-05-14"
         }
       },
       "bruksperiode": {
-        "fom": "2014-11-11T04:04:33.285"
+        "fom": "2020-05-14T14:56:00.221"
       },
       "gyldighetsperiode": {
-        "fom": "2014-11-03",
-        "tom": "2014-11-09"
+        "fom": "2020-05-06",
+        "tom": "2020-05-13"
       }
     },
     {
-      "organisasjonsnummer": "918022902",
+      "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "VITA AS",
-        "navnelinje1": "VITA AS",
-        "navnelinje3": "AVD 1143 ARKADEN",
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
         "bruksperiode": {
-          "fom": "2017-03-19T04:00:59.074"
+          "fom": "2020-05-14T14:56:00.225"
         },
         "gyldighetsperiode": {
-          "fom": "2017-03-18"
+          "fom": "2020-05-14"
         }
       },
       "bruksperiode": {
-        "fom": "2016-11-09T04:03:59.878"
+        "fom": "2020-05-14T14:56:00.221"
       },
       "gyldighetsperiode": {
-        "fom": "2016-11-08"
+        "fom": "2020-05-14"
       }
-    }
-  ],
-  "fisjoner": [
+    },
     {
-      "juridiskEnhet": {
-        "organisasjonsnummer": "976135709",
-        "type": "JuridiskEnhet",
-        "navn": {
-          "redigertnavn": "PARFYMELLE AS",
-          "navnelinje1": "PARFYMELLE AS",
-          "bruksperiode": {
-            "fom": "2015-02-23T08:04:53.2"
-          },
-          "gyldighetsperiode": {
-            "fom": "1996-03-12"
-          }
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
         },
-        "organisasjonDetaljer": {
-          "navn": [
-            {
-              "redigertnavn": "PARFYMELLE AS",
-              "navnelinje1": "PARFYMELLE AS",
-              "bruksperiode": {
-                "fom": "2015-02-23T08:04:53.2"
-              },
-              "gyldighetsperiode": {
-                "fom": "1996-03-12"
-              }
-            }
-          ]
-        },
-        "juridiskEnhetDetaljer": {}
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
       },
       "bruksperiode": {
-        "fom": "2014-08-04T08:32:53.138"
+        "fom": "2020-05-06T10:40:44.5"
       },
       "gyldighetsperiode": {
-        "fom": "2014-05-31",
-        "tom": "2014-07-31"
+        "fom": "2020-02-12",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825518",
+      "navn": {
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.003"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-06T10:51:51.728"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-02-12",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-06T10:51:51.752"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-06",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "954168395",
+      "navn": {
+        "redigertnavn": "HASLUM OG HOSLE REGNSKAP",
+        "navnelinje1": "HASLUM OG HOSLE REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-08-19T11:16:29.595"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-08-19"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-08-19T11:41:26.545"
+      },
+      "gyldighetsperiode": {
+        "fom": "2015-01-01",
+        "tom": "2020-08-18"
       }
     }
   ]
