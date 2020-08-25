@@ -1,7 +1,6 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret
 
 import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
-import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -14,7 +13,7 @@ import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
 @Service
-class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnClient: AltinnClient) {
+class EnhetsregisteretClient(private val restTemplate: RestTemplate) {
     val logger = LoggerFactory.getLogger(EnhetsregisteretClient::class.java)!!
 
     @Value("\${ereg.url}")
@@ -40,7 +39,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
             logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
             return response.body
         } catch (e: Exception) {
-            logger.error("Feil ved oppslag mot EnhetsRegisteret: orgnr: $orgnr {}", e.message)
+            logger.error("Feil ved oppslag mot EnhetsRegisteret: orgnr: $orgnr", e)
         }
         return null
     }
@@ -52,8 +51,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
            val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
-           logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista: ", juridiskEnhet)
-           komplementPaaAltinnFormat.forEach { logger.info(it.toString()) }
+           logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista:\n{}", juridiskEnhet, komplementPaaAltinnFormat.joinToString(" \n") { it.toString() })
            return komplementPaaAltinnFormat
         }
         return null

@@ -16,7 +16,7 @@ import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Protected
-class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretClient, val altinnClient: AltinnClient,
+class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretClient,
                                  val requestContextHolder: TokenValidationContextHolder) {
     @GetMapping(value = ["/tidligere-virksomheter"])
     fun hentTidligerVirksomheter(
