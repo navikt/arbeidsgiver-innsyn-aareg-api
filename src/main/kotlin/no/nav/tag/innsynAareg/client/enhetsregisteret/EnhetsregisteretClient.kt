@@ -53,7 +53,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
            val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
            logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista: ", juridiskEnhet)
-            komplementPaaAltinnFormat.forEach { logger.info(it.toString()) }
+           komplementPaaAltinnFormat.forEach { logger.info(it.toString()) }
            return komplementPaaAltinnFormat
         }
         return null
