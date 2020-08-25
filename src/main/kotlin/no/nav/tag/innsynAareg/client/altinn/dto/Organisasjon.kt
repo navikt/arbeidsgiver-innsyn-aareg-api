@@ -7,4 +7,8 @@ class Organisasjon(
     var OrganizationForm: String? = null,
     var Status: String? = null,
     var Type: String? = null
-)
+) {
+    override fun toString(): String {
+        return "Organisasjon(Name=$Name, ParentOrganizationNumber=$ParentOrganizationNumber, OrganizationNumber=$OrganizationNumber, OrganizationForm=$OrganizationForm, Status=$Status, Type=$Type)"
+    }
+}

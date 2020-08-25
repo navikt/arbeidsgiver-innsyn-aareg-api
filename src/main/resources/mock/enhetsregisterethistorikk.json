@@ -299,6 +299,26 @@
         "fom": "2015-01-01",
         "tom": "2020-08-18"
       }
+    },
+    {
+      "organisasjonsnummer": "954168396",
+      "navn": {
+        "redigertnavn": "smokk og skåne",
+        "navnelinje1": "smokk og skåne",
+        "bruksperiode": {
+          "fom": "2020-08-19T11:16:29.595"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-08-19"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-08-19T11:41:26.545"
+      },
+      "gyldighetsperiode": {
+        "fom": "2015-01-01",
+        "tom": "2020-08-18"
+      }
     }
   ]
 }

@@ -50,8 +50,11 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, val altinnC
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
            val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-           val komplementTilaktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
-           return mapFraOrganisasjonFraEregTilAltinn(komplementTilaktiveOrgs, juridiskEnhet);
+           val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
+           val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
+           logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista: ", juridiskEnhet)
+            komplementPaaAltinnFormat.forEach { logger.info(it.toString()) }
+           return komplementPaaAltinnFormat
         }
         return null
     }
