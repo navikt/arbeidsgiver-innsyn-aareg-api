@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.client.altinn.dto
 
-class Organisasjon(
+data class Organisasjon(
     var Name: String? = null,
     var ParentOrganizationNumber: String? = null,
     var OrganizationNumber: String? = null,

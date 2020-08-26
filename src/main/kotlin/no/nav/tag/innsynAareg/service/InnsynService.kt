@@ -3,8 +3,7 @@ package no.nav.tag.innsynAareg.service
 import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.aareg.AaregException
 import no.nav.tag.innsynAareg.client.enhetsregisteret.EnhetsregisteretClient
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.EnhetsRegisterOrg
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.Organisasjoneledd
+import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import no.nav.tag.innsynAareg.client.pdl.PdlBatchClient
 import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
@@ -42,8 +41,8 @@ class InnsynService(
             return Pair(orgnrHovedenhet, antall)
         }
 
-        val orgtreFraEnhetsregisteret: EnhetsRegisterOrg =
-            enhetsregisteretService.hentOrgnaisasjonFraEnhetsregisteret(orgnrUnderenhet)
+        val orgtreFraEnhetsregisteret: OrganisasjonFraEreg =
+            enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
                 ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
@@ -64,9 +63,9 @@ class InnsynService(
     }
 
     private fun itererOverOrgtre(
-        orgnrUnderenhet: String,
-        orgledd: Organisasjoneledd,
-        idToken: String
+            orgnrUnderenhet: String,
+            orgledd: OrganisasjonFraEreg,
+            idToken: String
     ): Pair<String, Int> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
@@ -74,10 +73,10 @@ class InnsynService(
             idToken
         )
         if (antall != null && antall != 0) {
-            return Pair(orgledd.organisasjonsnummer!!, antall)
+            return Pair(orgledd.organisasjonsnummer, antall)
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
             try {
-                val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter?.get(0)!!.organisasjonsnummer!!
+                val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter[0].organisasjonsnummer
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
                     orgnrUnderenhet,
                     juridiskEnhetOrgnr,
@@ -88,7 +87,7 @@ class InnsynService(
                 throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
             }
         } else {
-            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd!!, idToken)
+            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd, idToken)
         }
     }
 
