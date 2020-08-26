@@ -47,7 +47,7 @@ class MockServer @Autowired constructor(
 
         mockForPath(server, URL(eregUrl + "910825518"), "enhetsregisteret.json")
         mockForPath(server, URL(eregUrl + "910825517"), "enhetsregisteret.json")
-
+        mockEregHierarkiHistorikk(server, URL(eregUrl + "910825518"))
         server.stubFor(
             any(urlPathEqualTo(URL(aaregArbeidsforholdUrl).path))
                 .withQueryParam("status", equalTo("ALLE"))
@@ -165,6 +165,18 @@ class MockServer @Autowired constructor(
                         .withHeader("Content-Type", "application/json")
                         .withBody(hentStringFraFil("rettigheterTilSkjema.json"))
                 )
+        )
+    }
+    final fun mockEregHierarkiHistorikk(server: WireMockServer, url: URL) {
+        server.stubFor(
+                get(urlPathEqualTo(url.path))
+                        .withQueryParam("inkluderHistorikk",equalTo("true"))
+                        .withQueryParam("inkluderHierarki", equalTo("true"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(hentStringFraFil("enhetsregisterethistorikk.json"))
+                        )
         )
     }
 }
