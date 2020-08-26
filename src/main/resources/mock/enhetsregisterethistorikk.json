@@ -1,0 +1,324 @@
+{
+  "organisasjonsnummer": "810825472",
+  "type": "JuridiskEnhet",
+  "navn": {
+    "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+    "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
+    "bruksperiode": {
+      "fom": "2020-05-14T14:56:00.191"
+    },
+    "gyldighetsperiode": {
+      "fom": "2020-05-14"
+    }
+  },
+  "organisasjonDetaljer": {
+    "registreringsdato": "2020-02-12T00:00:00",
+    "enhetstyper": [
+      {
+        "enhetstype": "AS",
+        "bruksperiode": {
+          "fom": "2020-02-12T13:25:49.584"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-02-12"
+        }
+      }
+    ],
+    "navn": [
+      {
+        "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.191"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
+        }
+      },
+      {
+        "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+        "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.191"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      {
+        "navnelinje1": "Malmefjord og Ridabu Regnskap",
+        "bruksperiode": {
+          "fom": "2020-05-06T10:40:44.455"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-02-12",
+          "tom": "2020-05-05"
+        }
+      }
+    ],
+    "forretningsadresser": [
+      {
+        "type": "Forretningsadresse",
+        "adresselinje1": "RÅDHUSET",
+        "postnummer": "6440",
+        "poststed": "ELNESVÅGEN",
+        "landkode": "NO",
+        "kommunenummer": "1579",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.19"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
+        }
+      },
+      {
+        "type": "Forretningsadresse",
+        "adresselinje1": "RÅDHUSET",
+        "postnummer": "6440",
+        "poststed": "ELNESVÅGEN",
+        "landkode": "NO",
+        "kommunenummer": "1579",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.19"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      }
+    ],
+    "postadresser": [
+      {
+        "type": "Postadresse",
+        "adresselinje1": "Postboks 4120",
+        "postnummer": "2307",
+        "poststed": "Hamar",
+        "landkode": "NO",
+        "kommunenummer": "0403",
+        "bruksperiode": {
+          "fom": "2020-05-06T10:40:44.446"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-02-12",
+          "tom": "2020-05-05"
+        }
+      },
+      {
+        "type": "Postadresse",
+        "adresselinje1": "POSTBOKS 4120",
+        "postnummer": "2307",
+        "poststed": "HAMAR",
+        "landkode": "NO",
+        "kommunenummer": "3403",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.189"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-06",
+          "tom": "2020-05-13"
+        }
+      },
+      {
+        "type": "Postadresse",
+        "adresselinje1": "POSTBOKS 4120",
+        "postnummer": "2307",
+        "poststed": "HAMAR",
+        "landkode": "NO",
+        "kommunenummer": "3403",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.189"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      }
+    ],
+    "sistEndret": "2020-05-14"
+  },
+  "juridiskEnhetDetaljer": {
+    "enhetstype": "AS"
+  },
+  "driverVirksomheter": [
+    {
+      "organisasjonsnummer": "910825518",
+      "navn": {
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.003"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-14T14:55:59.992"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-06"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825518",
+      "navn": {
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.003"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-14T14:55:59.992"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-14"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-14T14:56:00.221"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-06",
+        "tom": "2020-05-13"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-14T14:56:00.221"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-14"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-06T10:40:44.5"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-02-12",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825518",
+      "navn": {
+        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "navnelinje1": "MAURA OG KOLBU REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.003"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-06T10:51:51.728"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-02-12",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "910825526",
+      "navn": {
+        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
+        "navnelinje2": "P",
+        "bruksperiode": {
+          "fom": "2020-05-14T14:56:00.225"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-05-14"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-05-06T10:51:51.752"
+      },
+      "gyldighetsperiode": {
+        "fom": "2020-05-06",
+        "tom": "2020-05-05"
+      }
+    },
+    {
+      "organisasjonsnummer": "954168395",
+      "navn": {
+        "redigertnavn": "HASLUM OG HOSLE REGNSKAP",
+        "navnelinje1": "HASLUM OG HOSLE REGNSKAP",
+        "bruksperiode": {
+          "fom": "2020-08-19T11:16:29.595"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-08-19"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-08-19T11:41:26.545"
+      },
+      "gyldighetsperiode": {
+        "fom": "2015-01-01",
+        "tom": "2020-08-18"
+      }
+    },
+    {
+      "organisasjonsnummer": "954168396",
+      "navn": {
+        "redigertnavn": "smokk og skåne",
+        "navnelinje1": "smokk og skåne",
+        "bruksperiode": {
+          "fom": "2020-08-19T11:16:29.595"
+        },
+        "gyldighetsperiode": {
+          "fom": "2020-08-19"
+        }
+      },
+      "bruksperiode": {
+        "fom": "2020-08-19T11:41:26.545"
+      },
+      "gyldighetsperiode": {
+        "fom": "2015-01-01",
+        "tom": "2020-08-18"
+      }
+    }
+  ]
+}
