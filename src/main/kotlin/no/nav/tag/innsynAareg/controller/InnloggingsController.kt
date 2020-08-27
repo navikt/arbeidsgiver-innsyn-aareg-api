@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Protected
-class InnlogginsController {
+class InnloggingsController {
     @GetMapping(value = ["/innlogget"])
     @ResponseBody
     fun erInnlogget(): String? {
