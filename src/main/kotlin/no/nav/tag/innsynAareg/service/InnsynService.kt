@@ -136,13 +136,12 @@ class InnsynService(
         arbeidsforholdOversikt: List<ArbeidsForhold>
     ) {
         val respons: PdlBatchRespons = pdlBatchClient.getBatchFraPdl(
-            arbeidsforholdOversikt.map { it.arbeidstaker.offentligIdent }
+            arbeidsforholdOversikt.mapNotNull { it.arbeidstaker.offentligIdent }
         ) ?: run {
             logger.error("getBatchFraPdl feilet")
             return
         }
 
-        /* Litt uheldig å ha N^2 iterasjoner når det kan være N log(N). */
         for (person in respons.data.hentPersonBolk) {
             for (arbeidsforhold in arbeidsforholdOversikt) {
                 if (person.ident == arbeidsforhold.arbeidstaker.offentligIdent) {
@@ -161,6 +160,11 @@ class InnsynService(
                         listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
                             .joinToString(" ")
                 }
+            }
+        }
+        for (arbeidsforhold in arbeidsforholdOversikt) {
+            if (arbeidsforhold.arbeidstaker.navn.isNullOrBlank()) {
+                arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
             }
         }
     }
