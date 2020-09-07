@@ -26,7 +26,7 @@ class TokenUtils(requestContextHolder: TokenValidationContextHolder) {
         return Optional.ofNullable(requestContextHolder.tokenValidationContext)
                 .orElse(null)
     }
-    fun getSubject(): String? {
+    fun getSubject(): String {
         return Optional.ofNullable(claimSet())
                 .map(Function { obj: JwtTokenClaims -> obj.subject })
                 .orElse(null)

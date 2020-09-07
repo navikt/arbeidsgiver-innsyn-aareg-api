@@ -18,7 +18,7 @@ class UnleashConfig ( tokenUtils: TokenUtils){
 
     @Bean
     @Profile("dev", "prod")
-    fun initializeUnleash( isNotProdStrategy: IsNotProdStrategy, byUserIdStrategy: ByUserIdStrategy): Unleash? {
+    fun initializeUnleash( byEnvironmentStrategy: ByEnvironmentStrategy, byUserIdStrategy: ByUserIdStrategy): Unleash? {
         val config: UnleashConfig = UnleashConfig.builder()
                 .appName(APP_NAME)
                 .instanceId(APP_NAME)
@@ -26,7 +26,7 @@ class UnleashConfig ( tokenUtils: TokenUtils){
                 .build()
         return DefaultUnleash(
                 config,
-                isNotProdStrategy,
+                byEnvironmentStrategy,
                 byUserIdStrategy
         )
     }
