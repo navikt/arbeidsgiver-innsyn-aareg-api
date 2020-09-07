@@ -13,11 +13,11 @@ class IsNotProdStrategy(@Value("\${nais.cluster.name}") val env: String)  : Stra
         return "isNotProd"
     }
 
-    override fun isEnabled(map: Map<String?, String?>?): Boolean {
-        return !isProd(env)
+    override fun isEnabled(map: Map<String, String>): Boolean {
+        return isProd(env)
     }
 
-    private fun isProd(environment: String?): Boolean {
+    private fun isProd(environment: String): Boolean {
         return "prod-fss".equals(environment, ignoreCase = true)
     }
 }

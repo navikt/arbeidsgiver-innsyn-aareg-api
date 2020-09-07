@@ -13,11 +13,6 @@ class UnleashService(private val unleash: Unleash, tokenUtils: TokenUtils){
 
     fun hentFeatureToggles(features: List<String>): Map<String, Boolean?>? {
         return features.map { it to isEnabled(it) }.toMap()
-        //return features.fold(HashMap(),it -> it)
-        //return features.associateBy { {it}, { it -> isEnabled(it) }  }
-        /*return features.stream().collect(Collectors.toMap(
-                { feature: String -> feature }
-        ) { feature: String -> isEnabled(feature) })*/
     }
 
     fun isEnabled(feature: String?): Boolean? {

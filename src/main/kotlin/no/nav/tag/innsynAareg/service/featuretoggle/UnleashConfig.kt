@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
 @Configuration
-class UnleashConfig (   tokenUtils: TokenUtils){
+class UnleashConfig ( tokenUtils: TokenUtils){
 
     private val APP_NAME = "permitteringsskjema-api"
     private val UNLEASH_API_URL = "https://unleash.nais.adeo.no/api/"
@@ -18,7 +18,7 @@ class UnleashConfig (   tokenUtils: TokenUtils){
 
     @Bean
     @Profile("dev", "prod")
-    fun initializeUnleash( isNotProdStrategy: IsNotProdStrategy): Unleash? {
+    fun initializeUnleash( isNotProdStrategy: IsNotProdStrategy, byUserIdStrategy: ByUserIdStrategy): Unleash? {
         val config: UnleashConfig = UnleashConfig.builder()
                 .appName(APP_NAME)
                 .instanceId(APP_NAME)
@@ -26,7 +26,8 @@ class UnleashConfig (   tokenUtils: TokenUtils){
                 .build()
         return DefaultUnleash(
                 config,
-                isNotProdStrategy
+                isNotProdStrategy,
+                byUserIdStrategy
         )
     }
 
