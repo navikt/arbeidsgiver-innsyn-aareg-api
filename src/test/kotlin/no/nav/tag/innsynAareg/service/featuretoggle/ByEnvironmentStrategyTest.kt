@@ -9,7 +9,7 @@ import java.util.Map
 
 class ByEnvironmentStrategyTest {
     @Test
-    fun featureIsEnabledWhenEnvironmentInList() {
+    fun featureIsEnabledMedMiljøILista() {
         assertThat(ByEnvironmentStrategy(environmentMock("local")).isEnabled(Map.of("miljø", "local,dev-fss"))).isEqualTo(true)
     }
 
@@ -19,7 +19,7 @@ class ByEnvironmentStrategyTest {
     }
 
     @Test
-    fun featureIsDisabledWhenEnvironmentNotInList() {
+    fun featureIsDisabledMedMiljøNull() {
         assertThat(ByEnvironmentStrategy(environmentMock("dev-fss")).isEnabled(Map.of("miljø", "prod-fss"))).isEqualTo(false)
     }
 

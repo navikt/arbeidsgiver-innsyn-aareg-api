@@ -4,10 +4,9 @@ import no.finn.unleash.Unleash
 import no.finn.unleash.UnleashContext
 import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
-class UnleashService(private val unleash: Unleash, tokenUtils: TokenUtils){
+class UnleashService(private val unleash: Unleash, tokenUtils: TokenUtils) {
 
     private val tokenUtil: TokenUtils = tokenUtils
 
