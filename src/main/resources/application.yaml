@@ -16,6 +16,8 @@ spring:
 spring:
   profiles: local
 
+nais.cluster.name: local
+
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: http://metadata-selvbetjening
   accepted_audience: aud-localhost
