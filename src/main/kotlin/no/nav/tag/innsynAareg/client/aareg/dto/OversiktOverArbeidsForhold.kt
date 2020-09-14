@@ -16,8 +16,8 @@ data class Arbeidsgiver(
 
 data class Arbeidstaker(
     val type: String,
-    val aktoerId: String,
-    val offentligIdent: String,
+    val aktoerId: String?,
+    val offentligIdent: String?,
     var navn: String?
 )
 
