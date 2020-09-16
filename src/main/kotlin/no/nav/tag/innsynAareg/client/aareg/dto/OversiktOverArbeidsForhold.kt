@@ -7,7 +7,11 @@ val varselKodeOppslag: HashMap<String, String> = hashMapOf(
     "EROPPH" to "Maskinell sluttdato: Opphørt i Enhetsregisteret",
     "ERVIRK" to "Maskinell sluttdato: Virksomhetoverdragelse",
     "IBARBG" to "Maskinell sluttdato: Ikke bekreftet",
-    "IBKAOR" to "Maskinell sluttdato: Ikke bekreftet i a-ordningen"
+    "IBKAOR" to "Maskinell sluttdato: Ikke bekreftet i a-ordningen",
+    "PPIDHI" to "Permisjonen/Permitteringen har id-historikk",
+    "NAVEND" to "NAV har opprettet eller endret arbeidsforholdet",
+    "IBPPAG" to "Maskinell sluttdato: Arbeidsgiver har ikke bekreftet permisjon/permitteringen.",
+    "AFIDHI" to "Arbeidsforholdet har id-historikk");
 )
 
 data class Arbeidsgiver(
