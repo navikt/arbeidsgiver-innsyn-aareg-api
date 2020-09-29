@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.service
 
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.aareg.AaregException
 import no.nav.tag.innsynAareg.client.enhetsregisteret.EnhetsregisteretClient
@@ -9,9 +10,14 @@ import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
 import no.nav.tag.innsynAareg.client.aareg.dto.ArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
+import no.nav.tag.innsynAareg.client.altinn.AltinnClient
+import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.Yrkeskoder
+import no.nav.tag.innsynAareg.utils.FnrExtractor
+import no.nav.tag.innsynAareg.utils.SERVICEKODE_INNSYN_AAREG
+import no.nav.tag.innsynAareg.utils.SERVICE_EDITION_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -22,7 +28,8 @@ class InnsynService(
     private val aaregClient: AaregClient,
     private val yrkeskodeverkClient: YrkeskodeverkClient,
     private val pdlBatchClient: PdlBatchClient,
-    private val enhetsregisteretService: EnhetsregisteretClient
+    private val enhetsregisteretService: EnhetsregisteretClient,
+    private val altinnClient: AltinnClient
 ) {
     private val logger = LoggerFactory.getLogger(InnsynService::class.java)!!
 
@@ -109,6 +116,43 @@ class InnsynService(
             settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
         }
         return arbeidsforhold
+    }
+
+
+    fun hentTidligereArbeidsforhold
+            (        bedriftsnr: String,
+                    overOrdnetEnhetOrgnr: String,
+                    idPortenToken: String,
+                    fnr:String
+            ): ArbeidsforholdOppslagResultat {
+
+        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        if(arbeidsforhold !is ArbeidsforholdFunnet) {
+            arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken,fnr)
+        }
+        settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
+        settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+        return arbeidsforhold
+    }
+
+    fun finnOpplysningspliktigOgHentArbeidsforhold(
+            bedriftsnr: String,
+            overOrdnetEnhetOrgnr: String,
+            idPortenToken: String,
+            fnr:String
+    ): ArbeidsforholdOppslagResultat {
+        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr , SERVICEKODE_INNSYN_AAREG,SERVICE_EDITION_INNSYN_AAREG)
+        if( organisasjonerMedTilgang is AltinnOppslagVellykket){
+          val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type=="Enterprise"}
+          juridiskeEnhetermedTilgang.forEach {
+              val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
+              if (arbeidsforhold is ArbeidsforholdFunnet){
+                  return arbeidsforhold;
+              }
+          }
+
+        }
+        throw Exception("klarte ikke hente juridisk enhet fra altinn");
     }
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(

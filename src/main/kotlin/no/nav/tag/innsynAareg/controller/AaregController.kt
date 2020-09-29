@@ -1,6 +1,7 @@
 package no.nav.tag.innsynAareg.controller
 
 import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.IngenRettigheter
@@ -15,7 +16,9 @@ import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Protected
-class AaregController(val aAregService: InnsynService) {
+class AaregController(
+        val requestContextHolder: TokenValidationContextHolder,
+        val aAregService: InnsynService) {
     @GetMapping(value = ["/arbeidsforhold"])
     fun hentArbeidsforhold(
         @RequestHeader("orgnr") orgnr: String,
@@ -26,6 +29,19 @@ class AaregController(val aAregService: InnsynService) {
             is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
             IngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
         }
+
+    @GetMapping(value = ["/tidligere-arbeidsforhold"])
+    fun hentTidligereArbeidsforhold(
+            @RequestHeader("orgnr") orgnr: String,
+            @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
+    ): ResponseEntity<OversiktOverArbeidsForhold> {
+        val fnr: String = no.nav.tag.innsynAareg.utils.FnrExtractor.extract(requestContextHolder)
+        when (val respons = aAregService.hentTidligereArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken, fnr)) {
+            is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
+            IngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+    }
 
     @GetMapping(value = ["/antall-arbeidsforhold"])
     fun hentAntallArbeidsforhold(
