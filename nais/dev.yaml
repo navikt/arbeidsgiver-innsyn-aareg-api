@@ -14,6 +14,9 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
+  prometheus:
+    enabled: true
+    path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/prometheus
   vault:
     enabled: true
     paths:
