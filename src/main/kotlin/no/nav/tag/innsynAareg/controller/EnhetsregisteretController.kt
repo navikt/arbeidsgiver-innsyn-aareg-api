@@ -23,7 +23,6 @@ class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretCli
             @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
             @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<List<Organisasjon>> {
-        val fnr: String = FnrExtractor.extract(requestContextHolder)
         val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr )
         return ResponseEntity.ok(result!!)
     }
