@@ -125,10 +125,13 @@ class InnsynService(
                     idPortenToken: String,
                     fnr:String
             ): ArbeidsforholdOppslagResultat {
-        var arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken,fnr)
+        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         if (arbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
             settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+        }
+        else{
+            arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken,fnr)
         }
         return arbeidsforhold
     }
@@ -149,6 +152,8 @@ class InnsynService(
           juridiskeEnhetermedTilgang.forEach {
               val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
               if (arbeidsforhold is ArbeidsforholdFunnet){
+                  settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
+                  settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
                   return arbeidsforhold;
               }
           }
