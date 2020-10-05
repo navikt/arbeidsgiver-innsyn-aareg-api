@@ -125,13 +125,11 @@ class InnsynService(
                     idPortenToken: String,
                     fnr:String
             ): ArbeidsforholdOppslagResultat {
-
-        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
-        if(arbeidsforhold !is ArbeidsforholdFunnet) {
-            arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken,fnr)
+        var arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr,idPortenToken,fnr)
+        if (arbeidsforhold is ArbeidsforholdFunnet) {
+            settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
+            settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
         }
-        settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
-        settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
         return arbeidsforhold
     }
 
@@ -141,6 +139,10 @@ class InnsynService(
             idPortenToken: String,
             fnr:String
     ): ArbeidsforholdOppslagResultat {
+        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        if (arbeidsforhold is ArbeidsforholdFunnet) {
+            return arbeidsforhold
+        }
         val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr , SERVICEKODE_INNSYN_AAREG,SERVICE_EDITION_INNSYN_AAREG)
         if( organisasjonerMedTilgang is AltinnOppslagVellykket){
           val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type=="Enterprise"}
@@ -150,7 +152,6 @@ class InnsynService(
                   return arbeidsforhold;
               }
           }
-
         }
         throw Exception("klarte ikke hente juridisk enhet fra altinn");
     }
