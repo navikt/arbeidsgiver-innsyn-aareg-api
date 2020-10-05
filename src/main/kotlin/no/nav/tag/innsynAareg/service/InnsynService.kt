@@ -125,16 +125,19 @@ class InnsynService(
                     idPortenToken: String,
                     fnr:String
             ): ArbeidsforholdOppslagResultat {
-        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+
+        var arbeidsforhold: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        if (!(arbeidsforhold is ArbeidsforholdFunnet && arbeidsforhold.oversiktOverArbeidsForhold.antall !== null && arbeidsforhold.oversiktOverArbeidsForhold.antall !== 0L)) {
+            arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
+        }
         if (arbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
             settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
-        }
-        else{
-            arbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken,fnr)
+            return arbeidsforhold;
         }
         return arbeidsforhold
     }
+
 
     fun finnOpplysningspliktigOgHentArbeidsforhold(
             bedriftsnr: String,
@@ -142,7 +145,7 @@ class InnsynService(
             idPortenToken: String,
             fnr:String
     ): ArbeidsforholdOppslagResultat {
-        var arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         if (arbeidsforhold is ArbeidsforholdFunnet) {
             return arbeidsforhold
         }
@@ -150,15 +153,20 @@ class InnsynService(
         if( organisasjonerMedTilgang is AltinnOppslagVellykket){
           val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type=="Enterprise"}
           juridiskeEnhetermedTilgang.forEach {
-              val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
-              if (arbeidsforhold is ArbeidsforholdFunnet){
-                  settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
-                  settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
-                  return arbeidsforhold;
+              try {
+                  val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
+                  if (arbeidsforhold is ArbeidsforholdFunnet && arbeidsforhold.oversiktOverArbeidsForhold.antall !== 0L){
+                      settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
+                      settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+                      return arbeidsforhold;
+                  }
+              }
+              catch (e: Exception) {
+                  logger.info("Spurte Aareg etter arbeidsforhold på kombinasjonen $bedriftsnr og ${it.OrganizationNumber} i historiske arbeidsforhold")
               }
           }
         }
-        throw Exception("klarte ikke hente juridisk enhet fra altinn");
+        return ArbeidsforholdFunnet(OversiktOverArbeidsForhold(0L, emptyList<ArbeidsForhold>(), "0",  "0"));
     }
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(
