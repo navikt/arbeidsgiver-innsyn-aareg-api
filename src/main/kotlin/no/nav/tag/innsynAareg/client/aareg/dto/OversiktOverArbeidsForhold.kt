@@ -2,6 +2,8 @@ package no.nav.tag.innsynAareg.client.aareg.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+
+
 val varselKodeOppslag: HashMap<String, String> = hashMapOf(
     "ERKONK" to "Kontroller sluttdatoen. NAV har satt samme sluttdato som konkursåpningsdato i Konkursregisteret.",
     "EROPPH" to "Kontroller sluttdatoen. NAV har satt samme sluttdato som datoen foretaket opphørte i Enhetsregisteret.",
