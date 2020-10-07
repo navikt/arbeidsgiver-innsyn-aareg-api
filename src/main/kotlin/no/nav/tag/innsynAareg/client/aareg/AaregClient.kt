@@ -40,7 +40,6 @@ class AaregClient(
                 entity,
                 OversiktOverArbeidsForhold::class.java
             )
-
             when (respons.statusCode) {
                 HttpStatus.OK -> ArbeidsforholdFunnet(respons.body!!)
                 else -> throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
