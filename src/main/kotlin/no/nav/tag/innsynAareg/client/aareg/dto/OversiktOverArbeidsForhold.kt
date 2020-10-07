@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 val varselKodeOppslag: HashMap<String, String> = hashMapOf(
-    "ERKONK" to "Maskinell sluttdato: Konkurs",
-    "EROPPH" to "Maskinell sluttdato: Opphørt i Enhetsregisteret",
-    "ERVIRK" to "Maskinell sluttdato: Virksomhetoverdragelse",
-    "IBARBG" to "Maskinell sluttdato: Ikke bekreftet",
+    "ERKONK" to "Kontroller sluttdatoen. NAV har satt samme sluttdato som konkursåpningsdato i Konkursregisteret.",
+    "EROPPH" to "Kontroller sluttdatoen. NAV har satt samme sluttdato som datoen foretaket opphørte i Enhetsregisteret.",
+    "ERVIRK" to "Kontroller sluttdatoen. NAV har satt samme sluttdato som datoen da foretaket ble overdratt til en annen juridisk enhet i Enhetsregisteret.",
+    "IBARBG" to "Kontroller sluttdatoen. Du har ikke bekreftet arbeidsforholdet. NAV har satt sluttdato til siste dato i den kalendermåneden du sist bekreftet arbeidsforholdet.",
     "IBKAOR" to "Maskinell sluttdato: Ikke bekreftet i a-ordningen",
-    "PPIDHI" to "Permisjonen/Permitteringen har id-historikk",
+    "PPIDHI" to "NAV har slått sammen denne permitteringen/permisjonen med en annen da opplysningene er så like at vi tolker det som en og samme. Hvis du tror det er feil, sjekk at du ikke savner en permittering eller permisjon på dette arbeidsforholdet.",
     "NAVEND" to "NAV har opprettet eller endret arbeidsforholdet",
-    "IBPPAG" to "Maskinell sluttdato: Arbeidsgiver har ikke bekreftet permisjon/permitteringen.",
-    "AFIDHI" to "Arbeidsforholdet har id-historikk"
+    "IBPPAG" to "Kontroller sluttdatoen. Du har ikke bekreftet permisjon/permitteringen. NAV har satt sluttdato til siste dato i den kalendermåneden du sist bekreftet opplysningen.",
+    "AFIDHI" to "NAV har slått sammen dette arbeidsforholdet med et annet da opplysningene er så like at vi tolker det som ett og samme arbeidsforhold. Hvis du tror det er feil, sjekk at du ikke savner et tidligere arbeidsforhold"
 )
 
 data class Arbeidsgiver(
