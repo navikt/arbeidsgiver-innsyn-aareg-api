@@ -20,7 +20,7 @@ class EnhetsregistertClientTest {
 
     @Test
     fun getToken() {
-        val result = enhetsregisteretClient.finnTidligereVirksomheter("910825518")
+        val result = enhetsregisteretClient.finnTidligereVirksomheter("910825518", "123")
         Assert.assertNotNull (result)
         Assert.assertEquals(2,result?.size)
     }
