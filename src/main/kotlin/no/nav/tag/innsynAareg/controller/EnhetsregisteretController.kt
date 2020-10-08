@@ -23,7 +23,7 @@ class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretCli
             @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
             @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<List<Organisasjon>> {
-        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr )
+        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr,idToken )
         return ResponseEntity.ok(result!!)
     }
 
