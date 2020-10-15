@@ -11,16 +11,14 @@ import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
 import no.nav.tag.innsynAareg.client.aareg.dto.ArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
-import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
-import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
-import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
-import no.nav.tag.innsynAareg.models.Yrkeskoder
+import no.nav.tag.innsynAareg.models.*
 import no.nav.tag.innsynAareg.utils.FnrExtractor
 import no.nav.tag.innsynAareg.utils.SERVICEKODE_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.SERVICE_EDITION_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestClientResponseException
 
 
 @Service
@@ -124,20 +122,19 @@ class InnsynService(
                     overOrdnetEnhetOrgnr: String,
                     idPortenToken: String,
                     fnr:String
-            ): OversiktOverArbeidsForhold {
+            ): ArbeidsforholdOppslagResultat {
 
-        val oversiktOverArbeidsforhold: OversiktOverArbeidsForhold;
+        var oversiktOverArbeidsforhold: ArbeidsforholdOppslagResultat;
         val arbeidsforholdGittOpplysningspliktig: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
-        oversiktOverArbeidsforhold = if (arbeidsforholdGittOpplysningspliktig is ArbeidsforholdFunnet && !arbeidsforholdGittOpplysningspliktig.oversiktOverArbeidsForhold.arbeidsforholdoversikter.isNullOrEmpty()) {
-            arbeidsforholdGittOpplysningspliktig.oversiktOverArbeidsForhold
+        oversiktOverArbeidsforhold = arbeidsforholdGittOpplysningspliktig
+        if (arbeidsforholdGittOpplysningspliktig !is ArbeidsforholdFunnet ) {
+            oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
         }
-        else {
-            finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
+        if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet ) {
+            settNavnPåArbeidsforholdBatch(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
+            settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
         }
-        settNavnPåArbeidsforholdBatch(oversiktOverArbeidsforhold)
-        settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsforhold)
-        return oversiktOverArbeidsforhold;
-
+        return oversiktOverArbeidsforhold
     }
 
 
@@ -146,24 +143,25 @@ class InnsynService(
             overOrdnetEnhetOrgnr: String,
             idPortenToken: String,
             fnr:String
-    ): OversiktOverArbeidsForhold {
+    ): ArbeidsforholdOppslagResultat {
         val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr , SERVICEKODE_INNSYN_AAREG,SERVICE_EDITION_INNSYN_AAREG)
         if( organisasjonerMedTilgang is AltinnOppslagVellykket){
           val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type=="Enterprise"}
           juridiskeEnhetermedTilgang.forEach {
               try {
                   val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
-                  if (arbeidsforhold is ArbeidsforholdFunnet && !arbeidsforhold.oversiktOverArbeidsForhold.arbeidsforholdoversikter.isNullOrEmpty()){
+                  if (arbeidsforhold is ArbeidsforholdFunnet ){
                       logger.info("Klarte finne historiske arbeidsforhold for $bedriftsnr og ${it.OrganizationNumber}")
-                      return arbeidsforhold.oversiktOverArbeidsForhold
+                      return arbeidsforhold
                   }
               }
               catch (e: Exception) {
                   logger.info("Spurte Aareg etter arbeidsforhold på kombinasjonen $bedriftsnr og ${it.OrganizationNumber} i historiske arbeidsforhold")
               }
           }
+            logger.info("Klarte ikke hente historiske arbeidsforhold fra aareg. juridiskeEnhetermedTilgang: $juridiskeEnhetermedTilgang")
         }
-        return OversiktOverArbeidsForhold(0L, emptyList<ArbeidsForhold>(), "0",  "0");
+        return IngenRettigheter
     }
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(
