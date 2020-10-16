@@ -35,9 +35,12 @@ class AaregController(
             @RequestHeader("orgnr") orgnr: String,
             @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
             @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): OversiktOverArbeidsForhold {
+    ): ResponseEntity<OversiktOverArbeidsForhold> {
         val fnr: String = no.nav.tag.innsynAareg.utils.FnrExtractor.extract(requestContextHolder)
-        return aAregService.hentTidligereArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken, fnr)
+        return when (val respons = aAregService.hentTidligereArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken, fnr)) {
+            is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
+            IngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
+        }
     }
 
     @GetMapping(value = ["/antall-arbeidsforhold"])
