@@ -29,7 +29,7 @@ spec:
       value: labs
   prometheus:
     enabled: true
-    path: /ditt-nav-arbeidsgiver-api/internal/actuator/prometheus
+    path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/prometheus
   accessPolicy:
     inbound:
       rules:
