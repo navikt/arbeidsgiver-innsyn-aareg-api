@@ -1,0 +1,39 @@
+apiVersion: nais.io/v1alpha1
+kind: "Application"
+metadata:
+  name: arbeidsgiver-arbeidsforhold-api
+  namespace: arbeidsgiver
+  labels:
+    team: arbeidsgiver
+spec:
+  image: {{image}}
+  team: arbeidsgiver
+  port: 8080
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 3000Mi
+    requests:
+      cpu: 500m
+      memory: 600Mi
+  ingresses:
+    - https://arbeidsgiver.labs.nais.io/arbeidsgiver-arbeidsforhold-api/
+  webproxy: false
+  vault:
+    enabled: false
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: labs
+  prometheus:
+    enabled: true
+    path: /ditt-nav-arbeidsgiver-api/internal/actuator/prometheus
+  accessPolicy:
+    inbound:
+      rules:
+        - application: bedriftsoversikt-og-ansatte
+    outbound:
+      rules:
+        - application: min-side-ag-fakelogin

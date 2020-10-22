@@ -21,7 +21,7 @@ const val FNR_MED_ORGANISASJONER = "00000000000"
 const val ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER = "123456789";
 const val ORGNR_UNDERENHET_UTEN_AAREG_RETTIGHETER = "223456789"
 
-@Profile("local")
+@Profile("local","labs")
 @Component
 class MockServer @Autowired constructor(
     @Value("\${mock.port}") val port: Int,
