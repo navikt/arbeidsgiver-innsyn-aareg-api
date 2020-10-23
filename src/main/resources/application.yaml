@@ -54,6 +54,44 @@ altinn:
 ---
 
 spring:
+  profiles: labs
+
+no.nav.security.jwt.issuer.selvbetjening:
+  discoveryurl: http://min-side-ag-fakelogin/metadata?issuer=selvbetjening
+  accepted_audience: aud-selvbetjening
+  cookiename: selvbetjening-idtoken
+
+mock:
+  enabled: true
+  port: 8081
+  aktorPort: 8082
+
+sts:
+  stsPass: "mockpass"
+  stsUrl: "http://localhost:${mock.port}/sts"
+
+aareg:
+  aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
+  aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+
+yrkeskodeverk:
+  yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
+
+pdl:
+  pdlUrl: "http://localhost:${mock.port}/graphql"
+
+ereg:
+  url: "http://localhost:${mock.port}/ereg/api/v1/organisasjon/"
+
+altinn:
+  altinnUrl: "http://localhost:${mock.port}/altinn/"
+  altinnHeader: "test"
+  APIGwHeader: "test"
+  proxyUrl: "http://localhost:${mock.port}/altinn/"
+
+---
+
+spring:
   profiles: dev
 
 aareg:
