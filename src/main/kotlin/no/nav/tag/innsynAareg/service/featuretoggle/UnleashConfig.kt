@@ -30,7 +30,7 @@ class UnleashConfig {
     }
 
     @Bean
-    @Profile("local")
+    @Profile("local","local")
     fun unleashMock(): Unleash? {
         val fakeUnleash = FakeUnleash()
         fakeUnleash.enableAll()
