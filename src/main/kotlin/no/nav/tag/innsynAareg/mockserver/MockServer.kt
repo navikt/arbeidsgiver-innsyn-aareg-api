@@ -94,7 +94,7 @@ class MockServer @Autowired constructor(
     fun mockArbeidsforholdmedJuridiskEnhet(server: WireMockServer, url: URL) {
         server.stubFor(
                 get(urlPathEqualTo(url.path))
-                        .withHeader("Nav-Opplysningspliktigident", matching("983887457|811076422"))
+                        .withHeader("Nav-Opplysningspliktigident", matching("983887457|811076112"))
                         .withHeader("Nav-Arbeidsgiverident", matching("910825518|811076422"))
                         .willReturn(
                                 aResponse()
