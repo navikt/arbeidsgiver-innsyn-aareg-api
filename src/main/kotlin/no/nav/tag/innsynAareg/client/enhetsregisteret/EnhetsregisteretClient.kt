@@ -1,7 +1,10 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret
 
+import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
+import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
+import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -13,7 +16,7 @@ import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
 @Service
-class EnhetsregisteretClient(private val restTemplate: RestTemplate) {
+class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val aaregClient: AaregClient) {
     val logger = LoggerFactory.getLogger(EnhetsregisteretClient::class.java)!!
 
     @Value("\${ereg.url}")
@@ -51,6 +54,16 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate) {
            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
            val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
+           logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista:\n{}", juridiskEnhet, komplementPaaAltinnFormat.joinToString(" \n") { it.toString() })
+            if (komplementPaaAltinnFormat.isNotEmpty()) {
+                val arbeidsforhold: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(komplementPaaAltinnFormat[0].OrganizationNumber!!,juridiskEnhet,idtoken);
+                if (arbeidsforhold is ArbeidsforholdFunnet ) {
+                    logger.info("skyggekall henter tidligere arbeidsforhold får respons med antall forhold ${arbeidsforhold.oversiktOverArbeidsForhold.arbeidsforholdoversikter?.size} ")
+                }
+                else {
+                    logger.info("skyggekall henter tidligere arbeidsforhold hentet ikke arbeidsforhold")
+                }
+            }
            return komplementPaaAltinnFormat
         }
         return null
