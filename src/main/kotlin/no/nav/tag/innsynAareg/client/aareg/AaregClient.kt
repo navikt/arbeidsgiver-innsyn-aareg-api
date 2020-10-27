@@ -47,10 +47,9 @@ class AaregClient(
         } catch (exception: RestClientException) {
             logger.error("Feil ved oppslag mot Aareg Arbeidsforhold.", exception)
             if (exception is RestClientResponseException && exception.rawStatusCode == 403) {
-                logger.info("statuskode 403 for underenhet: $bedriftsnr og opplysningspliktig $overOrdnetEnhetOrgnr")
+                logger.info("statuskode 403 for organisasjon: $bedriftsnr")
                 return IngenRettigheter
             }
-            logger.info("${exception.message} for underenhet: $bedriftsnr og opplysningspliktig $overOrdnetEnhetOrgnr")
             throw RuntimeException(" Aareg Exception: $exception")
         }
     }
