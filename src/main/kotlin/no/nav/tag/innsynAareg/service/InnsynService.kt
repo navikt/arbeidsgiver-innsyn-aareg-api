@@ -32,14 +32,14 @@ class InnsynService(
     private val logger = LoggerFactory.getLogger(InnsynService::class.java)!!
 
     fun hentAntallArbeidsforholdPåUnderenhet(
-        orgnrUnderenhet: String,
-        orgnrHovedenhet: String,
-        idPortenToken: String
+            orgnrUnderenhet: String,
+            orgnrHovedenhet: String,
+            idPortenToken: String
     ): Pair<String, Int> {
         val antall: Int? = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-            orgnrUnderenhet,
-            orgnrHovedenhet,
-            idPortenToken
+                orgnrUnderenhet,
+                orgnrHovedenhet,
+                idPortenToken
         )
 
         if (antall != null && antall >= 0) {
@@ -47,8 +47,8 @@ class InnsynService(
         }
 
         val orgtreFraEnhetsregisteret: OrganisasjonFraEreg =
-            enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
-                ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
+                enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
+                        ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
             logger.info("Fant null arbeidsforhold for organisasjon: $orgnrUnderenhet")
@@ -57,9 +57,9 @@ class InnsynService(
 
         return try {
             itererOverOrgtre(
-                orgnrUnderenhet,
-                orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!,
-                idPortenToken
+                    orgnrUnderenhet,
+                    orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!,
+                    idPortenToken
             )
         } catch (exception: Exception) {
             logger.error("Klarte ikke itere over orgtre ", exception.message)
@@ -73,9 +73,9 @@ class InnsynService(
             idToken: String
     ): Pair<String, Int> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-            orgnrUnderenhet,
-            orgledd.organisasjonsnummer,
-            idToken
+                orgnrUnderenhet,
+                orgledd.organisasjonsnummer,
+                idToken
         )
         if (antall != null && antall != 0) {
             return Pair(orgledd.organisasjonsnummer, antall)
@@ -83,9 +83,9 @@ class InnsynService(
             try {
                 val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter[0].organisasjonsnummer
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-                    orgnrUnderenhet,
-                    juridiskEnhetOrgnr,
-                    idToken
+                        orgnrUnderenhet,
+                        juridiskEnhetOrgnr,
+                        idToken
                 )
                 return Pair(juridiskEnhetOrgnr, antallNesteNiva!!)
             } catch (exception: Exception) {
@@ -97,17 +97,17 @@ class InnsynService(
     }
 
     fun hentArbeidsforhold(
-        bedriftsnr: String,
-        overOrdnetEnhetOrgnr: String,
-        idPortenToken: String
+            bedriftsnr: String,
+            overOrdnetEnhetOrgnr: String,
+            idPortenToken: String
     ): ArbeidsforholdOppslagResultat {
         val opplysningspliktigorgnr: String =
-            try {
-                hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
-            } catch (e: Exception) {
-                logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
-                overOrdnetEnhetOrgnr
-            }
+                try {
+                    hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
+                } catch (e: Exception) {
+                    logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
+                    overOrdnetEnhetOrgnr
+                }
         val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
         if (arbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
@@ -117,20 +117,19 @@ class InnsynService(
     }
 
 
-    fun hentTidligereArbeidsforhold
-            (        bedriftsnr: String,
-                    overOrdnetEnhetOrgnr: String,
-                    idPortenToken: String,
-                    fnr:String
-            ): ArbeidsforholdOppslagResultat {
+    fun hentTidligereArbeidsforhold(bedriftsnr: String,
+                                    overOrdnetEnhetOrgnr: String,
+                                    idPortenToken: String,
+                                    fnr: String
+    ): ArbeidsforholdOppslagResultat {
 
         var oversiktOverArbeidsforhold: ArbeidsforholdOppslagResultat;
         val arbeidsforholdGittOpplysningspliktig: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         oversiktOverArbeidsforhold = arbeidsforholdGittOpplysningspliktig
-        if (arbeidsforholdGittOpplysningspliktig !is ArbeidsforholdFunnet ) {
+        if (arbeidsforholdGittOpplysningspliktig !is ArbeidsforholdFunnet) {
             oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
         }
-        if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet ) {
+        if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
             settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
         }
@@ -142,30 +141,29 @@ class InnsynService(
             bedriftsnr: String,
             overOrdnetEnhetOrgnr: String,
             idPortenToken: String,
-            fnr:String
+            fnr: String
     ): ArbeidsforholdOppslagResultat {
-        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr , SERVICEKODE_INNSYN_AAREG,SERVICE_EDITION_INNSYN_AAREG)
-        if( organisasjonerMedTilgang is AltinnOppslagVellykket){
-          val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type=="Enterprise"}
-          juridiskeEnhetermedTilgang.forEach {
-              try {
-                  val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
-                  if (arbeidsforhold is ArbeidsforholdFunnet ){
-                      logger.info("Klarte finne historiske arbeidsforhold for $bedriftsnr og ${it.OrganizationNumber}")
-                      return arbeidsforhold
-                  }
-              }
-              catch (e: Exception) {
-                  logger.info("Spurte Aareg etter arbeidsforhold på kombinasjonen $bedriftsnr og ${it.OrganizationNumber} i historiske arbeidsforhold")
-              }
-          }
+        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr, SERVICEKODE_INNSYN_AAREG, SERVICE_EDITION_INNSYN_AAREG)
+        if (organisasjonerMedTilgang is AltinnOppslagVellykket) {
+            val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type == "Enterprise" }
+            juridiskeEnhetermedTilgang.forEach {
+                try {
+                    val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
+                    if (arbeidsforhold is ArbeidsforholdFunnet) {
+                        logger.info("Klarte finne historiske arbeidsforhold for $bedriftsnr og ${it.OrganizationNumber}")
+                        return arbeidsforhold
+                    }
+                } catch (e: Exception) {
+                    logger.info("Spurte Aareg etter arbeidsforhold på kombinasjonen $bedriftsnr og ${it.OrganizationNumber} i historiske arbeidsforhold")
+                }
+            }
             logger.info("Klarte ikke hente historiske arbeidsforhold fra aareg. juridiskeEnhetermedTilgang: $juridiskeEnhetermedTilgang")
         }
         return IngenRettigheter
     }
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(
-        arbeidsforholdOversikt: OversiktOverArbeidsForhold
+            arbeidsforholdOversikt: OversiktOverArbeidsForhold
     ) = withTimer("DittNavArbeidsgiverApi.hentYrker") {
         val yrkeskodeBeskrivelser: Yrkeskoder = yrkeskodeverkClient.hentBetydningAvYrkeskoder()
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
@@ -179,44 +177,45 @@ class InnsynService(
 
     private fun settNavnPåArbeidsforholdBatch(arbeidsforholdOversikt: OversiktOverArbeidsForhold) {
         arbeidsforholdOversikt
-            .arbeidsforholdoversikter
-            ?.asIterable()
-            ?.windowed(size = BATCH_SIZE, step = BATCH_SIZE, partialWindows = true)
-            ?.forEach(::settNavnPåArbeidsforholdSingleBatch)
+                .arbeidsforholdoversikter
+                ?.asIterable()
+                ?.windowed(size = BATCH_SIZE, step = BATCH_SIZE, partialWindows = true)
+                ?.forEach(::settNavnPåArbeidsforholdSingleBatch)
     }
 
     private fun settNavnPåArbeidsforholdSingleBatch(
-        arbeidsforholdOversikt: List<ArbeidsForhold>
+            arbeidsforholdOversikt: List<ArbeidsForhold>
     ) {
-        val respons: PdlBatchRespons = pdlBatchClient.getBatchFraPdl(
-            arbeidsforholdOversikt.mapNotNull { it.arbeidstaker.offentligIdent }
-        ) ?: run {
-            logger.error("getBatchFraPdl feilet")
-            return
+        val fnrs = arbeidsforholdOversikt.mapNotNull {
+            it.arbeidstaker.offentligIdent
         }
+        val respons: PdlBatchRespons? = pdlBatchClient.getBatchFraPdl(fnrs)
+        if (respons !== null) {
+            for (person in respons.data.hentPersonBolk) {
+                for (arbeidsforhold in arbeidsforholdOversikt) {
+                    if (person.ident == arbeidsforhold.arbeidstaker.offentligIdent) {
+                        if (person.code != "ok") {
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
+                        }
+                        val navn = person.person?.navn?.getOrNull(0);
+                        if (navn === null) {
+                            logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn")
+                            arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
+                        } else {
+                            arbeidsforhold.arbeidstaker.navn =
+                                    listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
+                                            .joinToString(" ")
+                        }
+                    }
+                }
 
-        for (person in respons.data.hentPersonBolk) {
-            for (arbeidsforhold in arbeidsforholdOversikt) {
-                if (person.ident == arbeidsforhold.arbeidstaker.offentligIdent) {
-                    if (person.code != "ok") {
-                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
-                    }
-                    val navn = person.person?.navn?.getOrNull(0);
-                    if (navn === null) {
-                        logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn")
-                        arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
-                    }
-                    else {
-                        arbeidsforhold.arbeidstaker.navn =
-                                listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
-                                        .joinToString(" ")
-                    }
-            }
         }
-        for (arbeidsforhold in arbeidsforholdOversikt) {
-            if (arbeidsforhold.arbeidstaker.navn.isNullOrBlank()) {
-                arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
+            for (arbeidsforhold in arbeidsforholdOversikt) {
+                if (arbeidsforhold.arbeidstaker.navn.isNullOrBlank()) {
+                    arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
+                }
             }
         }
     }
 }
+
