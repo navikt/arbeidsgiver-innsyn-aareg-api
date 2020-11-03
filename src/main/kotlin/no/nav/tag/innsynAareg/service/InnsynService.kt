@@ -200,19 +200,17 @@ class InnsynService(
                 if (person.ident == arbeidsforhold.arbeidstaker.offentligIdent) {
                     if (person.code != "ok") {
                         logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
-                        /* men vi kan jo prøve allikevel ... */
                     }
-
-                    val navn = person.person?.navn?.getOrNull(0) ?: run {
+                    val navn = person.person?.navn?.getOrNull(0);
+                    if (navn === null) {
                         logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn")
                         arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
-                        return
                     }
-
-                    arbeidsforhold.arbeidstaker.navn =
-                        listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
-                            .joinToString(" ")
-                }
+                    else {
+                        arbeidsforhold.arbeidstaker.navn =
+                                listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
+                                        .joinToString(" ")
+                    }
             }
         }
         for (arbeidsforhold in arbeidsforholdOversikt) {
