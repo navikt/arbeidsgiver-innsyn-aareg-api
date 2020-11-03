@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component
 class AltinnClient constructor(
     @Value("\${altinn.proxyUrl}") val proxyUrl: String,
     tokenUtils: TokenUtils,
-    @Value("\${altinn.altinnUrl") val fallBackUrl: String,
+    @Value("\${altinn.altinnUrl}") val fallBackUrl: String,
     @Value("\${altinn.altinnHeader}") val altinnHeader: String,
     @Value("\${altinn.APIGwHeader}") val APIGwHeader: String
 ) {
