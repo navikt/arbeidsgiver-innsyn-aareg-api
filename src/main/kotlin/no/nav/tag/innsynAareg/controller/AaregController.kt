@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.controller
 
-import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
-@Protected
+@ProtectedWithClaims(issuer="selvbetjening", claimMap= ["acr=Level4"])
 class AaregController(
         val requestContextHolder: TokenValidationContextHolder,
         val aAregService: InnsynService) {

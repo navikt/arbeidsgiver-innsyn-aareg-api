@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.controller
 
-import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-@Protected
+@ProtectedWithClaims(issuer="selvbetjening", claimMap= ["acr=Level4"])
 @RestController
 class OrganisasjonController(
     val altinnClient: AltinnClient,
