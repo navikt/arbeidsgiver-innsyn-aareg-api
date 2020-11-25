@@ -6,6 +6,8 @@ import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.InnsynService
+import no.nav.tag.innsynAareg.utils.ISSUER
+import no.nav.tag.innsynAareg.utils.LEVEL
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
-@ProtectedWithClaims(issuer="selvbetjening", claimMap= ["acr=Level4"])
+@ProtectedWithClaims(issuer= ISSUER , claimMap= [LEVEL])
 class AaregController(
         val requestContextHolder: TokenValidationContextHolder,
         val aAregService: InnsynService) {
