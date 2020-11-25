@@ -10,6 +10,9 @@ import java.util.*
 import java.util.function.Function
 import java.util.function.Supplier
 
+const val LEVEL = "acr=Level4"
+const val ISSUER = "selvbetjening"
+
 @Component
 class TokenUtils(requestContextHolder: TokenValidationContextHolder) {
     private val requestContextHolder: TokenValidationContextHolder = requestContextHolder
