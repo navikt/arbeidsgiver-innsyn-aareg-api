@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.service
 
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.aareg.AaregException
 import no.nav.tag.innsynAareg.client.enhetsregisteret.EnhetsregisteretClient
@@ -12,14 +11,11 @@ import no.nav.tag.innsynAareg.client.aareg.dto.ArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.models.*
-import no.nav.tag.innsynAareg.utils.FnrExtractor
 import no.nav.tag.innsynAareg.utils.SERVICEKODE_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.SERVICE_EDITION_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClientResponseException
-
 
 @Service
 class InnsynService(
