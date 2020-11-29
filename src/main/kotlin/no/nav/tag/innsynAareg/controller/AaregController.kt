@@ -1,11 +1,13 @@
 package no.nav.tag.innsynAareg.controller
 
-import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.InnsynService
+import no.nav.tag.innsynAareg.utils.ISSUER
+import no.nav.tag.innsynAareg.utils.LEVEL
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
-@Protected
+@ProtectedWithClaims(issuer= ISSUER , claimMap= [LEVEL])
 class AaregController(
         val requestContextHolder: TokenValidationContextHolder,
         val aAregService: InnsynService) {
