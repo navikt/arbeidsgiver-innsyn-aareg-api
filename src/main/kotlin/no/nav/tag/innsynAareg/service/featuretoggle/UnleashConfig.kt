@@ -11,26 +11,29 @@ import org.springframework.context.annotation.Profile
 @Configuration
 class UnleashConfig {
 
-    private val APP_NAME_UNLEASH = "arbeidsgiver-arbeidsforhold-api"
-    private val UNLEASH_API_URL = "https://unleash.nais.adeo.no/api/"
+    companion object {
+        private const val APP_NAME_UNLEASH = "arbeidsgiver-arbeidsforhold-api"
+        private const val UNLEASH_API_URL = "https://unleash.nais.io/api/"
+    }
 
     @Bean
     @Profile("dev", "prod")
     fun initializeUnleash(byEnvironmentStrategy: ByEnvironmentStrategy, byUserIdStrategy: ByUserIdStrategy): Unleash? {
-        val config: UnleashConfig = UnleashConfig.builder()
-                .appName(APP_NAME_UNLEASH)
-                .instanceId(APP_NAME_UNLEASH)
-                .unleashAPI(UNLEASH_API_URL)
-                .build()
+        val config: UnleashConfig = UnleashConfig
+            .builder()
+            .appName(APP_NAME_UNLEASH)
+            .instanceId(APP_NAME_UNLEASH)
+            .unleashAPI(UNLEASH_API_URL)
+            .build()
         return DefaultUnleash(
-                config,
-                byEnvironmentStrategy,
-                byUserIdStrategy
+            config,
+            byEnvironmentStrategy,
+            byUserIdStrategy
         )
     }
 
     @Bean
-    @Profile("local","labs")
+    @Profile("local", "labs")
     fun unleashMock(): Unleash? {
         val fakeUnleash = FakeUnleash()
         fakeUnleash.enableAll()
