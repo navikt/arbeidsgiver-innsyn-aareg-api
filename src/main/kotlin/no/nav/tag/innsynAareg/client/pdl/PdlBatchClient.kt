@@ -51,7 +51,6 @@ class PdlBatchClient @Autowired constructor(
                 graphQlUtils.resourceAsString(),
                 Variables(fnrs)
             )
-            logger.info("AG-ARBEIDSFORHOLD PDL henter navn")
             return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)!!
         } catch (exception: Exception) {
             logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", exception.message)

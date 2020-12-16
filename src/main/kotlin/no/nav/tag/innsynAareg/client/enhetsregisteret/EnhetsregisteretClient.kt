@@ -38,11 +38,10 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
                 requestEntity,
                 OrganisasjonFraEreg::class.java
             )
-            logger.info("respons fra enhetsregisteret: {}", response.body?.navn?.redigertnavn ?: "fant ingen ting")
-            logger.info("sjekker om organisasjon inngår i orgledd for organisasjon: $orgnr")
+            logger.info("sjekker om organisasjon inngår i orgledd")
             return response.body
         } catch (e: Exception) {
-            logger.error("Feil ved oppslag mot EnhetsRegisteret: orgnr: $orgnr", e)
+            logger.error("Feil ved oppslag mot EnhetsRegisteret:", e)
         }
         return null
     }
@@ -54,16 +53,7 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
            val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
-           logger.info("hent tidligere virksomheter gitt juridiskEnhet: {}. gir denne lista:\n{}", juridiskEnhet, komplementPaaAltinnFormat.joinToString(" \n") { it.toString() })
-            if (komplementPaaAltinnFormat.isNotEmpty()) {
-                val arbeidsforhold: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(komplementPaaAltinnFormat[0].OrganizationNumber!!,juridiskEnhet,idtoken);
-                if (arbeidsforhold is ArbeidsforholdFunnet ) {
-                    logger.info("skyggekall henter tidligere arbeidsforhold får respons med antall forhold ${arbeidsforhold.oversiktOverArbeidsForhold.arbeidsforholdoversikter?.size} ")
-                }
-                else {
-                    logger.info("skyggekall henter tidligere arbeidsforhold hentet ikke arbeidsforhold")
-                }
-            }
+           logger.info("hent tidligere virksomheter gitt juridiskEnhet gir  liste med organisasjoner med lengde", komplementPaaAltinnFormat.size)
            return komplementPaaAltinnFormat
         }
         return null
