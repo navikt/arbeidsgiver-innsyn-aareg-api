@@ -47,7 +47,6 @@ class InnsynService(
                         ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
-            logger.info("Fant null arbeidsforhold for organisasjon: $orgnrUnderenhet")
             return Pair(orgnrHovedenhet, 0)
         }
 
@@ -146,14 +145,13 @@ class InnsynService(
                 try {
                     val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
                     if (arbeidsforhold is ArbeidsforholdFunnet) {
-                        logger.info("Klarte finne historiske arbeidsforhold for $bedriftsnr og ${it.OrganizationNumber}")
+                        logger.info("Klarte finne historiske arbeidsforhold")
                         return arbeidsforhold
                     }
                 } catch (e: Exception) {
-                    logger.info("Spurte Aareg etter arbeidsforhold på kombinasjonen $bedriftsnr og ${it.OrganizationNumber} i historiske arbeidsforhold")
+                    logger.error("klarte ikke hente historiske arbeidsforhold", e.message)
                 }
             }
-            logger.info("Klarte ikke hente historiske arbeidsforhold fra aareg. juridiskeEnhetermedTilgang: $juridiskeEnhetermedTilgang")
         }
         return IngenRettigheter
     }
