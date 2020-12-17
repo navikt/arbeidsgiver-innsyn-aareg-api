@@ -47,7 +47,6 @@ class AaregClient(
         } catch (exception: RestClientException) {
             logger.error("Feil ved oppslag mot Aareg Arbeidsforhold.", exception)
             if (exception is RestClientResponseException && exception.rawStatusCode == 403) {
-                logger.info("statuskode 403 for organisasjon: $bedriftsnr")
                 return IngenRettigheter
             }
             throw RuntimeException(" Aareg Exception: $exception")
@@ -65,7 +64,7 @@ class AaregClient(
             idPortenToken
         )
         if (oversikt.isEmpty()) {
-            logger.info("Aareg oversikt over arbeidsgiver respons er tom for orgnr: $bedriftsnr")
+            logger.info("Aareg oversikt over arbeidsgiver respons er tom")
         }
         return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr}
             ?.let { it.aktiveArbeidsforhold + it.inaktiveArbeidsforhold }
