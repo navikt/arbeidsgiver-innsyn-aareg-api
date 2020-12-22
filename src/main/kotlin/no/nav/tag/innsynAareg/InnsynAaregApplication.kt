@@ -14,3 +14,4 @@ fun main(args: Array<String>) {
     runApplication<InnsynAaregApplication>(*args)
     val APP_NAME = "srvAG-Arbforhold"
 }
+
