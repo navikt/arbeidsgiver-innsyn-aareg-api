@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.client.pdl
 
+import com.fasterxml.jackson.core.io.NumberInput
 import lombok.RequiredArgsConstructor
 import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRequest
 import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
@@ -53,8 +54,27 @@ class PdlBatchClient @Autowired constructor(
             )
             return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)!!
         } catch (exception: Exception) {
-            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", exception.message)
+            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", maskerFødselsnummer(exception.message.toString()))
         }
         return null
     }
+}
+
+fun maskerFødselsnummer(beskjed: String): String {
+    var filtrertBeskjed = beskjed;
+    for (i in 0 until beskjed.length - 10) {
+        var erFnr = false;
+        val subString = beskjed.substring(i, i+11);
+        try {
+            NumberInput.parseDouble(subString)
+            erFnr=true
+        }
+        catch (e: Exception) {
+            continue
+        }
+        if (erFnr) {
+            filtrertBeskjed = filtrertBeskjed.replace(subString, "***********")
+        }
+    }
+    return filtrertBeskjed;
 }
