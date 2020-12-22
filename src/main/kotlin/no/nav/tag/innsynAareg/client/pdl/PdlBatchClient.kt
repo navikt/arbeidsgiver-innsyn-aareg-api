@@ -63,7 +63,7 @@ class PdlBatchClient @Autowired constructor(
 fun maskerFødselsnummer(beskjed: String): String {
     var filtrertBeskjed = beskjed;
     for (i in 0 until beskjed.length - 10) {
-        var erFnr = false;
+        var erFnr: Boolean;
         val subString = beskjed.substring(i, i+11);
         try {
             NumberInput.parseDouble(subString)
