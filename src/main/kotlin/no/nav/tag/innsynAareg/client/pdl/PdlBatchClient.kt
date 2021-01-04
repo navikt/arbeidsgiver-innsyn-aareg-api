@@ -53,8 +53,10 @@ class PdlBatchClient @Autowired constructor(
             )
             return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)!!
         } catch (exception: Exception) {
-            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", exception.message)
+            val msg = exception.message.toString().replace(Regex("""\d{11}"""), "***********")
+            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", msg)
         }
         return null
     }
 }
+
