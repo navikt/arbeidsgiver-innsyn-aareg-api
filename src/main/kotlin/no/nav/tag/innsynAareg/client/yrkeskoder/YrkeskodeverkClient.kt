@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.client.yrkeskoder
 
-
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkCacheConfig.Companion.YRKESKODE_CACHE
 import no.nav.tag.innsynAareg.client.yrkeskoder.dto.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.Yrkeskoder
