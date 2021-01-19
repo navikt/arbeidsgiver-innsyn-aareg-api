@@ -25,9 +25,6 @@ class AaregClient(
     @Value("\${aareg.aaregArbeidsgivere}")
     lateinit var aaregArbeidsgiverOversiktUrl: String
 
-    private val ARBEIDSFORHOLDTYPER = "ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
-    private val REGELVERK = "A_ORDNINGEN"
-
     val logger = LoggerFactory.getLogger(AaregClient::class.java)!!
 
     fun hentArbeidsforhold(
