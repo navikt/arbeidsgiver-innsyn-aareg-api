@@ -95,7 +95,7 @@ spring:
   profiles: dev
 
 aareg:
-  aaregArbeidsforhold: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
+  aaregArbeidsforhold: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
 no.nav.security.jwt.issuer.selvbetjening:
@@ -130,7 +130,7 @@ spring:
   profiles: prod
 
 aareg:
-  aaregArbeidsforhold: "https://modapp.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE"
+  aaregArbeidsforhold: "https://modapp.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://modapp.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
 
