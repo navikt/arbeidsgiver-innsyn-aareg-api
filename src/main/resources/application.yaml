@@ -121,7 +121,7 @@ altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
-  proxyUrl: "https://arbeidsgiver.nais.preprod.local/altinn-rettigheter-proxy"
+  proxyUrl: https://arbeidsgiver.dev.intern.nav.no/altinn-rettigheter-proxy
 
 ---
 
@@ -157,4 +157,4 @@ altinn:
   altinnUrl: "https://api-gw.adeo.no"
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
-  proxyUrl: "https://arbeidsgiver.nais.adeo.no/altinn-rettigheter-proxy"
+  proxyUrl: https://arbeidsgiver.intern.nav.no/altinn-rettigheter-proxy/
