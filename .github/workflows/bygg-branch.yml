@@ -53,7 +53,7 @@ jobs:
         run: |
           docker build --tag $IMAGE_BASE:$GITHUB_SHA .
           echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_REPOSITORY --password-stdin
-          docker push $IMAGE_BASE
+          docker push $IMAGE_BASE:$GITHUB_SHA
 
       - name: Lukk gamle deployment-issues
         if: steps.sjekk-mot-master.outputs.oppdatert == 'ja'
