@@ -49,12 +49,12 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
     fun finnTidligereVirksomheter(juridiskEnhet: String, idtoken: String): List<Organisasjon>? {
         val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
-           val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-           val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-           val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
-           val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
-           logger.info("hent tidligere virksomheter gitt juridiskEnhet gir  liste med organisasjoner med lengde", komplementPaaAltinnFormat.size)
-           return komplementPaaAltinnFormat
+            val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
+            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
+            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
+            val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
+            logger.info("hent tidligere virksomheter gitt juridiskEnhet gir  liste med organisasjoner med lengde", komplementPaaAltinnFormat.size)
+            return komplementPaaAltinnFormat
         }
         return null
     }
@@ -68,9 +68,9 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
     fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<OrganisasjonFraEreg>, juridiskEnhet: String): List<Organisasjon> {
         return virksomheter.map {
             Organisasjon(
-                    Name = it.navn?.redigertnavn,
-                    ParentOrganizationNumber = juridiskEnhet,
-                    OrganizationNumber = it.organisasjonsnummer
+                Name = it.navn?.redigertnavn,
+                ParentOrganizationNumber = juridiskEnhet,
+                OrganizationNumber = it.organisasjonsnummer
             )
         }
     }

@@ -17,7 +17,7 @@ class InnloggingsController {
     fun erInnlogget(): ResponseEntity<String> {
         val cacheControl = CacheControl.noStore()
         return ResponseEntity.ok()
-                .cacheControl(cacheControl)
-                .body("ok")
+            .cacheControl(cacheControl)
+            .body("ok")
     }
 }

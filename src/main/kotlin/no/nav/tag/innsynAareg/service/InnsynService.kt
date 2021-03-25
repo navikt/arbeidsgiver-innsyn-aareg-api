@@ -28,14 +28,14 @@ class InnsynService(
     private val logger = LoggerFactory.getLogger(InnsynService::class.java)!!
 
     fun hentAntallArbeidsforholdPåUnderenhet(
-            orgnrUnderenhet: String,
-            orgnrHovedenhet: String,
-            idPortenToken: String
+        orgnrUnderenhet: String,
+        orgnrHovedenhet: String,
+        idPortenToken: String
     ): Pair<String, Int> {
         val antall: Int? = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-                orgnrUnderenhet,
-                orgnrHovedenhet,
-                idPortenToken
+            orgnrUnderenhet,
+            orgnrHovedenhet,
+            idPortenToken
         )
 
         if (antall != null && antall >= 0) {
@@ -43,8 +43,8 @@ class InnsynService(
         }
 
         val orgtreFraEnhetsregisteret: OrganisasjonFraEreg =
-                enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
-                        ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
+            enhetsregisteretService.hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
+                ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
             return Pair(orgnrHovedenhet, 0)
@@ -52,9 +52,9 @@ class InnsynService(
 
         return try {
             itererOverOrgtre(
-                    orgnrUnderenhet,
-                    orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!,
-                    idPortenToken
+                orgnrUnderenhet,
+                orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd?.get(0)?.organisasjonsledd!!,
+                idPortenToken
             )
         } catch (exception: Exception) {
             logger.error("Klarte ikke itere over orgtre ", exception.message)
@@ -63,14 +63,14 @@ class InnsynService(
     }
 
     private fun itererOverOrgtre(
-            orgnrUnderenhet: String,
-            orgledd: OrganisasjonFraEreg,
-            idToken: String
+        orgnrUnderenhet: String,
+        orgledd: OrganisasjonFraEreg,
+        idToken: String
     ): Pair<String, Int> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-                orgnrUnderenhet,
-                orgledd.organisasjonsnummer,
-                idToken
+            orgnrUnderenhet,
+            orgledd.organisasjonsnummer,
+            idToken
         )
         if (antall != null && antall != 0) {
             return Pair(orgledd.organisasjonsnummer, antall)
@@ -78,9 +78,9 @@ class InnsynService(
             try {
                 val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter[0].organisasjonsnummer
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
-                        orgnrUnderenhet,
-                        juridiskEnhetOrgnr,
-                        idToken
+                    orgnrUnderenhet,
+                    juridiskEnhetOrgnr,
+                    idToken
                 )
                 return Pair(juridiskEnhetOrgnr, antallNesteNiva!!)
             } catch (exception: Exception) {
@@ -92,17 +92,17 @@ class InnsynService(
     }
 
     fun hentArbeidsforhold(
-            bedriftsnr: String,
-            overOrdnetEnhetOrgnr: String,
-            idPortenToken: String
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String
     ): ArbeidsforholdOppslagResultat {
         val opplysningspliktigorgnr: String =
-                try {
-                    hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
-                } catch (e: Exception) {
-                    logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
-                    overOrdnetEnhetOrgnr
-                }
+            try {
+                hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
+            } catch (e: Exception) {
+                logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
+                overOrdnetEnhetOrgnr
+            }
         val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
         if (arbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(arbeidsforhold.oversiktOverArbeidsForhold)
@@ -112,17 +112,20 @@ class InnsynService(
     }
 
 
-    fun hentTidligereArbeidsforhold(bedriftsnr: String,
-                                    overOrdnetEnhetOrgnr: String,
-                                    idPortenToken: String,
-                                    fnr: String
+    fun hentTidligereArbeidsforhold(
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String,
+        fnr: String
     ): ArbeidsforholdOppslagResultat {
 
         var oversiktOverArbeidsforhold: ArbeidsforholdOppslagResultat;
-        val arbeidsforholdGittOpplysningspliktig: ArbeidsforholdOppslagResultat = aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
+        val arbeidsforholdGittOpplysningspliktig: ArbeidsforholdOppslagResultat =
+            aaregClient.hentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         oversiktOverArbeidsforhold = arbeidsforholdGittOpplysningspliktig
         if (arbeidsforholdGittOpplysningspliktig !is ArbeidsforholdFunnet) {
-            oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
+            oversiktOverArbeidsforhold =
+                finnOpplysningspliktigOgHentArbeidsforhold(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken, fnr)
         }
         if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet) {
             settNavnPåArbeidsforholdBatch(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
@@ -133,17 +136,22 @@ class InnsynService(
 
 
     fun finnOpplysningspliktigOgHentArbeidsforhold(
-            bedriftsnr: String,
-            overOrdnetEnhetOrgnr: String,
-            idPortenToken: String,
-            fnr: String
+        bedriftsnr: String,
+        overOrdnetEnhetOrgnr: String,
+        idPortenToken: String,
+        fnr: String
     ): ArbeidsforholdOppslagResultat {
-        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(fnr, SERVICEKODE_INNSYN_AAREG, SERVICE_EDITION_INNSYN_AAREG)
+        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(
+            fnr,
+            SERVICEKODE_INNSYN_AAREG,
+            SERVICE_EDITION_INNSYN_AAREG
+        )
         if (organisasjonerMedTilgang is AltinnOppslagVellykket) {
             val juridiskeEnhetermedTilgang = organisasjonerMedTilgang.organisasjoner.filter { it.Type == "Enterprise" }
             juridiskeEnhetermedTilgang.forEach {
                 try {
-                    val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
+                    val arbeidsforhold =
+                        aaregClient.hentArbeidsforhold(bedriftsnr, it.OrganizationNumber!!, idPortenToken)
                     if (arbeidsforhold is ArbeidsforholdFunnet) {
                         logger.info("Klarte finne historiske arbeidsforhold")
                         return arbeidsforhold
@@ -157,7 +165,7 @@ class InnsynService(
     }
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(
-            arbeidsforholdOversikt: OversiktOverArbeidsForhold
+        arbeidsforholdOversikt: OversiktOverArbeidsForhold
     ) = withTimer("DittNavArbeidsgiverApi.hentYrker") {
         val yrkeskodeBeskrivelser: Yrkeskoder = yrkeskodeverkClient.hentBetydningAvYrkeskoder()
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
@@ -171,14 +179,14 @@ class InnsynService(
 
     private fun settNavnPåArbeidsforholdBatch(arbeidsforholdOversikt: OversiktOverArbeidsForhold) {
         arbeidsforholdOversikt
-                .arbeidsforholdoversikter
-                ?.asIterable()
-                ?.windowed(size = BATCH_SIZE, step = BATCH_SIZE, partialWindows = true)
-                ?.forEach(::settNavnPåArbeidsforholdSingleBatch)
+            .arbeidsforholdoversikter
+            ?.asIterable()
+            ?.windowed(size = BATCH_SIZE, step = BATCH_SIZE, partialWindows = true)
+            ?.forEach(::settNavnPåArbeidsforholdSingleBatch)
     }
 
     private fun settNavnPåArbeidsforholdSingleBatch(
-            arbeidsforholdOversikt: List<ArbeidsForhold>
+        arbeidsforholdOversikt: List<ArbeidsForhold>
     ) {
         val fnrs = arbeidsforholdOversikt.mapNotNull {
             it.arbeidstaker.offentligIdent
@@ -197,13 +205,13 @@ class InnsynService(
                             arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
                         } else {
                             arbeidsforhold.arbeidstaker.navn =
-                                    listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
-                                            .joinToString(" ")
+                                listOfNotNull(navn.fornavn, navn.mellomNavn, navn.etternavn)
+                                    .joinToString(" ")
                         }
                     }
                 }
 
-        }
+            }
             for (arbeidsforhold in arbeidsforholdOversikt) {
                 if (arbeidsforhold.arbeidstaker.navn.isNullOrBlank()) {
                     arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"

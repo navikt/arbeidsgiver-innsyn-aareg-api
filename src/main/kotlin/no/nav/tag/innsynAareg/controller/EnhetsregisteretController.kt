@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
-@ProtectedWithClaims(issuer= ISSUER , claimMap= [LEVEL])
-class EnhetsregisteretController(val enhetsregisteretClient: EnhetsregisteretClient,
-                                 val requestContextHolder: TokenValidationContextHolder) {
+@ProtectedWithClaims(issuer = ISSUER, claimMap = [LEVEL])
+class EnhetsregisteretController(
+    val enhetsregisteretClient: EnhetsregisteretClient,
+    val requestContextHolder: TokenValidationContextHolder
+) {
     @GetMapping(value = ["/tidligere-virksomheter"])
     fun hentTidligerVirksomheter(
-            @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
+        @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+        @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<List<Organisasjon>> {
-        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr,idToken )
+        val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr, idToken)
         return ResponseEntity.ok(result!!)
     }
 }
