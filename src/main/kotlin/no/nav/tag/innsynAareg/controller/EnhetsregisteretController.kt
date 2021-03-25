@@ -23,6 +23,6 @@ class EnhetsregisteretController(
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<List<Organisasjon>> {
         val result = enhetsregisteretClient.finnTidligereVirksomheter(juridiskEnhetOrgnr, idToken)
-        return ResponseEntity.ok(result!!)
+        return ResponseEntity.ok(result)
     }
 }
