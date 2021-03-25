@@ -17,24 +17,21 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @Component
-class AltinnClient constructor(
+class AltinnClient(
     @Value("\${altinn.proxyUrl}") val proxyUrl: String,
-    private val autentisertBruker: AutentisertBruker,
     @Value("\${altinn.altinnUrl}") val fallBackUrl: String,
     @Value("\${altinn.altinnHeader}") val altinnHeader: String,
-    @Value("\${altinn.APIGwHeader}") val APIGwHeader: String
+    @Value("\${altinn.APIGwHeader}") val APIGwHeader: String,
+    private val autentisertBruker: AutentisertBruker,
 ) {
-    private val klient: AltinnrettigheterProxyKlient
-
     val logger = LoggerFactory.getLogger(AltinnClient::class.java)!!
 
-    init {
-        val proxyKlientConfig = AltinnrettigheterProxyKlientConfig(
+    private val klient = AltinnrettigheterProxyKlient(
+        AltinnrettigheterProxyKlientConfig(
             ProxyConfig("arbeidsgiver-arbeidsforhold-api", proxyUrl),
             AltinnConfig(fallBackUrl, altinnHeader, APIGwHeader)
         )
-        klient = AltinnrettigheterProxyKlient(proxyKlientConfig)
-    }
+    )
 
     @Cacheable(ALTINN_TJENESTE_CACHE)
     fun hentOrganisasjonerBasertPaRettigheter(
@@ -77,6 +74,9 @@ class AltinnClient constructor(
                 .let { AltinnOppslagVellykket(it) }
         } catch (error: Exception) {
             logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra altinn.", error)
-            if (error.message?.contains("403") == true) AltinnIngenRettigheter else throw error
+            if (error.message?.contains("403") == true)
+                AltinnIngenRettigheter
+            else
+                throw error
         }
 }
