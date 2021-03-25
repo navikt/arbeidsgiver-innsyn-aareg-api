@@ -106,6 +106,5 @@ class AaregClient(
         headers["Nav-Consumer-Token"] = stsClient.token?.access_token
         return HttpEntity(headers)
     }
-
 }
 
