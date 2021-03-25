@@ -8,10 +8,10 @@
         <version>2.3.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>no.nav.tag</groupId>
-    <artifactId>innsynAaregApi</artifactId>
+    <groupId>no.nav.arbeidsgiver</groupId>
+    <artifactId>innsyn-aareg-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>innsynAaregApi</name>
+    <name>innsyn-aareg-api</name>
     <description>Arbeidsgiver - Backend for innsyn arbeidsforhold</description>
 
     <properties>
