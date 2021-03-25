@@ -1,10 +1,7 @@
 package no.nav.tag.innsynAareg.client.enhetsregisteret
 
-import no.nav.tag.innsynAareg.client.aareg.AaregClient
-import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
-import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
-import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
+import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -16,20 +13,17 @@ import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
 @Service
-class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val aaregClient: AaregClient) {
+class EnhetsregisteretClient(
+    private val restTemplate: RestTemplate
+) {
     val logger = LoggerFactory.getLogger(EnhetsregisteretClient::class.java)!!
 
     @Value("\${ereg.url}")
     private val eregUrl: String? = null
 
-    private val requestEntity: HttpEntity<String>
+    private val requestEntity: HttpEntity<String> = HttpEntity(HttpHeaders())
 
-    private fun getRequestEntity(): HttpEntity<String> {
-        val headers = HttpHeaders()
-        return HttpEntity(headers)
-    }
-
-    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String, inkluderHistorikk:Boolean): OrganisasjonFraEreg? {
+    fun hentOrganisasjonFraEnhetsregisteret(orgnr: String, inkluderHistorikk: Boolean): OrganisasjonFraEreg? {
         try {
             val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=$inkluderHistorikk&inkluderHierarki=true"
             val response: ResponseEntity<OrganisasjonFraEreg> = restTemplate.exchange(
@@ -47,25 +41,36 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
     }
 
     fun finnTidligereVirksomheter(juridiskEnhet: String, idtoken: String): List<Organisasjon>? {
-        val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet,true);
+        val organisasjonsInfoFraEreg = hentOrganisasjonFraEnhetsregisteret(juridiskEnhet, true);
         if (organisasjonsInfoFraEreg != null && !organisasjonsInfoFraEreg.driverVirksomheter.isNullOrEmpty()) {
-            val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter { it.gyldighetsperiode!=null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)  }
-            val komplementTilAktiveOrgs = inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer }}
+            val inaktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter {
+                it.gyldighetsperiode != null && sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)
+            }
+            val aktiveEregOrgs = organisasjonsInfoFraEreg.driverVirksomheter.filter {
+                it.gyldighetsperiode != null && !sjekkOmDatoErFørDagensDato(it.gyldighetsperiode.tom)
+            }
+            val komplementTilAktiveOrgs =
+                inaktiveEregOrgs.filterNot { organisasjon -> aktiveEregOrgs.any { it.organisasjonsnummer == organisasjon.organisasjonsnummer } }
             val komplementPaaAltinnFormat = mapFraOrganisasjonFraEregTilAltinn(komplementTilAktiveOrgs, juridiskEnhet);
-            logger.info("hent tidligere virksomheter gitt juridiskEnhet gir  liste med organisasjoner med lengde", komplementPaaAltinnFormat.size)
+            logger.info(
+                "hent tidligere virksomheter gitt juridiskEnhet gir  liste med organisasjoner med lengde",
+                komplementPaaAltinnFormat.size
+            )
             return komplementPaaAltinnFormat
         }
         return null
     }
 
-    fun sjekkOmDatoErFørDagensDato (dato :String?):Boolean{
-        return if(dato.isNullOrBlank()) false
+    fun sjekkOmDatoErFørDagensDato(dato: String?): Boolean {
+        return if (dato.isNullOrBlank()) false
         else
             LocalDate.parse(dato).isBefore(LocalDate.now())
     }
 
-    fun mapFraOrganisasjonFraEregTilAltinn(virksomheter: List<OrganisasjonFraEreg>, juridiskEnhet: String): List<Organisasjon> {
+    fun mapFraOrganisasjonFraEregTilAltinn(
+        virksomheter: List<OrganisasjonFraEreg>,
+        juridiskEnhet: String
+    ): List<Organisasjon> {
         return virksomheter.map {
             Organisasjon(
                 Name = it.navn?.redigertnavn,
@@ -73,9 +78,5 @@ class EnhetsregisteretClient(private val restTemplate: RestTemplate, private val
                 OrganizationNumber = it.organisasjonsnummer
             )
         }
-    }
-
-    init {
-        requestEntity = getRequestEntity()
     }
 }
