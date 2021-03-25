@@ -4,18 +4,16 @@ import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.mockito.Mockito
-import java.util.HashMap
-import java.util.Map
 
 class ByUseridStrategyTest {
     @Test
     fun featureErEnabledNårBrukerIListe() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(Map.of("user", "12345678911,12345678910"))).isEqualTo(true)
+        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(mapOf("user" to "12345678911,12345678910"))).isEqualTo(true)
     }
 
     @Test
     fun featureErDisabledNårIkkeBrukerIListe() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(Map.of("user", "10987654321"))).isEqualTo(false)
+        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(mapOf("user" to "10987654321"))).isEqualTo(false)
     }
 
     @Test
@@ -25,7 +23,7 @@ class ByUseridStrategyTest {
 
     @Test
     fun skalReturnereFalseHvisBrukerIkkeErSatt() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678913")).isEnabled(HashMap())).isEqualTo(false)
+        Assertions.assertThat(ByUserIdStrategy(userMock("12345678913")).isEnabled(mapOf())).isEqualTo(false)
     }
 
     private fun userMock(userId: String): TokenUtils {

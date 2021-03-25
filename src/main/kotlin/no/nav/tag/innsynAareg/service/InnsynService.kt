@@ -11,11 +11,12 @@ import no.nav.tag.innsynAareg.client.aareg.dto.ArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.models.*
-import no.nav.tag.innsynAareg.utils.SERVICEKODE_INNSYN_AAREG
-import no.nav.tag.innsynAareg.utils.SERVICE_EDITION_INNSYN_AAREG
 import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+
+const val SERVICEKODE_INNSYN_AAREG = "5441"
+const val SERVICE_EDITION_INNSYN_AAREG = "1"
 
 @Service
 class InnsynService(
