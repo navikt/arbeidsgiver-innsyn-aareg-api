@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
-@ProtectedWithClaims(issuer= ISSUER , claimMap= [LEVEL])
+@ProtectedWithClaims(issuer = ISSUER, claimMap = [LEVEL])
 class AaregController(
-        val requestContextHolder: TokenValidationContextHolder,
-        val aAregService: InnsynService) {
+    val requestContextHolder: TokenValidationContextHolder,
+    val aAregService: InnsynService
+) {
     @GetMapping(value = ["/arbeidsforhold"])
     fun hentArbeidsforhold(
         @RequestHeader("orgnr") orgnr: String,
@@ -34,9 +35,9 @@ class AaregController(
 
     @GetMapping(value = ["/tidligere-arbeidsforhold"])
     fun hentTidligereArbeidsforhold(
-            @RequestHeader("orgnr") orgnr: String,
-            @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-            @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
+        @RequestHeader("orgnr") orgnr: String,
+        @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
+        @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<OversiktOverArbeidsForhold> {
         val fnr: String = no.nav.tag.innsynAareg.utils.FnrExtractor.extract(requestContextHolder)
         return when (val respons = aAregService.hentTidligereArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken, fnr)) {

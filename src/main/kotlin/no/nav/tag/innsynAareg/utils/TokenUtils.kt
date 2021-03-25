@@ -22,23 +22,27 @@ class TokenUtils(requestContextHolder: TokenValidationContextHolder) {
 
     private fun claimSet(): JwtTokenClaims? {
         return Optional.ofNullable(context())
-                .map(Function { s: TokenValidationContext -> s.getClaims(ISSUER) })
-                .orElse(null)
+            .map(Function { s: TokenValidationContext -> s.getClaims(ISSUER) })
+            .orElse(null)
     }
+
     private fun context(): TokenValidationContext? {
         return Optional.ofNullable(requestContextHolder.tokenValidationContext)
-                .orElse(null)
+            .orElse(null)
     }
+
     fun getSubject(): String {
         return Optional.ofNullable(claimSet())
-                .map(Function { obj: JwtTokenClaims -> obj.subject })
-                .orElse(null)
+            .map(Function { obj: JwtTokenClaims -> obj.subject })
+            .orElse(null)
     }
+
     private fun unauthenticated(msg: String): Supplier<out JwtTokenValidatorException>? {
         return Supplier { JwtTokenValidatorException(msg) }
     }
+
     fun autentisertBruker(): String? {
         return Optional.ofNullable<String>(getSubject())
-                .orElseThrow(unauthenticated("Fant ikke subject"))
+            .orElseThrow(unauthenticated("Fant ikke subject"))
     }
 }
