@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class STSCacheConfig {
+    companion object {
+        const val STS_CACHE = "sts_cache"
+    }
 
     @Bean
     fun stsCache(): CaffeineCache {
@@ -19,9 +22,5 @@ class STSCacheConfig {
                 .recordStats()
                 .build()
         )
-    }
-
-    companion object {
-        const val STS_CACHE = "sts_cache"
     }
 }

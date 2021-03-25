@@ -1,4 +1,4 @@
 package no.nav.tag.innsynAareg.utils
 
-val SERVICEKODE_INNSYN_AAREG = "5441"
-val SERVICE_EDITION_INNSYN_AAREG = "1"
+const val SERVICEKODE_INNSYN_AAREG = "5441"
+const val SERVICE_EDITION_INNSYN_AAREG = "1"

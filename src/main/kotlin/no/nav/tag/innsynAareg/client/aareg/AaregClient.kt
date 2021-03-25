@@ -66,7 +66,7 @@ class AaregClient(
         if (oversikt.isEmpty()) {
             logger.info("Aareg oversikt over arbeidsgiver respons er tom")
         }
-        return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr}
+        return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr }
             ?.let { it.aktiveArbeidsforhold + it.inaktiveArbeidsforhold }
     }
 

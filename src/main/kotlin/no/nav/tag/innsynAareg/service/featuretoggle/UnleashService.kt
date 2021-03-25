@@ -6,9 +6,10 @@ import no.nav.tag.innsynAareg.utils.TokenUtils
 import org.springframework.stereotype.Service
 
 @Service
-class UnleashService(private val unleash: Unleash, tokenUtils: TokenUtils) {
-
-    private val tokenUtil: TokenUtils = tokenUtils
+class UnleashService(
+    private val unleash: Unleash,
+    private val tokenUtil: TokenUtils
+) {
 
     fun hentFeatureToggles(features: List<String>): Map<String, Boolean?>? {
         return features.map { it to isEnabled(it) }.toMap()
