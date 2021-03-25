@@ -97,11 +97,10 @@ class AaregClient(
         juridiskEnhetOrgnr: String?,
         idPortenToken: String
     ): HttpEntity<String> {
-        val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         headers["Authorization"] = "Bearer $idPortenToken"
-        headers["Nav-Call-Id"] = appName
+        headers["Nav-Call-Id"] = "srvditt-nav-arbeid"
         headers["Nav-Arbeidsgiverident"] = bedriftsnr
         headers["Nav-Opplysningspliktigident"] = juridiskEnhetOrgnr
         headers["Nav-Consumer-Token"] = stsClient.token?.access_token

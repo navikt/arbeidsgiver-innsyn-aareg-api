@@ -10,7 +10,7 @@ import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
 import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
 import no.nav.tag.innsynAareg.models.AltinnOppslagResultat
 import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
-import no.nav.tag.innsynAareg.utils.TokenUtils
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
 @Component
 class AltinnClient constructor(
     @Value("\${altinn.proxyUrl}") val proxyUrl: String,
-    private val tokenUtils: TokenUtils,
+    private val autentisertBruker: AutentisertBruker,
     @Value("\${altinn.altinnUrl}") val fallBackUrl: String,
     @Value("\${altinn.altinnHeader}") val altinnHeader: String,
     @Value("\${altinn.APIGwHeader}") val APIGwHeader: String
@@ -44,7 +44,7 @@ class AltinnClient constructor(
     ): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                SelvbetjeningToken(autentisertBruker.jwtToken),
                 Subject(fnr),
                 ServiceCode(serviceKode),
                 ServiceEdition(serviceEdition),
@@ -55,7 +55,7 @@ class AltinnClient constructor(
     fun hentOrganisasjoner(fnr: String): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                SelvbetjeningToken(autentisertBruker.jwtToken),
                 Subject(fnr),
                 true
             )
