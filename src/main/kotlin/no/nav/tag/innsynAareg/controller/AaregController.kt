@@ -1,11 +1,11 @@
 package no.nav.tag.innsynAareg.controller
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.InnsynService
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import no.nav.tag.innsynAareg.utils.ISSUER
 import no.nav.tag.innsynAareg.utils.LEVEL
 import org.springframework.http.HttpStatus
@@ -19,7 +19,7 @@ import springfox.documentation.annotations.ApiIgnore
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = [LEVEL])
 class AaregController(
-    val requestContextHolder: TokenValidationContextHolder,
+    val autentisertBruker: AutentisertBruker,
     val aAregService: InnsynService
 ) {
     @GetMapping(value = ["/arbeidsforhold"])
@@ -27,11 +27,17 @@ class AaregController(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): ResponseEntity<OversiktOverArbeidsForhold> =
-        when (val respons = aAregService.hentArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken)) {
+    ): ResponseEntity<OversiktOverArbeidsForhold> {
+        val respons = aAregService.hentArbeidsforhold(
+            orgnr,
+            juridiskEnhetOrgnr,
+            idToken
+        )
+        return when (respons) {
             is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
             IngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
         }
+    }
 
     @GetMapping(value = ["/tidligere-arbeidsforhold"])
     fun hentTidligereArbeidsforhold(
@@ -39,8 +45,13 @@ class AaregController(
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<OversiktOverArbeidsForhold> {
-        val fnr: String = no.nav.tag.innsynAareg.utils.FnrExtractor.extract(requestContextHolder)
-        return when (val respons = aAregService.hentTidligereArbeidsforhold(orgnr, juridiskEnhetOrgnr, idToken, fnr)) {
+        val respons = aAregService.hentTidligereArbeidsforhold(
+            orgnr,
+            juridiskEnhetOrgnr,
+            idToken,
+            autentisertBruker.fødselsnummer
+        )
+        return when (respons) {
             is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
             IngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
         }
@@ -51,7 +62,10 @@ class AaregController(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): Pair<String, Number> {
-        return aAregService.hentAntallArbeidsforholdPåUnderenhet(orgnr, juridiskEnhetOrgnr, idToken)
-    }
+    ): Pair<String, Number> =
+        aAregService.hentAntallArbeidsforholdPåUnderenhet(
+            orgnr,
+            juridiskEnhetOrgnr,
+            idToken
+        )
 }
