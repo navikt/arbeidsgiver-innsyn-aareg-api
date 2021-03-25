@@ -4,23 +4,21 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito
 import org.springframework.core.env.Environment
-import java.util.HashMap
-import java.util.Map
 
 class ByEnvironmentStrategyTest {
     @Test
     fun featureIsEnabledMedMiljøILista() {
-        assertThat(ByEnvironmentStrategy(environmentMock("local")).isEnabled(Map.of("miljø", "local,dev-fss"))).isEqualTo(true)
+        assertThat(ByEnvironmentStrategy(environmentMock("local")).isEnabled(mapOf("miljø" to "local,dev-fss"))).isEqualTo(true)
     }
 
     @Test
     fun strategiSkalHandtereFlereProfiler() {
-        assertThat(ByEnvironmentStrategy(environmentMock("local", "test")).isEnabled(Map.of("miljø", "local,dev-fss"))).isEqualTo(true)
+        assertThat(ByEnvironmentStrategy(environmentMock("local", "test")).isEnabled(mapOf("miljø" to "local,dev-fss"))).isEqualTo(true)
     }
 
     @Test
     fun featureIsDisabledMedMiljøNull() {
-        assertThat(ByEnvironmentStrategy(environmentMock("dev-fss")).isEnabled(Map.of("miljø", "prod-fss"))).isEqualTo(false)
+        assertThat(ByEnvironmentStrategy(environmentMock("dev-fss")).isEnabled(mapOf("miljø" to "prod-fss"))).isEqualTo(false)
     }
 
     @Test
