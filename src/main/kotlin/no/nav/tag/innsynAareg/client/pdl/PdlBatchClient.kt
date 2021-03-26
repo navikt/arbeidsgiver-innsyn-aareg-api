@@ -1,11 +1,7 @@
 package no.nav.tag.innsynAareg.client.pdl
 
 import lombok.RequiredArgsConstructor
-import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRequest
-import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
-import no.nav.tag.innsynAareg.client.pdl.dto.Variables
 import no.nav.tag.innsynAareg.client.sts.STSClient
-import no.nav.tag.innsynAareg.utils.GraphQlBatch
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -20,12 +16,11 @@ import org.springframework.web.client.RestTemplate
 class PdlBatchClient @Autowired constructor(
     private val restTemplate: RestTemplate,
     private val stsClient: STSClient,
-    private val graphQlUtils: GraphQlBatch,
     @Value("\${pdl.pdlUrl}") private val pdlUrl: String
 ) {
     private val log = LoggerFactory.getLogger(PdlBatchClient::class.java)!!
 
-    fun getBatchFraPdl(fnrs: List<String>): PdlBatchRespons? {
+    fun getBatchFraPdl(fnrs: List<String>): HentPersonBolkResponse? {
         return try {
             getBatchFraPdlInternal(fnrs)
         } catch (exception: Exception) {
@@ -38,7 +33,7 @@ class PdlBatchClient @Autowired constructor(
         }
     }
 
-    private fun getBatchFraPdlInternal(fnrs: List<String>): PdlBatchRespons {
+    private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
         val stsToken: String? = stsClient.token?.access_token
         val headers = HttpHeaders()
 
@@ -51,14 +46,13 @@ class PdlBatchClient @Autowired constructor(
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
 
-        val pdlRequest = PdlBatchRequest(
-            graphQlUtils.resourceAsString(),
-            Variables(fnrs)
-        )
         return restTemplate.postForObject(
             pdlUrl,
-            HttpEntity(pdlRequest, headers),
-            PdlBatchRespons::class.java
+            HttpEntity(
+                HentPersonBolkRequest(fnrs),
+                headers
+            ),
+            HentPersonBolkResponse::class.java
         )!!
     }
 }
