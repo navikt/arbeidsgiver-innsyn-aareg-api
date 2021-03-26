@@ -161,13 +161,11 @@ class MockServer @Autowired constructor(
         )
     }
 
-    private final fun mockHentNavn(server: WireMockServer, path: String) {
-        server.stubFor(
-            get(urlPathEqualTo(path)).apply {
-                withHeader("Nav-Opplysningspliktigident", equalTo("983887457"))
-                withHeader("Nav-Arbeidsgiverident", equalTo("910825518"))
-                willReturnJson(hentStringFraFil("arbeidsforholdrespons.json"))
-            }
-        )
+    private final fun WireMockServer.mockHentNavn(path: String) {
+        stubForGet(urlPathEqualTo(path)) {
+            withHeader("Nav-Opplysningspliktigident", equalTo("983887457"))
+            withHeader("Nav-Arbeidsgiverident", equalTo("910825518"))
+            willReturnJson(hentStringFraFil("arbeidsforholdrespons.json"))
+        }
     }
 }
