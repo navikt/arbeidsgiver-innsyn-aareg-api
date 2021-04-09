@@ -66,7 +66,7 @@ class AaregClient(
         if (oversikt.isEmpty()) {
             logger.info("Aareg oversikt over arbeidsgiver respons er tom")
         }
-        return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr}
+        return oversikt.find { it.arbeidsgiver.organisasjonsnummer == bedriftsnr }
             ?.let { it.aktiveArbeidsforhold + it.inaktiveArbeidsforhold }
     }
 
@@ -97,16 +97,14 @@ class AaregClient(
         juridiskEnhetOrgnr: String?,
         idPortenToken: String
     ): HttpEntity<String> {
-        val appName = "srvditt-nav-arbeid"
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         headers["Authorization"] = "Bearer $idPortenToken"
-        headers["Nav-Call-Id"] = appName
+        headers["Nav-Call-Id"] = "srvditt-nav-arbeid"
         headers["Nav-Arbeidsgiverident"] = bedriftsnr
         headers["Nav-Opplysningspliktigident"] = juridiskEnhetOrgnr
         headers["Nav-Consumer-Token"] = stsClient.token?.access_token
         return HttpEntity(headers)
     }
-
 }
 
