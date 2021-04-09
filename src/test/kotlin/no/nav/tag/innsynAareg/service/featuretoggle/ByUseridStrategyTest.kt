@@ -1,36 +1,46 @@
 package no.nav.tag.innsynAareg.service.featuretoggle
 
-import no.nav.tag.innsynAareg.utils.TokenUtils
-import org.assertj.core.api.Assertions
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito
-import java.util.HashMap
-import java.util.Map
 
 class ByUseridStrategyTest {
     @Test
     fun featureErEnabledNårBrukerIListe() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(Map.of("user", "12345678911,12345678910"))).isEqualTo(true)
+        assertThat(
+            ByUserIdStrategy(userMock("12345678910"))
+                .isEnabled(mapOf("user" to "12345678911,12345678910"))
+        ).isTrue
     }
 
     @Test
     fun featureErDisabledNårIkkeBrukerIListe() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678910")).isEnabled(Map.of("user", "10987654321"))).isEqualTo(false)
+        assertThat(
+            ByUserIdStrategy(userMock("12345678910"))
+                .isEnabled(mapOf("user" to "10987654321"))
+        ).isFalse
     }
 
     @Test
     fun skalReturnereFalseHvisParametreErNull() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678912")).isEnabled(null)).isEqualTo(false)
+        assertThat(
+            ByUserIdStrategy(userMock("12345678912"))
+                .isEnabled(null)
+        ).isFalse
     }
 
     @Test
     fun skalReturnereFalseHvisBrukerIkkeErSatt() {
-        Assertions.assertThat(ByUserIdStrategy(userMock("12345678913")).isEnabled(HashMap())).isEqualTo(false)
+        assertThat(
+            ByUserIdStrategy(userMock("12345678913"))
+                .isEnabled(mapOf())
+        ).isFalse
     }
 
-    private fun userMock(userId: String): TokenUtils {
-        val mock = Mockito.mock(TokenUtils::class.java)
-        Mockito.`when`(mock.getSubject()).thenReturn(userId)
+    private fun userMock(userId: String): AutentisertBruker {
+        val mock = Mockito.mock(AutentisertBruker::class.java)
+        Mockito.`when`(mock.fødselsnummer).thenReturn(userId)
         return mock
     }
 }

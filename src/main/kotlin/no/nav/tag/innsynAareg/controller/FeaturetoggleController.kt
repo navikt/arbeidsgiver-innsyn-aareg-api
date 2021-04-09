@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Unprotected
 class FeaturetoggleController(val unleashService: UnleashService) {
-
     @GetMapping(value = ["/feature"])
-    fun feature(@RequestParam("feature") features: List<String>): ResponseEntity<Map<String, Boolean?>> {
+    fun feature(
+        @RequestParam("feature") features: List<String>
+    ): ResponseEntity<Map<String, Boolean?>> {
         return ResponseEntity.status(HttpStatus.OK).body(unleashService.hentFeatureToggles(features))
     }
 }

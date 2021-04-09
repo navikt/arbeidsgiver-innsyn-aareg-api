@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class YrkeskodeverkCacheConfig {
+    companion object {
+        const val YRKESKODE_CACHE = "yrkeskode_cache"
+    }
+
     @Bean
     fun kodeverkCache(): CaffeineCache {
         return CaffeineCache(
@@ -18,9 +22,5 @@ class YrkeskodeverkCacheConfig {
                 .recordStats()
                 .build()
         )
-    }
-
-    companion object {
-        const val YRKESKODE_CACHE = "yrkeskode_cache"
     }
 }
