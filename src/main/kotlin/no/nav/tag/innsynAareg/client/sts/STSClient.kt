@@ -17,30 +17,26 @@ constructor(
     @Value("\${sts.stsUrl}") stsUrl: String,
     private val restTemplate: RestTemplate
 ) {
-    private val requestEntity: HttpEntity<String>
-    private val uriString: String
+    private val requestEntity = getRequestEntity(stsPass)
+    private val uriString = buildUriString(stsUrl)
 
     val token: STStoken?
         @Cacheable(STS_CACHE)
         get() {
             try {
                 val response = restTemplate.exchange(uriString, HttpMethod.GET, requestEntity, STStoken::class.java)
-                if (response.getStatusCode() != HttpStatus.OK) {
-                    val message = "Kall mot STS feiler med HTTP-" + response.getStatusCode()
+                if (response.statusCode != HttpStatus.OK) {
+                    val message = "Kall mot STS feiler med HTTP-" + response.statusCode
                     //log.error(message)
                     throw RuntimeException(message)
                 }
-                return response.getBody()
+                return response.body
             } catch (e: Throwable) {
                 //log.error("Feil ved oppslag i STS", e)
                 throw RuntimeException(e)
             }
         }
 
-    init {
-        this.requestEntity = getRequestEntity(stsPass)
-        this.uriString = buildUriString(stsUrl)
-    }
 
     private fun getRequestEntity(stsPass: String): HttpEntity<String> {
         val headers = HttpHeaders()
@@ -60,5 +56,4 @@ constructor(
     @CacheEvict(STS_CACHE)
     fun evict() {
     }
-
 }

@@ -10,32 +10,28 @@ import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
 import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
 import no.nav.tag.innsynAareg.models.AltinnOppslagResultat
 import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
-import no.nav.tag.innsynAareg.utils.TokenUtils
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @Component
-class AltinnClient constructor(
+class AltinnClient(
     @Value("\${altinn.proxyUrl}") val proxyUrl: String,
-    tokenUtils: TokenUtils,
     @Value("\${altinn.altinnUrl}") val fallBackUrl: String,
     @Value("\${altinn.altinnHeader}") val altinnHeader: String,
-    @Value("\${altinn.APIGwHeader}") val APIGwHeader: String
+    @Value("\${altinn.APIGwHeader}") val APIGwHeader: String,
+    private val autentisertBruker: AutentisertBruker,
 ) {
-    private val tokenUtils: TokenUtils = tokenUtils
-    private val klient: AltinnrettigheterProxyKlient
-
     val logger = LoggerFactory.getLogger(AltinnClient::class.java)!!
 
-    init {
-        val proxyKlientConfig = AltinnrettigheterProxyKlientConfig(
+    private val klient = AltinnrettigheterProxyKlient(
+        AltinnrettigheterProxyKlientConfig(
             ProxyConfig("arbeidsgiver-arbeidsforhold-api", proxyUrl),
             AltinnConfig(fallBackUrl, altinnHeader, APIGwHeader)
         )
-        klient = AltinnrettigheterProxyKlient(proxyKlientConfig)
-    }
+    )
 
     @Cacheable(ALTINN_TJENESTE_CACHE)
     fun hentOrganisasjonerBasertPaRettigheter(
@@ -45,7 +41,7 @@ class AltinnClient constructor(
     ): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                SelvbetjeningToken(autentisertBruker.jwtToken),
                 Subject(fnr),
                 ServiceCode(serviceKode),
                 ServiceEdition(serviceEdition),
@@ -56,7 +52,7 @@ class AltinnClient constructor(
     fun hentOrganisasjoner(fnr: String): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(tokenUtils.tokenForInnloggetBruker),
+                SelvbetjeningToken(autentisertBruker.jwtToken),
                 Subject(fnr),
                 true
             )
@@ -78,7 +74,9 @@ class AltinnClient constructor(
                 .let { AltinnOppslagVellykket(it) }
         } catch (error: Exception) {
             logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra altinn.", error)
-            if (error.message?.contains("403") == true) AltinnIngenRettigheter else throw error
+            if (error.message?.contains("403") == true)
+                AltinnIngenRettigheter
+            else
+                throw error
         }
-
 }

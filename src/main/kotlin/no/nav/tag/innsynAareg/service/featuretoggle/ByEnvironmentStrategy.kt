@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class ByEnvironmentStrategy(currentEnv: Environment) : Strategy {
+    companion object {
+        val MILJOER = listOf("dev-fss", "prod-fss")
+    }
 
-    val MILJOER = listOf("dev-fss", "prod-fss")
     val currentEnv = currentEnv.activeProfiles.find { MILJOER.contains(it) } ?: "dev-fss"
 
     override fun getName(): String {

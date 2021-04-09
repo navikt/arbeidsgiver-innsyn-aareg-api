@@ -1,11 +1,8 @@
 package no.nav.tag.innsynAareg.client.pdl
 
 import lombok.RequiredArgsConstructor
-import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRequest
-import no.nav.tag.innsynAareg.client.pdl.dto.PdlBatchRespons
-import no.nav.tag.innsynAareg.client.pdl.dto.Variables
 import no.nav.tag.innsynAareg.client.sts.STSClient
-import no.nav.tag.innsynAareg.utils.GraphQlBatch
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -18,45 +15,45 @@ import org.springframework.web.client.RestTemplate
 @RequiredArgsConstructor
 class PdlBatchClient @Autowired constructor(
     private val restTemplate: RestTemplate,
-    val stsClient: STSClient,
-    val graphQlUtils: GraphQlBatch,
-    @Value("\${pdl.pdlUrl}") pdlUrl: String
+    private val stsClient: STSClient,
+    @Value("\${pdl.pdlUrl}") private val pdlUrl: String
 ) {
-    private val uriString: String = pdlUrl
+    private val log = LoggerFactory.getLogger(PdlBatchClient::class.java)!!
 
-    val logger = org.slf4j.LoggerFactory.getLogger(PdlBatchClient::class.java)!!
-
-    private fun createRequestEntity(pdlRequest: PdlBatchRequest): HttpEntity<Any?> {
-        return HttpEntity(pdlRequest, createHeaders())
+    fun getBatchFraPdl(fnrs: List<String>): HentPersonBolkResponse? {
+        return try {
+            getBatchFraPdlInternal(fnrs)
+        } catch (exception: Exception) {
+            val msg = exception
+                .message
+                .toString()
+                .replace(Regex("""\d{11}"""), "***********")
+            log.error("AG-ARBEIDSFORHOLD feiler mot PDL ", msg)
+            null
+        }
     }
 
-    private fun createHeaders(): HttpHeaders {
+    private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
         val stsToken: String? = stsClient.token?.access_token
         val headers = HttpHeaders()
 
         if (stsToken != null) {
             headers.setBearerAuth(stsToken)
         } else {
-            logger.error("fant ikke ststoken i pdlservice")
+            log.error("fant ikke ststoken i pdlservice")
         }
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
-        return headers
-    }
 
-    fun getBatchFraPdl(fnrs: List<String>): PdlBatchRespons? {
-        try {
-            val pdlRequest = PdlBatchRequest(
-                graphQlUtils.resourceAsString(),
-                Variables(fnrs)
-            )
-            return restTemplate.postForObject(uriString, createRequestEntity(pdlRequest), PdlBatchRespons::class.java)!!
-        } catch (exception: Exception) {
-            val msg = exception.message.toString().replace(Regex("""\d{11}"""), "***********")
-            logger.error("AG-ARBEIDSFORHOLD feiler mot PDL ", msg)
-        }
-        return null
+        return restTemplate.postForObject(
+            pdlUrl,
+            HttpEntity(
+                HentPersonBolkRequest(fnrs),
+                headers
+            ),
+            HentPersonBolkResponse::class.java
+        )!!
     }
 }
 
