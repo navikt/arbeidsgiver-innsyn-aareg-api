@@ -39,7 +39,7 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: arbeidsgiver-innsyn-aareg
+        - application: innsyn-aareg
     outbound:
       rules:
         - application: min-side-ag-fakelogin
