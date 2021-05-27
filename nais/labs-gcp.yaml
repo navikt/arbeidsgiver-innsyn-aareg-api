@@ -39,7 +39,7 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: bedriftsoversikt-og-ansatte
+        - application: innsyn-aareg
     outbound:
       rules:
         - application: min-side-ag-fakelogin
