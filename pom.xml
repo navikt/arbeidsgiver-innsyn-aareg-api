@@ -18,6 +18,8 @@
         <java.version>11</java.version>
         <kotlin.version>1.4.32</kotlin.version>
         <token-support.version>1.3.7</token-support.version>
+        <!-- overstyrt fra tokensupport i påvente av ny versjon https://github.com/navikt/token-support/issues/276 -->
+        <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
     </properties>
 
     <dependencies>
