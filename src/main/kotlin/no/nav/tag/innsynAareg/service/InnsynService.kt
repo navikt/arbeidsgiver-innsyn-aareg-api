@@ -104,6 +104,7 @@ class InnsynService(
         val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
 
         if (arbeidsforhold is ArbeidsforholdFunnet) {
+            logger.info("fant arbeidsforhold setter på navn innsynsservice")
             navneoppslagService.settNavn(arbeidsforhold.oversiktOverArbeidsForhold)
             settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
         }
