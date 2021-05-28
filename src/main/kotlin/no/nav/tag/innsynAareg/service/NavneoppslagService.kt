@@ -49,7 +49,7 @@ class NavneoppslagService(
 
         for (arbeidsforhold in arbeidsforholdOversikt) {
             if (arbeidsforhold.arbeidstaker.navn.isNullOrBlank()) {
-                logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn")
+                logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn, ukjent grunn, antall arbeidsforhold totalt: ${arbeidsforholdOversikt.size}")
                 arbeidsforhold.arbeidstaker.navn = "Kunne ikke hente navn"
             }
         }
