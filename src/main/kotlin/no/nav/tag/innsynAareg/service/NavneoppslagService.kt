@@ -13,9 +13,6 @@ class NavneoppslagService(
     private val logger = LoggerFactory.getLogger(this::class.java)!!
 
     fun settNavn(arbeidsforholdOversikt: OversiktOverArbeidsForhold) {
-        val sequence =         arbeidsforholdOversikt.arbeidsforholdoversikter
-            ?.asSequence()
-        logger.info("public settNavn Navneoppslagservice $sequence.")
         arbeidsforholdOversikt
             .arbeidsforholdoversikter
             ?.chunked(size = 100, transform = this::settNavn)
@@ -24,7 +21,6 @@ class NavneoppslagService(
     private fun settNavn(
         arbeidsforholdOversikt: List<ArbeidsForhold>
     ) {
-        logger.info("private settNavn Navneoppslagservice")
         val arbeidstakerTabell = arbeidsforholdOversikt
             .asSequence()
             .map { it.arbeidstaker }
@@ -36,10 +32,7 @@ class NavneoppslagService(
             ?.hentPersonBolk
             ?: emptyList()
 
-        logger.info("antall personer hentet fra pdl: ${personer.size}")
-
         for (person in personer) {
-            logger.info("person in personer: ${person.ident}")
             val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)

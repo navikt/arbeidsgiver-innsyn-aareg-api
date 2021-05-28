@@ -34,7 +34,6 @@ class AaregClient(
     ): ArbeidsforholdOppslagResultat {
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
-            logger.info("hentArbeidsforhold aaregclient")
             val respons = restTemplate.exchange(
                 aaregArbeidsforholdUrl,
                 HttpMethod.GET,
