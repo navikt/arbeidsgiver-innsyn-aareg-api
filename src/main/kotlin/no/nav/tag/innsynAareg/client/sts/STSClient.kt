@@ -27,7 +27,6 @@ constructor(
                 val response = restTemplate.exchange(uriString, HttpMethod.GET, requestEntity, STStoken::class.java)
                 if (response.statusCode != HttpStatus.OK) {
                     val message = "Kall mot STS feiler med HTTP-" + response.statusCode
-                    //log.error(message)
                     throw RuntimeException(message)
                 }
                 return response.body

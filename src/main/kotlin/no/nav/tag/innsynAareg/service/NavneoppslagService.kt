@@ -33,6 +33,8 @@ class NavneoppslagService(
             ?.hentPersonBolk
             ?: emptyList()
 
+        logger.info("antall personer hentet fra pdl: ${personer.size}")
+
         for (person in personer) {
             val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
             if (person.code != "ok") {
