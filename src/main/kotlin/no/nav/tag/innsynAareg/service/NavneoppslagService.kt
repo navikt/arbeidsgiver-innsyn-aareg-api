@@ -15,7 +15,6 @@ class NavneoppslagService(
     fun settNavn(arbeidsforholdOversikt: OversiktOverArbeidsForhold) {
         arbeidsforholdOversikt
             .arbeidsforholdoversikter
-            ?.asSequence()
             ?.chunked(size = 100, transform = this::settNavn)
     }
 

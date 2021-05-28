@@ -18,7 +18,7 @@ class STSCacheConfig {
             STS_CACHE,
             Caffeine.newBuilder()
                 .maximumSize(1)
-                .expireAfterWrite(59, TimeUnit.MINUTES)
+                .expireAfterWrite(40, TimeUnit.MINUTES)
                 .recordStats()
                 .build()
         )
