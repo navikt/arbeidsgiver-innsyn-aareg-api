@@ -41,7 +41,6 @@ class NavneoppslagService(
             ?: emptyList()
 
         for (person in personer) {
-
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
             }
