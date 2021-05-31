@@ -32,10 +32,10 @@ class NavneoppslagService(
             ?: emptyList()
 
         for (person in personer) {
-            val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
             }
+            val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
 
             arbeidstaker.navn = person.person
                 ?.navn
