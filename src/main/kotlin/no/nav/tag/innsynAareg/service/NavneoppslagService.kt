@@ -22,7 +22,6 @@ class NavneoppslagService(
         arbeidsforholdOversikt: List<ArbeidsForhold>
     ) {
         val arbeidstakerTabell = arbeidsforholdOversikt
-            .asSequence()
             .map { it.arbeidstaker }
             .filter { it.offentligIdent != null }
             .associateBy { it.offentligIdent!! }
@@ -33,7 +32,7 @@ class NavneoppslagService(
             ?: emptyList()
 
         for (person in personer) {
-            val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
+            val arbeidstaker = arbeidstakerTabell[person.ident]
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
             }
