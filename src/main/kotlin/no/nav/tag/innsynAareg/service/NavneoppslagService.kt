@@ -26,15 +26,29 @@ class NavneoppslagService(
             .filter { it.offentligIdent != null }
             .associateBy { it.offentligIdent!! }
 
+        val pdlBatchrespons = pdlBatchClient.getBatchFraPdl(arbeidstakerTabell.keys.toList())
+
+        if(pdlBatchrespons?.errors?.isNotEmpty() == true){
+            val errors = pdlBatchrespons.errors
+                for(error in errors){
+                    logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  ${error?.message}")
+                }
+        }
+
         val personer = pdlBatchClient.getBatchFraPdl(arbeidstakerTabell.keys.toList())
             ?.data
             ?.hentPersonBolk
             ?: emptyList()
 
         for (person in personer) {
+
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn  {}", person.code)
             }
+            if (person.person?.navn.isNullOrEmpty()) {
+                logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn kode: ${person.code}")
+            }
+
             val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
 
             arbeidstaker.navn = person.person
