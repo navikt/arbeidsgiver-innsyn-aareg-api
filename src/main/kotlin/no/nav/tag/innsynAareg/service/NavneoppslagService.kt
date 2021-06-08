@@ -24,7 +24,7 @@ class NavneoppslagService(
         val arbeidstakerTabell = arbeidsforholdOversikt
             .map { it.arbeidstaker }
             .filter { it.offentligIdent != null }
-            .associateBy { it.offentligIdent!! }
+            .groupBy { it.offentligIdent!! }
 
         val personer = pdlBatchClient.getBatchFraPdl(arbeidstakerTabell.keys.toList())
             ?.data
@@ -37,13 +37,15 @@ class NavneoppslagService(
             }
             val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
 
-            arbeidstaker.navn = person.person
-                ?.navn
-                ?.getOrNull(0)
-                ?.let {
-                    listOfNotNull(it.fornavn, it.mellomNavn, it.etternavn)
-                        .joinToString(" ")
-                }
+            arbeidstaker.forEach {
+                it.navn = person.person
+                    ?.navn
+                    ?.getOrNull(0)
+                    ?.let {
+                        listOfNotNull(it.fornavn, it.mellomNavn, it.etternavn)
+                            .joinToString(" ")
+                    }
+            }
         }
 
         for (arbeidsforhold in arbeidsforholdOversikt) {
