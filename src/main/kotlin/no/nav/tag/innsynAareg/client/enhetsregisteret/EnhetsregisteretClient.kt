@@ -25,20 +25,18 @@ class EnhetsregisteretClient(
     fun hentOrganisasjonFraEnhetsregisteret(
         orgnr: String,
         inkluderHistorikk: Boolean
-    ): OrganisasjonFraEreg? {
+    ): OrganisasjonFraEreg {
         return try {
-            val eregurMedParam = "$eregUrl$orgnr?inkluderHistorikk=$inkluderHistorikk&inkluderHierarki=true"
-            val response = restTemplate.exchange(
-                eregurMedParam,
+            restTemplate.exchange(
+                "$eregUrl{orgnr}?inkluderHistorikk={inkluderHistorikk}&inkluderHierarki=true",
                 HttpMethod.GET,
                 requestEntity,
-                OrganisasjonFraEreg::class.java
-            )
-            logger.info("sjekker om organisasjon inngår i orgledd")
-            response.body
+                OrganisasjonFraEreg::class.java,
+                orgnr,
+                inkluderHistorikk
+            ).body!!
         } catch (e: Exception) {
-            logger.error("Feil ved oppslag mot EnhetsRegisteret:", e)
-            null
+            throw RuntimeException("Feil ved oppslag mot EnhetsRegisteret: $e", e)
         }
     }
 
@@ -53,13 +51,17 @@ class EnhetsregisteretClient(
     }
 
     fun finnTidligereVirksomheter(juridiskEnhet: String, idtoken: String): List<Organisasjon> {
-        val driverVirksomhetene = hentOrganisasjonFraEnhetsregisteret(
-            juridiskEnhet,
-            true
-        )
-            ?.driverVirksomheter
-            ?.filter { it.gyldighetsperiode != null }
-            ?: emptyList()
+        val driverVirksomhetene = try {
+            hentOrganisasjonFraEnhetsregisteret(
+                juridiskEnhet,
+                true
+            )
+                .driverVirksomheter
+                ?.filter { it.gyldighetsperiode != null }
+                ?: emptyList()
+        } catch (e: RuntimeException) {
+            emptyList()
+        }
 
         val now = LocalDate.now()
 

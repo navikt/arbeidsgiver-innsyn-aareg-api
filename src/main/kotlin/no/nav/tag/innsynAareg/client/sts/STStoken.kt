@@ -1,9 +1,9 @@
 package no.nav.tag.innsynAareg.client.sts
 
 @Suppress("Unused") /* dto */
-class STStoken {
-    var access_token: String? = null
-    internal var token_type: String? = null
-    internal var expires_in: Int = 0
-}
+data class STStoken(
+    var access_token: String,
+    var token_type: String? = null,
+    var expires_in: Int = 0,
+)
 

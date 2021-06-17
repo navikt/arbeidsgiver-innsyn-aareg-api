@@ -42,7 +42,6 @@ class InnsynService(
 
         val orgtreFraEnhetsregisteret = enhetsregisteretService
             .hentOrganisasjonFraEnhetsregisteret(orgnrUnderenhet, false)
-            ?: throw RuntimeException("enhetsregisteret frant ingen organisasjon med orgnummer $orgnrUnderenhet")
 
         if (orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd.isNullOrEmpty()) {
             return Pair(orgnrHovedenhet, 0)
@@ -55,8 +54,7 @@ class InnsynService(
                 idPortenToken
             )
         } catch (exception: Exception) {
-            logger.error("Klarte ikke itere over orgtre ", exception.message)
-            throw AaregException(" Aareg Exception, klarte ikke finne opplysningspliktig: $exception")
+            throw AaregException("Aareg Exception, klarte ikke finne opplysningspliktig: $exception", exception)
         }
     }
 
@@ -81,8 +79,8 @@ class InnsynService(
                     idToken
                 )
                 return Pair(juridiskEnhetOrgnr, antallNesteNiva!!)
-            } catch (exception: Exception) {
-                throw AaregException(" Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $exception")
+            } catch (e: Exception) {
+                throw AaregException("Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $e", e)
             }
         } else {
             return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd, idToken)
@@ -167,11 +165,10 @@ class InnsynService(
                         idPortenToken
                     )
                     if (arbeidsforhold is ArbeidsforholdFunnet) {
-                        logger.info("Klarte finne historiske arbeidsforhold")
                         return arbeidsforhold
                     }
                 } catch (e: Exception) {
-                    logger.error("klarte ikke hente historiske arbeidsforhold", e.message)
+                    logger.error("klarte ikke hente historiske arbeidsforhold $e", e)
                 }
             }
         }
