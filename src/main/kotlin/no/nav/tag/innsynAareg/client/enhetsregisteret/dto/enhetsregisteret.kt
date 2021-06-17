@@ -11,10 +11,24 @@ data class OrganisasjonFraEreg(
     val gyldighetsperiode: Gyldighetsperiode?,
     val navn: Navn?,
     val driverVirksomheter: List<OrganisasjonFraEreg>?
-)
+) {
+    companion object {
+        fun tom(orgnr: String) : OrganisasjonFraEreg {
+            return OrganisasjonFraEreg(
+                organisasjonsnummer = orgnr,
+                bestaarAvOrganisasjonsledd = null,
+                organisasjonsleddOver = null,
+                inngaarIJuridiskEnheter = null,
+                gyldighetsperiode = null,
+                navn = null,
+                driverVirksomheter = null
+            )
+        }
+    }
+}
 
 data class Organisasjoneledd(val organisasjonsledd: OrganisasjonFraEreg)
 
 data class Navn(val redigertnavn: String?)
 
-data class Gyldighetsperiode(val fom: String?, val tom: String?);
+data class Gyldighetsperiode(val fom: String?, val tom: String?)

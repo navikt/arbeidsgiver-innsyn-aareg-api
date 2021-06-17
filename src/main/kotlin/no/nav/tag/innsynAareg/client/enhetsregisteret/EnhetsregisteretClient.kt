@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
@@ -35,6 +36,9 @@ class EnhetsregisteretClient(
                 orgnr,
                 inkluderHistorikk
             ).body!!
+        } catch (e: HttpClientErrorException.NotFound) {
+            // 404 skjer typisk pga nattlig synkronisering av nye underenheter mellom ereg og breg
+            OrganisasjonFraEreg.tom(orgnr)
         } catch (e: Exception) {
             throw RuntimeException("Feil ved oppslag mot EnhetsRegisteret: $e", e)
         }
