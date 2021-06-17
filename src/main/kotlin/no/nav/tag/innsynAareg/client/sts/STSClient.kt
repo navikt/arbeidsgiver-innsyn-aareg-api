@@ -20,20 +20,10 @@ constructor(
     private val requestEntity = getRequestEntity(stsPass)
     private val uriString = buildUriString(stsUrl)
 
-    val token: STStoken?
+    val token: STStoken
         @Cacheable(STS_CACHE)
         get() {
-            try {
-                val response = restTemplate.exchange(uriString, HttpMethod.GET, requestEntity, STStoken::class.java)
-                if (response.statusCode != HttpStatus.OK) {
-                    val message = "Kall mot STS feiler med HTTP-" + response.statusCode
-                    throw RuntimeException(message)
-                }
-                return response.body
-            } catch (e: Throwable) {
-                //log.error("Feil ved oppslag i STS", e)
-                throw RuntimeException(e)
-            }
+            return restTemplate.exchange(uriString, HttpMethod.GET, requestEntity, STStoken::class.java).body!!
         }
 
 
