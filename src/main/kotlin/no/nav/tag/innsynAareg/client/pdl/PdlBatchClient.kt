@@ -28,23 +28,19 @@ class PdlBatchClient @Autowired constructor(
                 .message
                 .toString()
                 .replace(Regex("""\d{11}"""), "***********")
-            log.error("AG-ARBEIDSFORHOLD feiler mot PDL ", msg)
+            log.error("AG-ARBEIDSFORHOLD feiler mot PDL: $msg")
             null
         }
     }
 
     private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
-        val stsToken: String? = stsClient.token?.access_token
-        val headers = HttpHeaders()
+        val stsToken: String = stsClient.token.access_token
 
-        if (stsToken != null) {
-            headers.setBearerAuth(stsToken)
-        } else {
-            log.error("fant ikke ststoken i pdlservice")
-        }
+        val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Nav-Consumer-Token"] = "Bearer $stsToken"
+        headers.setBearerAuth(stsToken)
 
         return restTemplate.postForObject(
             pdlUrl,

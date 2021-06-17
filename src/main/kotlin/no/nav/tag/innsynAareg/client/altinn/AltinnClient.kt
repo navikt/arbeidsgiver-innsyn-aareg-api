@@ -73,10 +73,9 @@ class AltinnClient(
                 }
                 .let { AltinnOppslagVellykket(it) }
         } catch (error: Exception) {
-            logger.error("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra altinn.", error)
             if (error.message?.contains("403") == true)
                 AltinnIngenRettigheter
             else
-                throw error
+                throw RuntimeException("AG-ARBEIDSFORHOLD Klarte ikke hente organisasjoner fra altinn. $error", error)
         }
 }
