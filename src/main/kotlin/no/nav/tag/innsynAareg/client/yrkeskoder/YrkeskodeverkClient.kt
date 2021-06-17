@@ -22,36 +22,25 @@ class YrkeskodeverkClient @Autowired constructor(
     @Cacheable(YRKESKODE_CACHE)
     fun hentBetydningAvYrkeskoder(): Yrkeskoder =
         hentYrkeskoderespons()
-            ?.betydninger
-            ?.mapValues { it.value.getOrNull(0)?.beskrivelser?.nb?.tekst ?: "Fant ikke yrkesbeskrivelse" }
-            ?.let(::Yrkeskoder)
-            ?: Yrkeskoder()
+            .betydninger
+            .mapValues { it.value.getOrNull(0)?.beskrivelser?.nb?.tekst ?: "Fant ikke yrkesbeskrivelse" }
+            .let(::Yrkeskoder)
 
-    private fun hentYrkeskoderespons(): Yrkeskoderespons? {
+    private fun hentYrkeskoderespons(): Yrkeskoderespons {
         return try {
             val headers = HttpHeaders()
             headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
             headers["Nav-Call-Id"] = UUID.randomUUID().toString()
             headers["Nav-Consumer-Id"] = "srvAG-Arbforhold"
-            val respons: ResponseEntity<Yrkeskoderespons> = restTemplate.exchange(
+            restTemplate.exchange(
                 yrkeskodeUrl,
                 HttpMethod.GET,
                 HttpEntity<Any>(headers),
                 Yrkeskoderespons::class.java
-            )
-
-            if (respons.statusCode != HttpStatus.OK) {
-                logger.error("MSA-AAREG Kall mot kodeverksoversikt feiler med HTTP-{}", respons.statusCode)
-                return null
-            }
-
-            if (respons.body?.betydninger.isNullOrEmpty()) {
-                logger.error("MSA-AAREG Ingen betydninger funnet i yrkesoppslag")
-            }
-            respons.body
+            ).body!!
         } catch (e: Exception) {
-            logger.error("MSA-AAREG Kall mot kodeoversikt feilet med exception", e)
-            null
+            logger.error("MSA-AAREG Kall mot kodeoversikt feilet med exception $e", e)
+            Yrkeskoderespons()
         }
     }
 }

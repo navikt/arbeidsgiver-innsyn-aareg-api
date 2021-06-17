@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
@@ -34,22 +35,18 @@ class AaregClient(
     ): ArbeidsforholdOppslagResultat {
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
-            val respons = restTemplate.exchange(
-                aaregArbeidsforholdUrl,
-                HttpMethod.GET,
-                entity,
-                OversiktOverArbeidsForhold::class.java
+            ArbeidsforholdFunnet(
+                restTemplate.exchange(
+                    aaregArbeidsforholdUrl,
+                    HttpMethod.GET,
+                    entity,
+                    OversiktOverArbeidsForhold::class.java
+                ).body!!
             )
-            when (respons.statusCode) {
-                HttpStatus.OK -> ArbeidsforholdFunnet(respons.body!!)
-                else -> throw RuntimeException("Kall mot aareg feiler med HTTP-${respons.statusCode}")
-            }
+        } catch (exception: HttpClientErrorException.Forbidden) {
+            return IngenRettigheter
         } catch (exception: RestClientException) {
-            logger.error("Feil ved oppslag mot Aareg Arbeidsforhold.", exception)
-            if (exception is RestClientResponseException && exception.rawStatusCode == 403) {
-                return IngenRettigheter
-            }
-            throw RuntimeException(" Aareg Exception: $exception")
+            throw RuntimeException("Feil ved oppslag mot Aareg Arbeidsforhold.: $exception", exception)
         }
     }
 
@@ -77,18 +74,12 @@ class AaregClient(
     ): Array<OversiktOverArbeidsgiver> {
         val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
-            val respons = restTemplate.exchange(
+            restTemplate.exchange(
                 aaregArbeidsgiverOversiktUrl,
                 HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java
-            )
-            if (respons.statusCode != HttpStatus.OK) {
-                val message = "Kall mot aareg feiler med HTTP-" + respons.statusCode
-                throw RuntimeException(message)
-            }
-            respons.body!!
+            ).body!!
         } catch (exception: RestClientException) {
-            logger.error("Feiler ved å hente arbeidsgiveroversikt fra Aareg ", exception.message)
-            throw RuntimeException(" Aareg Exception: $exception")
+            throw RuntimeException("Feil ved henting av arbeidsgiveroversikt fra Aareg", exception)
         }
     }
 
@@ -103,7 +94,7 @@ class AaregClient(
         headers["Nav-Call-Id"] = "srvditt-nav-arbeid"
         headers["Nav-Arbeidsgiverident"] = bedriftsnr
         headers["Nav-Opplysningspliktigident"] = juridiskEnhetOrgnr
-        headers["Nav-Consumer-Token"] = stsClient.token?.access_token
+        headers["Nav-Consumer-Token"] = stsClient.token.access_token
         return HttpEntity(headers)
     }
 }
