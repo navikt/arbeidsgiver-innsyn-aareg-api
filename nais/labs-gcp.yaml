@@ -40,6 +40,7 @@ spec:
     inbound:
       rules:
         - application: innsyn-aareg
+          namespace: fager
     outbound:
       rules:
         - application: min-side-ag-fakelogin
