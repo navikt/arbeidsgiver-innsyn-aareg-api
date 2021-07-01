@@ -49,8 +49,7 @@
         <dependency>
             <groupId>no.nav.arbeidsgiver</groupId>
             <artifactId>altinn-rettigheter-proxy-klient</artifactId>
-            <version>2.0.1</version>
-            <classifier>kotlin-client</classifier>
+            <version>2.0.2</version>
         </dependency>
 
         <dependency>
@@ -159,11 +158,6 @@
         </dependency>
 
         <!--Metrikker-->
-        <dependency>
-            <groupId>no.nav.common</groupId>
-            <artifactId>metrics</artifactId>
-            <version>1.2019.07.25-08.54-f2bfe18c24bc</version>
-        </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
