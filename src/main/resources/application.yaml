@@ -14,7 +14,9 @@ spring:
 ---
 
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
 
 nais.cluster.name: local
 
@@ -54,7 +56,9 @@ altinn:
 ---
 
 spring:
-  profiles: labs
+  config:
+    activate:
+      on-profile: labs
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: http://min-side-ag-fakelogin/metadata?issuer=selvbetjening
@@ -92,7 +96,9 @@ altinn:
 ---
 
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
 
 aareg:
   aaregArbeidsforhold: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
@@ -125,9 +131,10 @@ altinn:
 
 ---
 
-
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
 
 aareg:
   aaregArbeidsforhold: "https://modapp.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
