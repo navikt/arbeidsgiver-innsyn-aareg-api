@@ -44,6 +44,7 @@ class AaregClient(
                 ).body!!
             )
         } catch (exception: HttpClientErrorException.Forbidden) {
+            logger.warn("Forbidden fra aareg")
             return IngenRettigheter
         } catch (exception: RestClientException) {
             throw RuntimeException("Feil ved oppslag mot Aareg Arbeidsforhold.: $exception", exception)
