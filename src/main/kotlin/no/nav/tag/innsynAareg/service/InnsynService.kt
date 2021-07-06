@@ -8,7 +8,6 @@ import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.models.*
-import no.nav.tag.innsynAareg.utils.withTimer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -179,7 +178,7 @@ class InnsynService(
 
     private fun settYrkeskodebetydningPaAlleArbeidsforhold(
         arbeidsforholdOversikt: OversiktOverArbeidsForhold
-    ) = withTimer("DittNavArbeidsgiverApi.hentYrker") {
+    ) {
         val yrkeskodeBeskrivelser = yrkeskodeverkClient.hentBetydningAvYrkeskoder()
         for (arbeidsforhold in arbeidsforholdOversikt.arbeidsforholdoversikter!!) {
             arbeidsforhold.yrkesbeskrivelse = yrkeskodeBeskrivelser.betydningPåYrke(arbeidsforhold.yrke)
