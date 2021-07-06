@@ -91,8 +91,7 @@ class EnhetsregisteretClient(
             }
             .also {
                 logger.info(
-                    "hent tidligere virksomheter gitt juridiskEnhet gir liste med organisasjoner med lengde",
-                    it.size
+                    "hent tidligere virksomheter gitt juridiskEnhet gir liste med organisasjoner med lengde ${it.size}"
                 )
             }
     }

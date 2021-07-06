@@ -71,6 +71,7 @@ class InnsynService(
         if (antall != null && antall != 0) {
             return Pair(orgledd.organisasjonsnummer, antall)
         } else if (orgledd.inngaarIJuridiskEnheter != null) {
+            logger.info("traverser opp orgtre")
             try {
                 val juridiskEnhetOrgnr: String = orgledd.inngaarIJuridiskEnheter[0].organisasjonsnummer
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
