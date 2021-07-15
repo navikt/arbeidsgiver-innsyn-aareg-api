@@ -1,13 +1,13 @@
 apiVersion: nais.io/v1alpha1
 kind: "Application"
 metadata:
-  name: arbeidsgiver-arbeidsforhold-api
-  namespace: arbeidsgiver
+  name: innsyn-aareg-api
+  namespace: fager
   labels:
-    team: arbeidsgiver
+    team: fager
 spec:
   image: {{image}}
-  team: arbeidsgiver
+  team: fager
   port: 8080
   replicas:
     min: 1
