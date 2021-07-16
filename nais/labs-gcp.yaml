@@ -44,3 +44,4 @@ spec:
     outbound:
       rules:
         - application: min-side-ag-fakelogin
+          namespace: arbeidsgiver
