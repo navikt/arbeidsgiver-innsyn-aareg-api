@@ -101,8 +101,8 @@ spring:
       on-profile: dev
 
 aareg:
-  aaregArbeidsforhold: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
-  aaregArbeidsgivere: "https://modapp-q1.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  aaregArbeidsforhold: "https://modapp-q2.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsgivere: "https://modapp-q2.adeo.no/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -121,7 +121,7 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://modapp-q1.adeo.no/ereg/api/v1/organisasjon/"
+  url: "https://modapp-q2.adeo.no/ereg/api/v1/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
