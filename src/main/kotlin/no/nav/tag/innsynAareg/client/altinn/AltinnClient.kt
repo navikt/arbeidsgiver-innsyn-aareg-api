@@ -28,7 +28,7 @@ class AltinnClient(
 
     private val klient = AltinnrettigheterProxyKlient(
         AltinnrettigheterProxyKlientConfig(
-            ProxyConfig("arbeidsgiver-arbeidsforhold-api", proxyUrl),
+            ProxyConfig("innsyn-aareg-api", proxyUrl),
             AltinnConfig(fallBackUrl, altinnHeader, APIGwHeader)
         )
     )
