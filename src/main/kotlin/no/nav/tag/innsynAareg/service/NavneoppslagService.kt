@@ -38,15 +38,13 @@ class NavneoppslagService(
             if (person.code != "ok") {
                 logger.error("AG-ARBEIDSFORHOLD PDL ERROR fant ikke navn {}", person.code)
             }
-            val arbeidstaker = arbeidstakerTabell[person.ident] ?: continue
 
-            arbeidstaker.forEach {
-                it.navn = person.person
+            for (arbeidstaker in arbeidstakerTabell.getOrDefault(person.ident, emptyList())) {
+                arbeidstaker.navn = person.person
                     ?.navn
                     ?.getOrNull(0)
                     ?.let {
-                        listOfNotNull(it.fornavn, it.mellomNavn, it.etternavn)
-                            .joinToString(" ")
+                        listOfNotNull(it.fornavn, it.mellomNavn, it.etternavn).joinToString(" ")
                     }
             }
         }
