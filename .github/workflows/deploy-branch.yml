@@ -51,15 +51,16 @@ jobs:
           REF: ${{ env.COMMIT }}
           IMAGE: ${{ env.IMAGE }}
 
-      - name: Deploy til dev-gcp
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: nais/dev-gcp.yaml
-          PRINT_PAYLOAD: true
-          REF: ${{ env.COMMIT }}
-          IMAGE: ${{ env.IMAGE }}
+#      pågår ikke jobb for å flytte til gcp akkurat nå: https://jira.adeo.no/browse/TAG-1517
+#      - name: Deploy til dev-gcp
+#        uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: dev-gcp
+#          RESOURCE: nais/dev-gcp.yaml
+#          PRINT_PAYLOAD: true
+#          REF: ${{ env.COMMIT }}
+#          IMAGE: ${{ env.IMAGE }}
 
       - name: Deploy til labs-gcp
         uses: nais/deploy/actions/deploy@v1
