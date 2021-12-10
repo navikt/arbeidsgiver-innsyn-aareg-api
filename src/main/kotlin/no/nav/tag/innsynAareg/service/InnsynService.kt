@@ -120,7 +120,7 @@ class InnsynService(
             idPortenToken
         )
 
-        if (oversiktOverArbeidsforhold !is ArbeidsforholdFunnet) {
+        if (oversiktOverArbeidsforhold is IngenRettigheter) {
             oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(
                 bedriftsnr,
                 overOrdnetEnhetOrgnr,
