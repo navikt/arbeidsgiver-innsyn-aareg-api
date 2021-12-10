@@ -2,11 +2,11 @@ package no.nav.tag.innsynAareg.models
 
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 
-sealed class ArbeidsforholdOppslagResultat
+sealed interface ArbeidsforholdOppslagResultat
 
-object IngenRettigheter : ArbeidsforholdOppslagResultat()
+object IngenRettigheter : ArbeidsforholdOppslagResultat
 
 data class ArbeidsforholdFunnet(
     val oversiktOverArbeidsForhold: OversiktOverArbeidsForhold
-) : ArbeidsforholdOppslagResultat()
+) : ArbeidsforholdOppslagResultat
 
