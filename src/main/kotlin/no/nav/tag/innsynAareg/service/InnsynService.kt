@@ -99,16 +99,13 @@ class InnsynService(
             overOrdnetEnhetOrgnr
         }
 
-        val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
-
-        if (arbeidsforhold is ArbeidsforholdFunnet) {
-            navneoppslagService.settNavn(arbeidsforhold.oversiktOverArbeidsForhold)
-            settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+        return aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken).apply {
+            if (this is ArbeidsforholdFunnet) {
+                navneoppslagService.settNavn(oversiktOverArbeidsForhold)
+                settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsForhold)
+            }
         }
-
-        return arbeidsforhold
     }
-
 
     fun hentTidligereArbeidsforhold(
         bedriftsnr: String,
@@ -116,28 +113,29 @@ class InnsynService(
         idPortenToken: String,
         fnr: String
     ): ArbeidsforholdOppslagResultat {
-
-        var oversiktOverArbeidsforhold = aaregClient.hentArbeidsforhold(
+        val oversiktOverArbeidsforhold = aaregClient.hentArbeidsforhold(
             bedriftsnr,
             overOrdnetEnhetOrgnr,
             idPortenToken
         )
 
-        if (oversiktOverArbeidsforhold !is ArbeidsforholdFunnet) {
-            oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(
-                bedriftsnr,
-                overOrdnetEnhetOrgnr,
-                idPortenToken,
-                fnr
-            )
+        return oversiktOverArbeidsforhold.let {
+            when(it) {
+                is IngenRettigheter -> {
+                    finnOpplysningspliktigOgHentArbeidsforhold(
+                        bedriftsnr,
+                        overOrdnetEnhetOrgnr,
+                        idPortenToken,
+                        fnr
+                    )
+                }
+                is ArbeidsforholdFunnet -> {
+                    navneoppslagService.settNavn(it.oversiktOverArbeidsForhold)
+                    settYrkeskodebetydningPaAlleArbeidsforhold(it.oversiktOverArbeidsForhold)
+                    it
+                }
+            }
         }
-
-        if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet) {
-            navneoppslagService.settNavn(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
-            settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
-        }
-
-        return oversiktOverArbeidsforhold
     }
 
 
