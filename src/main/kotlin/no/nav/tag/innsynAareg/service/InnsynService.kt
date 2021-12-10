@@ -113,29 +113,28 @@ class InnsynService(
         idPortenToken: String,
         fnr: String
     ): ArbeidsforholdOppslagResultat {
-        val oversiktOverArbeidsforhold = aaregClient.hentArbeidsforhold(
+
+        var oversiktOverArbeidsforhold = aaregClient.hentArbeidsforhold(
             bedriftsnr,
             overOrdnetEnhetOrgnr,
             idPortenToken
         )
 
-        return oversiktOverArbeidsforhold.let {
-            when(it) {
-                is IngenRettigheter -> {
-                    finnOpplysningspliktigOgHentArbeidsforhold(
-                        bedriftsnr,
-                        overOrdnetEnhetOrgnr,
-                        idPortenToken,
-                        fnr
-                    )
-                }
-                is ArbeidsforholdFunnet -> {
-                    navneoppslagService.settNavn(it.oversiktOverArbeidsForhold)
-                    settYrkeskodebetydningPaAlleArbeidsforhold(it.oversiktOverArbeidsForhold)
-                    it
-                }
-            }
+        if (oversiktOverArbeidsforhold !is ArbeidsforholdFunnet) {
+            oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(
+                bedriftsnr,
+                overOrdnetEnhetOrgnr,
+                idPortenToken,
+                fnr
+            )
         }
+
+        if (oversiktOverArbeidsforhold is ArbeidsforholdFunnet) {
+            navneoppslagService.settNavn(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
+            settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsforhold.oversiktOverArbeidsForhold)
+        }
+
+        return oversiktOverArbeidsforhold
     }
 
 
