@@ -28,7 +28,7 @@ class InnsynService(
         orgnrUnderenhet: String,
         orgnrHovedenhet: String,
         idPortenToken: String
-    ): Pair<String, Int> {
+    ): Pair<String, Int?> {
         val antall: Int? = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
             orgnrHovedenhet,
@@ -61,7 +61,7 @@ class InnsynService(
         orgnrUnderenhet: String,
         orgledd: OrganisasjonFraEreg,
         idToken: String
-    ): Pair<String, Int> {
+    ): Pair<String, Int?> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
             orgledd.organisasjonsnummer,
@@ -78,7 +78,7 @@ class InnsynService(
                     juridiskEnhetOrgnr,
                     idToken
                 )
-                return Pair(juridiskEnhetOrgnr, antallNesteNiva?:0)
+                return Pair(juridiskEnhetOrgnr, antallNesteNiva)
             } catch (e: Exception) {
                 throw AaregException("Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $e", e)
             }

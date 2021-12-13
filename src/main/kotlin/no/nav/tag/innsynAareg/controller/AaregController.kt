@@ -62,7 +62,7 @@ class AaregController(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
         @ApiIgnore @CookieValue("selvbetjening-idtoken") idToken: String
-    ): Pair<String, Number> =
+    ): Pair<String, Number?> =
         aAregService.hentAntallArbeidsforholdPåUnderenhet(
             orgnr,
             juridiskEnhetOrgnr,
