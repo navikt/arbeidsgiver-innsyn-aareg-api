@@ -99,16 +99,13 @@ class InnsynService(
             overOrdnetEnhetOrgnr
         }
 
-        val arbeidsforhold = aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken)
-
-        if (arbeidsforhold is ArbeidsforholdFunnet) {
-            navneoppslagService.settNavn(arbeidsforhold.oversiktOverArbeidsForhold)
-            settYrkeskodebetydningPaAlleArbeidsforhold(arbeidsforhold.oversiktOverArbeidsForhold)
+        return aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken).apply {
+            if (this is ArbeidsforholdFunnet) {
+                navneoppslagService.settNavn(oversiktOverArbeidsForhold)
+                settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsForhold)
+            }
         }
-
-        return arbeidsforhold
     }
-
 
     fun hentTidligereArbeidsforhold(
         bedriftsnr: String,
@@ -123,7 +120,7 @@ class InnsynService(
             idPortenToken
         )
 
-        if (oversiktOverArbeidsforhold !is ArbeidsforholdFunnet) {
+        if (oversiktOverArbeidsforhold is IngenRettigheter) {
             oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(
                 bedriftsnr,
                 overOrdnetEnhetOrgnr,

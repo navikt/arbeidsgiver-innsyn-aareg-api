@@ -9,16 +9,15 @@ import no.nav.tag.innsynAareg.models.IngenRettigheter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
+import org.springframework.http.RequestEntity.method
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.RestClientException
-import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 
 @Service
 class AaregClient(
     private val restTemplate: RestTemplate,
-    private val stsClient: STSClient
+    private val stsClient: STSClient,
 ) {
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
@@ -31,30 +30,26 @@ class AaregClient(
     fun hentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String
+        idPortenToken: String,
     ): ArbeidsforholdOppslagResultat {
-        val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
         return try {
             ArbeidsforholdFunnet(
                 restTemplate.exchange(
-                    aaregArbeidsforholdUrl,
-                    HttpMethod.GET,
-                    entity,
+                    method(HttpMethod.GET, aaregArbeidsforholdUrl)
+                        .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).build(),
                     OversiktOverArbeidsForhold::class.java
                 ).body!!
             )
         } catch (exception: HttpClientErrorException.Forbidden) {
             logger.warn("Forbidden fra aareg")
             return IngenRettigheter
-        } catch (exception: RestClientException) {
-            throw RuntimeException("Feil ved oppslag mot Aareg Arbeidsforhold.: $exception", exception)
         }
     }
 
     fun antallArbeidsforholdForOpplysningspliktig(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String
+        idPortenToken: String,
     ): Int? {
         val oversikt = hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
             bedriftsnr,
@@ -71,32 +66,26 @@ class AaregClient(
     private fun hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String
+        idPortenToken: String,
     ): Array<OversiktOverArbeidsgiver> {
-        val entity: HttpEntity<String> = getRequestEntity(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken)
-        return try {
-            restTemplate.exchange(
-                aaregArbeidsgiverOversiktUrl,
-                HttpMethod.GET, entity, Array<OversiktOverArbeidsgiver>::class.java
-            ).body!!
-        } catch (exception: RestClientException) {
-            throw RuntimeException("Feil ved henting av arbeidsgiveroversikt fra Aareg", exception)
-        }
+        return restTemplate.exchange(
+            method(HttpMethod.GET, aaregArbeidsgiverOversiktUrl)
+                .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).build(),
+            Array<OversiktOverArbeidsgiver>::class.java
+        ).body!!
     }
 
-    private fun getRequestEntity(
+    private fun RequestEntity.BodyBuilder.medHeadere(
         bedriftsnr: String,
-        juridiskEnhetOrgnr: String?,
-        idPortenToken: String
-    ): HttpEntity<String> {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        headers["Authorization"] = "Bearer $idPortenToken"
-        headers["Nav-Call-Id"] = "srvditt-nav-arbeid"
-        headers["Nav-Arbeidsgiverident"] = bedriftsnr
-        headers["Nav-Opplysningspliktigident"] = juridiskEnhetOrgnr
-        headers["Nav-Consumer-Token"] = stsClient.token.access_token
-        return HttpEntity(headers)
+        overOrdnetEnhetOrgnr: String?,
+        idPortenToken: String,
+    ): RequestEntity.BodyBuilder = headers {
+        it.contentType = MediaType.APPLICATION_FORM_URLENCODED
+        it["Authorization"] = "Bearer $idPortenToken"
+        it["Nav-Call-Id"] = "srvditt-nav-arbeid"
+        it["Nav-Arbeidsgiverident"] = bedriftsnr
+        it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
+        it["Nav-Consumer-Token"] = stsClient.token.access_token
     }
 }
 
