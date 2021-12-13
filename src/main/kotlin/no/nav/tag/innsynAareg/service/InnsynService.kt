@@ -78,7 +78,7 @@ class InnsynService(
                     juridiskEnhetOrgnr,
                     idToken
                 )
-                return Pair(juridiskEnhetOrgnr, antallNesteNiva!!)
+                return Pair(juridiskEnhetOrgnr, antallNesteNiva?:0)
             } catch (e: Exception) {
                 throw AaregException("Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $e", e)
             }
