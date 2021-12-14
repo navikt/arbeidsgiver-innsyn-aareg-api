@@ -13,9 +13,8 @@ class ByUserIdStrategy(
     private fun isCurrentUser(userId: String) =
         autentisertBruker.fødselsnummer == userId
 
-    override fun isEnabled(parameters: Map<String, String>?): Boolean {
-        return parameters
-            ?.get("user")
+    override fun isEnabled(parameters: Map<String, String>): Boolean {
+        return parameters["user"]
             ?.split(',')
             ?.any { isCurrentUser(it) }
             ?: false

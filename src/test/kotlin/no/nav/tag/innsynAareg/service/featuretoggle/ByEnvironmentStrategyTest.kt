@@ -22,11 +22,6 @@ class ByEnvironmentStrategyTest {
     }
 
     @Test
-    fun skalReturnereFalseHvisParametreErNull() {
-        assertThat(ByEnvironmentStrategy(environmentMock("dev-fss")).isEnabled(null)).isEqualTo(false)
-    }
-
-    @Test
     fun skalReturnereFalseHvisMiljøIkkeErSatt() {
         assertThat(ByEnvironmentStrategy(environmentMock("dev-fss")).isEnabled(HashMap())).isEqualTo(false)
     }
