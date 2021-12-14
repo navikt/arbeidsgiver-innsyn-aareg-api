@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.client.pdl
 
-import lombok.RequiredArgsConstructor
 import no.nav.tag.innsynAareg.client.sts.STSClient
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
-@RequiredArgsConstructor
 class PdlBatchClient @Autowired constructor(
     private val restTemplate: RestTemplate,
     private val stsClient: STSClient,

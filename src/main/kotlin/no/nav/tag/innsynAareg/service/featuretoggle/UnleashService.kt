@@ -2,7 +2,6 @@ package no.nav.tag.innsynAareg.service.featuretoggle
 
 import no.finn.unleash.Unleash
 import no.finn.unleash.UnleashContext
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.springframework.stereotype.Service
 
@@ -13,9 +12,9 @@ class UnleashService(
 ) {
 
     fun hentFeatureToggles(features: List<String>): Map<String, Boolean> =
-        features.map { it to isEnabled(it) }.toMap()
+        features.associateWith(this::isEnabled)
 
-    fun isEnabled(feature: String?) =
+    fun isEnabled(feature: String) =
         unleash.isEnabled(feature, contextMedInnloggetBruker())
 
     private fun contextMedInnloggetBruker() =

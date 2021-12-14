@@ -23,14 +23,6 @@ class ByUseridStrategyTest {
     }
 
     @Test
-    fun skalReturnereFalseHvisParametreErNull() {
-        assertThat(
-            ByUserIdStrategy(userMock("12345678912"))
-                .isEnabled(null)
-        ).isFalse
-    }
-
-    @Test
     fun skalReturnereFalseHvisBrukerIkkeErSatt() {
         assertThat(
             ByUserIdStrategy(userMock("12345678913"))
