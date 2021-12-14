@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 
+/* Swagger for API-et (krever VDI): * https://modapp-q1.adeo.no/aareg-services/api/swagger-ui/index.html#/
+ * Repo for API-et: https://github.com/navikt/aareg-services
+ **/
 @Service
 class AaregClient(
     private val restTemplate: RestTemplate,
