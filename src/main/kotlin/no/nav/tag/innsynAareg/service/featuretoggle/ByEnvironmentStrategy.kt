@@ -16,8 +16,8 @@ class ByEnvironmentStrategy(currentEnv: Environment) : Strategy {
         return "byEnvironment"
     }
 
-    override fun isEnabled(parameters: Map<String, String>?): Boolean {
-        return parameters?.get("miljø")?.split(',')?.any { isCurrentEnv(it) } ?: false
+    override fun isEnabled(parameters: Map<String, String>): Boolean {
+        return parameters["miljø"]?.split(',')?.any { isCurrentEnv(it) } ?: false
     }
 
     fun isCurrentEnv(env: String): Boolean {
