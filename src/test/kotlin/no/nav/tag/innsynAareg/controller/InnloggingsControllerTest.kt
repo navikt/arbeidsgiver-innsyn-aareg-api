@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc
 @RunWith(SpringRunner::class)
 @ActiveProfiles("local")
-@TestPropertySource(properties = ["mock.port=8082", "logging.level.root=DEBUG"])
+@TestPropertySource(properties = ["mock.enabled=false"])
 class InnloggingsControllerTest {
     @Autowired
     lateinit var mockMvc: MockMvc
