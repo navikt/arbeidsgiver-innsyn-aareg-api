@@ -60,12 +60,12 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     private fun hentDriftsforstyrrelse(e: AltinnrettigheterProxyKlientFallbackException): HttpStatus? {
-        return when (e.cause) {
-            is ServerResponseException -> when (val status = (e.cause as ServerResponseException).response.status) {
+        return when (val c = e.cause) {
+            is ServerResponseException -> when (c.response.status) {
                 BadGateway,
                 ServiceUnavailable,
                 GatewayTimeout,
-                -> HttpStatus.valueOf(status.value)
+                -> HttpStatus.valueOf(c.response.status.value)
 
                 else -> null
             }
