@@ -1,6 +1,7 @@
 package no.nav.tag.innsynAareg.client.pdl
 
-import no.nav.tag.innsynAareg.client.sts.STSClient
+import kotlinx.coroutines.runBlocking
+import no.nav.tms.token.support.azure.exchange.AzureServiceBuilder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -13,10 +14,14 @@ import org.springframework.web.client.RestTemplate
 @Service
 class PdlBatchClient @Autowired constructor(
     private val restTemplate: RestTemplate,
-    private val stsClient: STSClient,
-    @Value("\${pdl.pdlUrl}") private val pdlUrl: String
+    @Value("\${pdl.pdlUrl}") private val pdlUrl: String,
+    @Value("\${pdl.tokenClaim}") private val pdlTokenClaim: String,
 ) {
     private val log = LoggerFactory.getLogger(PdlBatchClient::class.java)!!
+
+    private val azureExchangeClient = AzureServiceBuilder.buildAzureService(
+        enableDefaultProxy = true
+    )
 
     fun getBatchFraPdl(fnrs: List<String>): HentPersonBolkResponse? {
         return try {
@@ -32,13 +37,14 @@ class PdlBatchClient @Autowired constructor(
     }
 
     private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
-        val stsToken: String = stsClient.token.access_token
+        val token = runBlocking {
+            azureExchangeClient.getAccessToken(pdlTokenClaim)
+        }
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
-        headers["Nav-Consumer-Token"] = "Bearer $stsToken"
-        headers.setBearerAuth(stsToken)
+        headers.setBearerAuth(token)
 
         return restTemplate.postForObject(
             pdlUrl,
