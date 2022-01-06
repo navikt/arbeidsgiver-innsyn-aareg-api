@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
 interface PdlTokenGenerator {
-    fun getToken(): String
+    fun createToken(): String
 }
 
 @Component
@@ -20,7 +20,7 @@ class PdlTokenGeneratorAzureAd(
         enableDefaultProxy = true
     )
 
-    override fun getToken(): String {
+    override fun createToken(): String {
         return runBlocking {
             azureExchangeClient.getAccessToken(pdlTokenClaim)
         }
@@ -30,7 +30,7 @@ class PdlTokenGeneratorAzureAd(
 @Component
 @Profile("labs", "local")
 class PdlTokenGeneratorStub: PdlTokenGenerator {
-    override fun getToken(): String {
+    override fun createToken(): String {
         return "stub-token"
     }
 }

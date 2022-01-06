@@ -34,7 +34,7 @@ class PdlBatchClient @Autowired constructor(
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
-        headers.setBearerAuth(pdlTokenGenerator.getToken())
+        headers.setBearerAuth(pdlTokenGenerator.createToken())
 
         return restTemplate.postForObject(
             pdlUrl,
