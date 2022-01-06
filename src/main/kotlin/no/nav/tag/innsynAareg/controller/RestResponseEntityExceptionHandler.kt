@@ -19,7 +19,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(RuntimeException::class)
     @ResponseBody
-    protected fun handleInternalError(e: RuntimeException, ignored: WebRequest?): ResponseEntity<Any> {
+    fun handleInternalError(e: RuntimeException, ignored: WebRequest?): ResponseEntity<Any> {
         log.error("Uhåndtert feil", e)
         return getResponseEntity(e, "Internal error", HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -39,7 +39,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     private fun getResponseEntity(
         t: Throwable,
         melding: String,
-        status: HttpStatus
+        status: HttpStatus,
     ): ResponseEntity<Any> {
         val body = FeilRespons(melding, t.message)
         log.info(String.format(
@@ -54,6 +54,6 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
     data class FeilRespons(
         val message: String? = null,
-        val cause: String? = null
+        val cause: String? = null,
     )
 }
