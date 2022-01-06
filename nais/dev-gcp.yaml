@@ -23,3 +23,6 @@ spec:
   readiness:
     path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/health
     initialDelay: 30
+  azure:
+    application:
+      enabled: true
