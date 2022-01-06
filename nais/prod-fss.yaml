@@ -32,3 +32,6 @@ spec:
         kvPath: /kv/prod/fss/arbeidsgiver-arbeidsforhold-api/default
       - mountPath: /var/run/secrets/nais.io/service_user
         kvPath: /serviceuser/data/prod/srvag-arbforhold
+  azure:
+    application:
+      enabled: true
