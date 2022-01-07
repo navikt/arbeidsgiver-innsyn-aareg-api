@@ -1,5 +1,11 @@
 package no.nav.tag.innsynAareg.controller
 
+import io.ktor.client.features.*
+import io.ktor.http.HttpStatusCode.Companion.BadGateway
+import io.ktor.http.HttpStatusCode.Companion.GatewayTimeout
+import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
+import io.ktor.network.sockets.*
+import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.error.exceptions.AltinnrettigheterProxyKlientFallbackException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -34,6 +40,37 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ResponseBody
     protected fun handleUnauthorized(e: RuntimeException, ignored: WebRequest?): ResponseEntity<Any> {
         return getResponseEntity(e, "ingen tilgang", HttpStatus.UNAUTHORIZED)
+    }
+
+    @ExceptionHandler(AltinnrettigheterProxyKlientFallbackException::class)
+    @ResponseBody
+    protected fun handleAltinnFallbackFeil(
+        e: AltinnrettigheterProxyKlientFallbackException,
+        ignored: WebRequest?,
+    ): ResponseEntity<Any> {
+        if (e.cause is SocketTimeoutException) {
+            return getResponseEntity(e, "Fallback til Altinn feilet pga timeout", HttpStatus.GATEWAY_TIMEOUT)
+        }
+        val httpStatus = hentDriftsforstyrrelse(e)
+        return if (httpStatus != null) {
+            getResponseEntity(e, "Fallback til Altinn feilet pga driftsforstyrrelse", httpStatus)
+        } else {
+            handleInternalError(e, ignored)
+        }
+    }
+
+    private fun hentDriftsforstyrrelse(e: AltinnrettigheterProxyKlientFallbackException): HttpStatus? {
+        return when (val c = e.cause) {
+            is ServerResponseException -> when (c.response.status) {
+                BadGateway,
+                ServiceUnavailable,
+                GatewayTimeout,
+                -> HttpStatus.valueOf(c.response.status.value)
+
+                else -> null
+            }
+            else -> null
+        }
     }
 
     private fun getResponseEntity(
