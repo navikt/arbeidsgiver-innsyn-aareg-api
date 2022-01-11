@@ -10,6 +10,8 @@ management.endpoints.web:
 spring:
   profiles:
     active: local
+  main:
+    banner-mode: log
 
 ---
 
