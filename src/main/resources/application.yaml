@@ -12,6 +12,10 @@ spring:
     active: local
   main:
     banner-mode: log
+springdoc:
+  swagger-ui:
+    enabled: true
+  packagesToScan: no.nav.tag.innsynAareg
 
 ---
 
