@@ -15,7 +15,7 @@ class AutentisertBruker(
             tokenValidationContextHolder
                 .tokenValidationContext
                 .getClaims(ISSUER)
-                .subject
+                .getStringClaim("pid")
 
     val jwtToken: String
         get() =
