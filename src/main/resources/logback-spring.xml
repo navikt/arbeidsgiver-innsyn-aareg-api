@@ -1,6 +1,4 @@
 <configuration>
-    <turboFilter class="no.nav.tag.innsynAareg.log.SOEPreventionFilter" />
-
     <appender name="stdout"
               class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
