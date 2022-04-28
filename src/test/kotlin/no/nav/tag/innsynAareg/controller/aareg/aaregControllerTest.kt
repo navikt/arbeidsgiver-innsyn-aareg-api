@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.controller.aareg
 
+import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import no.nav.tag.innsynAareg.controller.AaregController
 import no.nav.tag.innsynAareg.mockserver.ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER
 import no.nav.tag.innsynAareg.mockserver.ORGNR_UNDERENHET_UTEN_AAREG_RETTIGHETER
@@ -8,13 +9,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@EnableMockOAuth2Server
 @RunWith(SpringRunner::class)
 @ActiveProfiles("local")
 @TestPropertySource(properties = ["mock.port=8082"])
