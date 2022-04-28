@@ -9,6 +9,7 @@ import com.github.tomakehurst.wiremock.matching.UrlPattern
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.net.URL
@@ -19,7 +20,7 @@ const val SERVICE_CODE = "4936"
 const val FNR_MED_SKJEMATILGANG = "01065500791"
 const val FNR_MED_ORGANISASJONER = "00000000000"
 
-const val ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER = "123456789";
+const val ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER = "123456789"
 const val ORGNR_UNDERENHET_UTEN_AAREG_RETTIGHETER = "223456789"
 const val ALTINN_PROXY_PATH = "/altinn/ekstern/altinn/api/serviceowner/reportees*"
 
@@ -42,6 +43,7 @@ fun MappingBuilder.willReturnJson(body: String) {
 
 @Profile("local", "labs")
 @Component
+@ConditionalOnProperty("mock.enabled", havingValue = "true")
 class MockServer @Autowired constructor(
     @Value("\${mock.port}") private val port: Int,
     @Value("\${sts.stsUrl}") private val stsUrl: String,
