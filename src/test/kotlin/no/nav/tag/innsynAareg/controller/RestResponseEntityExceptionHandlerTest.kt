@@ -1,15 +1,18 @@
 package no.nav.tag.innsynAareg.controller
 
+import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.context.request.WebRequest
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@EnableMockOAuth2Server
 @ExtendWith(SpringExtension::class)
 class RestResponseEntityExceptionHandlerTest {
 
