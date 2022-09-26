@@ -110,11 +110,10 @@ aareg:
   aaregArbeidsforhold: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
-no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
-  accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
-  cookiename: selvbetjening-idtoken
-  proxyurl: http://webproxy.nais:8088
+no.nav.security.jwt.issuer:
+  tokenx:
+    discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
+    accepted_audience: ${TOKEN_X_CLIENT_ID}
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
