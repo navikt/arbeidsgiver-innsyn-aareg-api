@@ -13,6 +13,7 @@
             </layout>
         </appender>
     </springProfile>
+    <logger name="no.nav.security" level="TRACE"/>
     <logger name="jsonLogger" additivity="false" level="INFO">
         <appender-ref ref="stdout"/>
     </logger>
