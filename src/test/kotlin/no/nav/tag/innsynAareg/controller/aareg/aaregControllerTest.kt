@@ -1,5 +1,4 @@
 package no.nav.tag.innsynAareg.controller.aareg
-
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import no.nav.tag.innsynAareg.controller.AaregController
 import no.nav.tag.innsynAareg.mockserver.ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER
@@ -27,13 +26,16 @@ class AAregControllerTest {
 
     @Test
     fun hentAntallArbeidsforhold() {
-        val responsMedInnhold = aAregController.hentAntallArbeidsforhold("910825518", "132", "132")
+        val responsMedInnhold = aAregController.hentAntallArbeidsforhold("910825518", "132")
         Assert.assertEquals(Pair("983887457", 5), responsMedInnhold)
     }
 
     @Test
     fun `får 403 når vi ikke har tilgang`() {
-        val response = aAregController.hentArbeidsforhold(ORGNR_UNDERENHET_UTEN_AAREG_RETTIGHETER, ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER, "2")
+        val response = aAregController.hentArbeidsforhold(
+            ORGNR_UNDERENHET_UTEN_AAREG_RETTIGHETER,
+            ORGNR_HOVEDENHET_UTEN_AAREG_RETTIGHETER
+        )
         Assert.assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
 
     }
