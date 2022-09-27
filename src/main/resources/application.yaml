@@ -17,6 +17,12 @@ springdoc:
     enabled: true
   packagesToScan: no.nav.tag.innsynAareg
 
+token.x:
+  privateJwk: ${TOKEN_X_PRIVATE_JWK}
+  clientId: ${TOKEN_X_CLIENT_ID}
+  tokendingsUrl: ${TOKEN_X_TOKEN_ENDPOINT}
+
+
 ---
 
 spring:
@@ -135,6 +141,7 @@ altinn:
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
   proxyUrl: https://altinn-rettigheter-proxy.dev.intern.nav.no/altinn-rettigheter-proxy
+  proxyAudience: dev-gcp:arbeidsgiver:altinn-rettigheter-proxy
 
 ---
 
@@ -153,6 +160,7 @@ no.nav.security.jwt.issuer.selvbetjening:
   accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
   cookiename: selvbetjening-idtoken
   proxyurl: http://webproxy.nais:8088
+  proxyAudience: prod-gcp:arbeidsgiver:altinn-rettigheter-proxy
 
 sts:
   stsPass: ${STS_PASS}

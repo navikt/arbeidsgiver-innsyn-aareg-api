@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.client.altinn
 
+import com.nimbusds.oauth2.sdk.id.Audience
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig
@@ -10,6 +11,7 @@ import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
 import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
 import no.nav.tag.innsynAareg.models.AltinnOppslagResultat
 import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
+import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -19,10 +21,11 @@ import org.springframework.stereotype.Component
 @Component
 class AltinnClient(
     @Value("\${altinn.proxyUrl}") val proxyUrl: String,
+    @Value("\${altinn.proxyAudience}") val proxyAudience: String,
     @Value("\${altinn.altinnUrl}") val fallBackUrl: String,
     @Value("\${altinn.altinnHeader}") val altinnHeader: String,
     @Value("\${altinn.APIGwHeader}") val APIGwHeader: String,
-    private val autentisertBruker: AutentisertBruker,
+    private val tokenExchangeClient: TokenExchangeClient,
 ) {
     val logger = LoggerFactory.getLogger(AltinnClient::class.java)!!
 
@@ -41,7 +44,7 @@ class AltinnClient(
     ): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(autentisertBruker.jwtToken),
+                TokenXToken(tokenExchangeClient.exchangeToken(proxyAudience).access_token),
                 Subject(fnr),
                 ServiceCode(serviceKode),
                 ServiceEdition(serviceEdition),
@@ -52,7 +55,7 @@ class AltinnClient(
     fun hentOrganisasjoner(fnr: String): AltinnOppslagResultat =
         run {
             klient.hentOrganisasjoner(
-                SelvbetjeningToken(autentisertBruker.jwtToken),
+                TokenXToken(tokenExchangeClient.exchangeToken(proxyAudience).access_token),
                 Subject(fnr),
                 true
             )
