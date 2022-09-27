@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 
 
-@Profile("local", "dev-gcp", "prod-gcp")
+@Profile("local", "dev", "prod")
 @Component
 class TokenExchangeClient internal constructor(
     val properties: TokenXProperties,

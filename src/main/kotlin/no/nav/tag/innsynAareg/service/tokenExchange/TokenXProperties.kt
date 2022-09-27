@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import java.text.ParseException
 
-@Profile("local", "dev-gcp", "prod-gcp")
+@Profile("local", "dev", "prod")
 @Configuration
 @ConfigurationProperties("token.x")
 class TokenXProperties {
