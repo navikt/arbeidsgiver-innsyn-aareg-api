@@ -27,12 +27,10 @@ class InnsynService(
     fun hentAntallArbeidsforholdPåUnderenhet(
         orgnrUnderenhet: String,
         orgnrHovedenhet: String,
-        idPortenToken: String
     ): Pair<String, Int?> {
         val antall: Int? = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
             orgnrHovedenhet,
-            idPortenToken
         )
 
         if (antall != null && antall >= 0) {
@@ -50,7 +48,6 @@ class InnsynService(
             itererOverOrgtre(
                 orgnrUnderenhet,
                 orgtreFraEnhetsregisteret.bestaarAvOrganisasjonsledd[0].organisasjonsledd,
-                idPortenToken
             )
         } catch (exception: Exception) {
             throw AaregException("Aareg Exception, klarte ikke finne opplysningspliktig: $exception", exception)
@@ -60,12 +57,10 @@ class InnsynService(
     private fun itererOverOrgtre(
         orgnrUnderenhet: String,
         orgledd: OrganisasjonFraEreg,
-        idToken: String
     ): Pair<String, Int?> {
         val antall = aaregClient.antallArbeidsforholdForOpplysningspliktig(
             orgnrUnderenhet,
             orgledd.organisasjonsnummer,
-            idToken
         )
         if (antall != null && antall != 0) {
             return Pair(orgledd.organisasjonsnummer, antall)
@@ -76,30 +71,28 @@ class InnsynService(
                 val antallNesteNiva = aaregClient.antallArbeidsforholdForOpplysningspliktig(
                     orgnrUnderenhet,
                     juridiskEnhetOrgnr,
-                    idToken
                 )
                 return Pair(juridiskEnhetOrgnr, antallNesteNiva)
             } catch (e: Exception) {
                 throw AaregException("Aareg Exception, feilet å finne antall arbeidsforhold på øverste nivå: $e", e)
             }
         } else {
-            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd, idToken)
+            return itererOverOrgtre(orgnrUnderenhet, orgledd.organisasjonsleddOver!![0].organisasjonsledd)
         }
     }
 
     fun hentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String
     ): ArbeidsforholdOppslagResultat {
         val opplysningspliktigorgnr = try {
-            hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).first
+            hentAntallArbeidsforholdPåUnderenhet(bedriftsnr, overOrdnetEnhetOrgnr).first
         } catch (e: Exception) {
             logger.warn("Exception. Bruker overordnet enhets orgnr fra http-request", e)
             overOrdnetEnhetOrgnr
         }
 
-        return aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr, idPortenToken).apply {
+        return aaregClient.hentArbeidsforhold(bedriftsnr, opplysningspliktigorgnr).apply {
             if (this is ArbeidsforholdFunnet) {
                 navneoppslagService.settNavn(oversiktOverArbeidsForhold)
                 settYrkeskodebetydningPaAlleArbeidsforhold(oversiktOverArbeidsForhold)
@@ -110,21 +103,18 @@ class InnsynService(
     fun hentTidligereArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String,
         fnr: String
     ): ArbeidsforholdOppslagResultat {
 
         var oversiktOverArbeidsforhold = aaregClient.hentArbeidsforhold(
             bedriftsnr,
             overOrdnetEnhetOrgnr,
-            idPortenToken
         )
 
         if (oversiktOverArbeidsforhold is IngenRettigheter) {
             oversiktOverArbeidsforhold = finnOpplysningspliktigOgHentArbeidsforhold(
                 bedriftsnr,
                 overOrdnetEnhetOrgnr,
-                idPortenToken,
                 fnr
             )
         }
@@ -141,7 +131,6 @@ class InnsynService(
     fun finnOpplysningspliktigOgHentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String,
         fnr: String
     ): ArbeidsforholdOppslagResultat {
         val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(
@@ -159,7 +148,6 @@ class InnsynService(
                     val arbeidsforhold = aaregClient.hentArbeidsforhold(
                         bedriftsnr,
                         it.OrganizationNumber!!,
-                        idPortenToken
                     )
                     if (arbeidsforhold is ArbeidsforholdFunnet) {
                         return arbeidsforhold

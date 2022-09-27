@@ -49,6 +49,7 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  audience: "local:local:local"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"

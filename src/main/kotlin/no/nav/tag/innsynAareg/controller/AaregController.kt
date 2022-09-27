@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.controller
 
-import io.swagger.v3.oas.annotations.Parameter
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
@@ -11,7 +10,6 @@ import no.nav.tag.innsynAareg.utils.ISSUER
 import no.nav.tag.innsynAareg.utils.LEVEL
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
@@ -26,12 +24,10 @@ class AaregController(
     fun hentArbeidsforhold(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-        @Parameter(hidden = true) @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<OversiktOverArbeidsForhold> {
         val respons = aAregService.hentArbeidsforhold(
             orgnr,
-            juridiskEnhetOrgnr,
-            idToken
+            juridiskEnhetOrgnr
         )
         return when (respons) {
             is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)
@@ -43,12 +39,10 @@ class AaregController(
     fun hentTidligereArbeidsforhold(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-        @Parameter(hidden = true) @CookieValue("selvbetjening-idtoken") idToken: String
     ): ResponseEntity<OversiktOverArbeidsForhold> {
         val respons = aAregService.hentTidligereArbeidsforhold(
             orgnr,
             juridiskEnhetOrgnr,
-            idToken,
             autentisertBruker.fødselsnummer
         )
         return when (respons) {
@@ -61,11 +55,9 @@ class AaregController(
     fun hentAntallArbeidsforhold(
         @RequestHeader("orgnr") orgnr: String,
         @RequestHeader("jurenhet") juridiskEnhetOrgnr: String,
-        @Parameter(hidden = true) @CookieValue("selvbetjening-idtoken") idToken: String
     ): Pair<String, Number?> =
         aAregService.hentAntallArbeidsforholdPåUnderenhet(
             orgnr,
             juridiskEnhetOrgnr,
-            idToken
         )
 }

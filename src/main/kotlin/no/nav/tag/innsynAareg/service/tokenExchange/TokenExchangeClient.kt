@@ -14,16 +14,19 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 
+interface TokenExchangeClient{
+    fun exchangeToken(audience: String): TokenXToken
+}
 
-@Profile("local", "dev", "prod")
+@Profile("dev", "prod")
 @Component
-class TokenExchangeClient internal constructor(
+class TokenExchangeClientImpl internal constructor (
     val properties: TokenXProperties,
     val clientAssertionTokenFactory: ClientAssertionTokenFactory,
     val restTemplate: RestTemplate,
     val autentisertBruker: AutentisertBruker,
-) {
-    fun exchangeToken(audience: String): TokenXToken {
+) : TokenExchangeClient{
+    override fun exchangeToken(audience: String): TokenXToken {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         val request: HttpEntity<MultiValueMap<String, String>> = HttpEntity<MultiValueMap<String, String>>(
