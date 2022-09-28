@@ -54,7 +54,7 @@ class EnhetsregisteretClient(
         }
     }
 
-    fun finnTidligereVirksomheter(juridiskEnhet: String, idtoken: String): List<Organisasjon> {
+    fun finnTidligereVirksomheter(juridiskEnhet: String): List<Organisasjon> {
         val driverVirksomhetene = try {
             hentOrganisasjonFraEnhetsregisteret(
                 juridiskEnhet,
