@@ -119,7 +119,7 @@ spring:
 aareg:
   aaregArbeidsforhold: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
-  audience: dev-fss:arbeidsforhold:aareg-services-nais-q2
+  audience: dev-fss:arbeidsforhold:aareg-services-nais
 
 no.nav.security.jwt:
   tokenvalidationfilter.order: 2
