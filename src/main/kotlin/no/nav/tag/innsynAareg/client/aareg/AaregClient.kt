@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate
 class AaregClient(
     private val tokenExchangeClient: TokenExchangeClient,
     private val restTemplate: RestTemplate,
-    private val stsClient: STSClient,
 ) {
     @Value("\${aareg.audience}")
     lateinit var audience: String
@@ -90,7 +89,6 @@ class AaregClient(
             it["Nav-Call-Id"] = "srvditt-nav-arbeid"
             it["Nav-Arbeidsgiverident"] = bedriftsnr
             it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
-            it["Nav-Consumer-Token"] = stsClient.token.access_token
         }
     }
 }
