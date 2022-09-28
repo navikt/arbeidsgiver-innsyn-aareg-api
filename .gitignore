@@ -6,6 +6,9 @@ target/
 
 **/.DS_Store
 
+### iCloud ###
+*.icloud
+
 ### STS ###
 .apt_generated
 .classpath
