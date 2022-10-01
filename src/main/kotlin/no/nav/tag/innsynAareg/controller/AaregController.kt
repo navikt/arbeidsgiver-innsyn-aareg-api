@@ -27,7 +27,7 @@ class AaregController(
     ): ResponseEntity<OversiktOverArbeidsForhold> {
         val respons = aAregService.hentArbeidsforhold(
             orgnr,
-            juridiskEnhetOrgnr
+            juridiskEnhetOrgnr,
         )
         return when (respons) {
             is ArbeidsforholdFunnet -> ResponseEntity.ok(respons.oversiktOverArbeidsForhold)

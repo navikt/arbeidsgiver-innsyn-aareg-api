@@ -122,7 +122,6 @@ aareg:
   audience: dev-fss:arbeidsforhold:aareg-services-nais
 
 no.nav.security.jwt:
-  tokenvalidationfilter.order: 2
   issuer:
     tokenx:
       discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
