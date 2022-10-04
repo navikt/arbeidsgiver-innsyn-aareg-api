@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @EnableMockOAuth2Server
 @RunWith(SpringRunner::class)
 @ActiveProfiles("local")
-@TestPropertySource(properties = ["mock.port=8082"])
+@TestPropertySource(properties = ["mock.port=8083"])
 class AAregControllerTest {
     @Autowired
     lateinit var aAregController: AaregController
