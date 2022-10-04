@@ -17,9 +17,9 @@ jobs:
       - name: Deploy
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FAGER }}
           CLUSTER: dev-fss
-          RESOURCE: nais/dev-fss.yaml
+          RESOURCE: nais/dev-fss-fager.yaml
           PRINT_PAYLOAD: true
           REF: ${{ github.sha }}
           IMAGE: ${{ env.IMAGE }}

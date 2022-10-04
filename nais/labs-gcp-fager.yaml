@@ -2,7 +2,7 @@ apiVersion: nais.io/v1alpha1
 kind: "Application"
 metadata:
   name: innsyn-aareg-api
-  namespace: arbeidsforhold
+  namespace: fager
 spec:
   image: {{{ image }}}
   replicas:

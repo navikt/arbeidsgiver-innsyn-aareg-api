@@ -54,26 +54,26 @@ jobs:
       - name: Sjekk ut kode
         uses: actions/checkout@v2
 
-      - name: Deploy til dev-fss
+      - name: Deploy til dev-fss (fager)
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FAGER }}
           CLUSTER: dev-fss
-          RESOURCE: nais/dev-fss.yaml
+          RESOURCE: nais/dev-fss-fager.yaml
           PRINT_PAYLOAD: true
 
-      - name: Deploy til prod-fss
+      - name: Deploy til prod-fss (fager)
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FAGER }}
           CLUSTER: prod-fss
-          RESOURCE: nais/prod-fss.yaml
+          RESOURCE: nais/prod-fss-fager.yaml
           PRINT_PAYLOAD: true
 
-      - name: Deploy til labs-gcp
+      - name: Deploy til labs-gcp (fager)
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FAGER }}
           CLUSTER: labs-gcp
-          RESOURCE: nais/labs-gcp.yaml
+          RESOURCE: nais/labs-gcp-fager.yaml
           PRINT_PAYLOAD: true
