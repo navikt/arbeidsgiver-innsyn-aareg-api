@@ -27,8 +27,5 @@ spec:
     paths:
       - mountPath: /var/run/secrets/nais.io/service_user
         kvPath: /serviceuser/data/dev/srvag-arbforhold
-  azure:
-    application:
-      enabled: true
   tokenx:
     enabled: true
