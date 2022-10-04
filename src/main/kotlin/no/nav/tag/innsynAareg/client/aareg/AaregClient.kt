@@ -6,6 +6,7 @@ import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.IngenRettigheter
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
@@ -20,8 +21,10 @@ import org.springframework.web.client.RestTemplate
 @Service
 class AaregClient(
     private val restTemplate: RestTemplate,
+    private val autentisertBruker: AutentisertBruker,
     private val stsClient: STSClient,
 ) {
+
     @Value("\${aareg.aaregArbeidsforhold}")
     lateinit var aaregArbeidsforholdUrl: String
 
@@ -33,13 +36,12 @@ class AaregClient(
     fun hentArbeidsforhold(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String,
-        idPortenToken: String,
     ): ArbeidsforholdOppslagResultat {
         return try {
             ArbeidsforholdFunnet(
                 restTemplate.exchange(
                     method(HttpMethod.GET, aaregArbeidsforholdUrl)
-                        .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).build(),
+                        .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr).build(),
                     OversiktOverArbeidsForhold::class.java
                 ).body!!
             )
@@ -52,12 +54,10 @@ class AaregClient(
     fun antallArbeidsforholdForOpplysningspliktig(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String,
     ): Int? {
         val oversikt = hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
             bedriftsnr,
             overOrdnetEnhetOrgnr,
-            idPortenToken
         )
         if (oversikt.isEmpty()) {
             logger.info("Aareg oversikt over arbeidsgiver respons er tom")
@@ -69,11 +69,10 @@ class AaregClient(
     private fun hentOversiktOverAntallArbeidsforholdForOpplysningspliktig(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String,
     ): Array<OversiktOverArbeidsgiver> {
         return restTemplate.exchange(
             method(HttpMethod.GET, aaregArbeidsgiverOversiktUrl)
-                .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr, idPortenToken).build(),
+                .medHeadere(bedriftsnr, overOrdnetEnhetOrgnr).build(),
             Array<OversiktOverArbeidsgiver>::class.java
         ).body!!
     }
@@ -81,14 +80,13 @@ class AaregClient(
     private fun RequestEntity.BodyBuilder.medHeadere(
         bedriftsnr: String,
         overOrdnetEnhetOrgnr: String?,
-        idPortenToken: String,
     ): RequestEntity.BodyBuilder = headers {
         it.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        it["Authorization"] = "Bearer $idPortenToken"
         it["Nav-Call-Id"] = "srvditt-nav-arbeid"
         it["Nav-Arbeidsgiverident"] = bedriftsnr
         it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
         it["Nav-Consumer-Token"] = stsClient.token.access_token
+        it["Authorization"] = "Bearer ${autentisertBruker.jwtToken}"
     }
 }
 

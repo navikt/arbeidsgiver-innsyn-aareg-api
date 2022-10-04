@@ -35,3 +35,5 @@ spec:
   azure:
     application:
       enabled: true
+  tokenx:
+    enabled: true
