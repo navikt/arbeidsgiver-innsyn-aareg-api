@@ -37,9 +37,3 @@ spec:
       enabled: true
   tokenx:
     enabled: true
-  accessPolicy:
-    inbound:
-      rules:
-        - application: innsyn-aareg
-          namespace: fager
-          cluster: dev-gcp

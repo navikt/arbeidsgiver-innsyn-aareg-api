@@ -6,7 +6,7 @@ import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.IngenRettigheter
-import no.nav.tag.innsynAareg.utils.LoginServiceTokenHolder
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate
 @Service
 class AaregClient(
     private val restTemplate: RestTemplate,
-    private val idTokenHolder: LoginServiceTokenHolder,
+    private val autentisertBruker: AutentisertBruker,
     private val stsClient: STSClient,
 ) {
 
@@ -86,9 +86,7 @@ class AaregClient(
         it["Nav-Arbeidsgiverident"] = bedriftsnr
         it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
         it["Nav-Consumer-Token"] = stsClient.token.access_token
-        idTokenHolder.idToken?.let { idToken ->
-            it["Authorization"] = "Bearer $idToken"
-        }
+        it["Authorization"] = "Bearer ${autentisertBruker.jwtToken}"
     }
 }
 

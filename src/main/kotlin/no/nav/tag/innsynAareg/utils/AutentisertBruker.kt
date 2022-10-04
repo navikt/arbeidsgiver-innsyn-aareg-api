@@ -4,7 +4,7 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.springframework.stereotype.Component
 
 const val LEVEL = "acr=Level4"
-const val ISSUER = "tokenx"
+const val ISSUER = "selvbetjening"
 
 @Component
 class AutentisertBruker(
