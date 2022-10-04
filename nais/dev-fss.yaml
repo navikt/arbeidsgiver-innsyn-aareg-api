@@ -2,12 +2,9 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   name: innsyn-aareg-api
-  namespace: fager
-  labels:
-    team: fager
+  namespace: arbeidsforhold
 spec:
-  image: {{ image }}
-  port: 8080
+  image: {{{ image }}}
   ingresses:
     - https://arbeidsgiver.nais.preprod.local/arbeidsgiver-arbeidsforhold-api/
   env:
@@ -28,8 +25,6 @@ spec:
   vault:
     enabled: true
     paths:
-      - mountPath: /var/run/secrets/nais.io/vault
-        kvPath: /kv/preprod/fss/arbeidsgiver-arbeidsforhold-api/default
       - mountPath: /var/run/secrets/nais.io/service_user
         kvPath: /serviceuser/data/dev/srvag-arbforhold
   azure:

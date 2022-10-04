@@ -2,9 +2,9 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   name: innsyn-aareg-api
-  namespace: {{{ namespace }}}
+  namespace: fager
 spec:
-  image: arbeidsforhold
+  image: {{{ image }}}
   ingresses:
     - https://arbeidsgiver.nais.adeo.no/arbeidsgiver-arbeidsforhold-api/
   env:
