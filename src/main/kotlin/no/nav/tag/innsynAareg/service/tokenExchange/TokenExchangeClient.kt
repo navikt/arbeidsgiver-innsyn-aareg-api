@@ -47,6 +47,14 @@ class TokenExchangeClientImpl internal constructor (
     }
 }
 
+@Profile("local", "labs")
+@Component
+class TokenExchangeClientStub: TokenExchangeClient {
+    override fun exchangeToken(audience: String): TokenXToken {
+        return TokenXToken("", "", "", 2)
+    }
+}
+
 data class TokenXToken (
     val access_token: String,
     val issued_token_type: String,

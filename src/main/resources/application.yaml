@@ -22,7 +22,6 @@ token.x:
   clientId: ${TOKEN_X_CLIENT_ID}
   tokendingsUrl: ${TOKEN_X_TOKEN_ENDPOINT}
 
-
 ---
 
 spring:
@@ -49,7 +48,6 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
-  audience: "local:local:local"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -106,8 +104,7 @@ altinn:
   altinnHeader: "test"
   APIGwHeader: "test"
   proxyUrl: "http://localhost:${mock.port}/altinn/"
-
-
+  proxyAudience: "labs:labs:labs"
 
 ---
 
@@ -119,13 +116,12 @@ spring:
 aareg:
   aaregArbeidsforhold: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
-  audience: dev-fss:arbeidsforhold:aareg-services-nais
 
-no.nav.security.jwt:
-  issuer:
-    tokenx:
-      discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
-      accepted_audience: ${TOKEN_X_CLIENT_ID}
+no.nav.security.jwt.issuer.selvbetjening:
+  discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
+  accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
+  cookiename: selvbetjening-idtoken
+  proxyurl: http://webproxy.nais:8088
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
@@ -138,7 +134,7 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://modapp-q1.adeo.no/ereg/api/v1/organisasjon/"
+  url: "https://modapp-q2.adeo.no/ereg/api/v1/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
