@@ -2,14 +2,14 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   name: innsyn-aareg-api
-  namespace: {{{ namespace }}}
+  namespace: fager
 spec:
-  image: arbeidsforhold
+  image: {{{ image }}}
   ingresses:
-    - https://arbeidsgiver.nais.adeo.no/arbeidsgiver-arbeidsforhold-api/
+    - https://arbeidsgiver.nais.preprod.local/arbeidsgiver-arbeidsforhold-api/
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: prod
+      value: dev
   envFrom:
     - secret: innsyn-aareg-api-secrets
     - configmap: loginservice-idporten
@@ -26,7 +26,7 @@ spec:
     enabled: true
     paths:
       - mountPath: /var/run/secrets/nais.io/service_user
-        kvPath: /serviceuser/data/prod/srvag-arbforhold
+        kvPath: /serviceuser/data/dev/srvag-arbforhold
   azure:
     application:
       enabled: true
