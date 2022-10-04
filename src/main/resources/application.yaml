@@ -17,6 +17,11 @@ springdoc:
     enabled: true
   packagesToScan: no.nav.tag.innsynAareg
 
+token.x:
+  privateJwk: ${TOKEN_X_PRIVATE_JWK}
+  clientId: ${TOKEN_X_CLIENT_ID}
+  tokendingsUrl: ${TOKEN_X_TOKEN_ENDPOINT}
+
 ---
 
 spring:
@@ -58,6 +63,7 @@ altinn:
   altinnHeader: "test"
   APIGwHeader: "test"
   proxyUrl: "http://localhost:${mock.port}/altinn/"
+  proxyAudience: "local:local:local"
 
 ---
 
@@ -98,6 +104,7 @@ altinn:
   altinnHeader: "test"
   APIGwHeader: "test"
   proxyUrl: "http://localhost:${mock.port}/altinn/"
+  proxyAudience: "labs:labs:labs"
 
 ---
 
@@ -107,8 +114,8 @@ spring:
       on-profile: dev
 
 aareg:
-  aaregArbeidsforhold: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
-  aaregArbeidsgivere: "https://aareg-services-q2.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -127,13 +134,14 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://modapp-q2.adeo.no/ereg/api/v1/organisasjon/"
+  url: "https://modapp-q1.adeo.no/ereg/api/v1/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
   proxyUrl: https://altinn-rettigheter-proxy.dev.intern.nav.no/altinn-rettigheter-proxy
+  proxyAudience: dev-gcp:arbeidsgiver:altinn-rettigheter-proxy
 
 ---
 
@@ -171,3 +179,4 @@ altinn:
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
   proxyUrl: https://altinn-rettigheter-proxy.intern.nav.no/altinn-rettigheter-proxy/
+  proxyAudience: prod-gcp:arbeidsgiver:altinn-rettigheter-proxy
