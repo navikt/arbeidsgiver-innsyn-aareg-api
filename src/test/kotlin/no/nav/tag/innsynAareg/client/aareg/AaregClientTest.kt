@@ -4,7 +4,7 @@ import no.nav.security.token.support.core.configuration.MultiIssuerConfiguration
 import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.client.sts.STStoken
 import no.nav.tag.innsynAareg.models.IngenRettigheter
-import no.nav.tag.innsynAareg.utils.LoginServiceTokenHolder
+import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -22,15 +22,13 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers.method
 import org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
 import org.springframework.test.web.client.response.MockRestResponseCreators.withStatus
 
-const val aaregArbeidsforholdUrl = ""
-const val aaregArbeidsgiverOversiktUrl = ""
 
 @RunWith(SpringRunner::class)
 @RestClientTest(
     components = [AaregClient::class],
     properties = [
-        "aareg.aaregArbeidsforhold=$aaregArbeidsforholdUrl",
-        "aareg.aaregArbeidsgivere=$aaregArbeidsgiverOversiktUrl"
+        "aareg.aaregArbeidsforhold=",
+        "aareg.aaregArbeidsgivere="
     ]
 )
 @AutoConfigureWebClient(registerRestTemplate = true)
@@ -46,7 +44,7 @@ class AaregClientTest {
     lateinit var stsClient: STSClient
 
     @MockBean
-    lateinit var idTokenHolder: LoginServiceTokenHolder
+    lateinit var autentisertBruker: AutentisertBruker
 
     @MockBean
     lateinit var multiIssuerConfiguration: MultiIssuerConfiguration
@@ -54,12 +52,12 @@ class AaregClientTest {
     @Before
     fun setUp() {
         Mockito.`when`(stsClient.token).thenReturn(STStoken(""))
-        Mockito.`when`(idTokenHolder.idToken).thenReturn("fake token")
+        Mockito.`when`(autentisertBruker.jwtToken).thenReturn("fake token")
     }
 
     @Test
     fun `hentArbeidsforhold returnerer IngenRettigheter ved 403`() {
-        server.expect(requestTo(aaregArbeidsforholdUrl))
+        server.expect(requestTo(""))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.FORBIDDEN))
 

@@ -1,6 +1,5 @@
 package no.nav.tag.innsynAareg.client.altinn
 
-import com.nimbusds.oauth2.sdk.id.Audience
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnConfig
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlient
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.AltinnrettigheterProxyKlientConfig
@@ -12,7 +11,6 @@ import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
 import no.nav.tag.innsynAareg.models.AltinnOppslagResultat
 import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
-import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
