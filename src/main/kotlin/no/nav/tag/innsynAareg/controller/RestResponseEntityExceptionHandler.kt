@@ -1,10 +1,10 @@
 package no.nav.tag.innsynAareg.controller
 
-import io.ktor.client.features.*
+import io.ktor.client.network.sockets.SocketTimeoutException
+import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode.Companion.BadGateway
 import io.ktor.http.HttpStatusCode.Companion.GatewayTimeout
 import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
-import io.ktor.network.sockets.*
 import no.nav.arbeidsgiver.altinnrettigheter.proxy.klient.error.exceptions.AltinnrettigheterProxyKlientFallbackException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
