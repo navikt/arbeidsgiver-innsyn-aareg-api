@@ -1,4 +1,4 @@
-name: Deploy til dev (fager)
+name: Deploy til dev
 on:
   workflow_dispatch:
 
