@@ -3,6 +3,8 @@ kind: "Application"
 metadata:
   name: innsyn-aareg-api
   namespace: fager
+  labels:
+    team: fager
 spec:
   image: {{{ image }}}
   replicas:
