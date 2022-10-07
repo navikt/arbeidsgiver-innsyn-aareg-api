@@ -8,7 +8,7 @@ metadata:
 spec:
   image: {{{ image }}}
   ingresses:
-    - https://arbeidsgiver.nais.preprod.local/arbeidsgiver-arbeidsforhold-api/
+    - https://aareg-innsyn-arbeidsgiver-api.dev-fss-pub.nais.io
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
