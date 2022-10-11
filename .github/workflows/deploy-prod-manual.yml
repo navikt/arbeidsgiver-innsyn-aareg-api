@@ -1,0 +1,25 @@
+name: Deploy til prod (manuelt, arbeidsforhold)
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}:${{ github.sha }}
+
+jobs:
+  deploy-branch:
+    name: Deploy til prod
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-fss
+          RESOURCE: nais/prod-fss.yaml
+          PRINT_PAYLOAD: true
+          REF: ${{ github.sha }}
+          IMAGE: ${{ env.IMAGE }}
