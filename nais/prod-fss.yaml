@@ -1,0 +1,33 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: aareg-innsyn-arbeidsgiver-api
+  namespace: arbeidsforhold
+  labels:
+    team: arbeidsforhold
+spec:
+  image: {{{ image }}}
+  ingresses:
+    - https://aareg-innsyn-arbeidsgiver-api.prod-fss-pub.nais.io
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: prod
+  envFrom:
+    - secret: aareg-innsyn-arbeidsgiver-secrets
+    - configmap: loginservice-idporten
+  prometheus:
+    enabled: true
+    path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/prometheus
+  liveness:
+    path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/health
+    initialDelay: 30
+  readiness:
+    path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/health
+    initialDelay: 30
+  vault:
+    enabled: true
+    paths:
+      - mountPath: /var/run/secrets/nais.io/service_user
+        kvPath: /serviceuser/data/prod/srvag-arbforhold
+  tokenx:
+    enabled: true
