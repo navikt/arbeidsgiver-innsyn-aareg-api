@@ -26,7 +26,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
   envFrom:
-    - secret: aareg-innsyn-arbeidsgiver-secrets
+    - secret: aareg-innsyn-arbeidsgiver-api-secrets
     - configmap: loginservice-idporten
   prometheus:
     enabled: true
