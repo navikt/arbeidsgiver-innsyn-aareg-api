@@ -1,10 +1,12 @@
 package no.nav.tag.innsynAareg.service.tokenExchange
 
 
+import no.nav.tag.innsynAareg.client.RetryInterceptor
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenXProperties.Companion.CLIENT_ASSERTION_TYPE
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenXProperties.Companion.GRANT_TYPE
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenXProperties.Companion.SUBJECT_TOKEN_TYPE
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -12,7 +14,6 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import org.springframework.web.client.RestTemplate
 
 interface TokenExchangeClient{
     fun exchangeToken(audience: String): TokenXToken
@@ -23,9 +24,15 @@ interface TokenExchangeClient{
 class TokenExchangeClientImpl internal constructor (
     val properties: TokenXProperties,
     val clientAssertionTokenFactory: ClientAssertionTokenFactory,
-    val restTemplate: RestTemplate,
     val autentisertBruker: AutentisertBruker,
+    restTemplateBuilder: RestTemplateBuilder,
 ) : TokenExchangeClient{
+    private val restTemplate = restTemplateBuilder
+        .additionalInterceptors(
+            RetryInterceptor(3, 250L, java.net.SocketException::class.java)
+        ).build()
+
+
     override fun exchangeToken(audience: String): TokenXToken {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
