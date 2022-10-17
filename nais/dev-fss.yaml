@@ -1,3 +1,16 @@
+apiVersion: v1
+data:
+  ALTINN_HEADER: {{ altinn_header }}
+  APIGW_HEADER: {{ apigw_header }}
+kind: Secret
+metadata:
+  labels:
+    team: arbeidsforhold
+    app: aareg-innsyn-arbeidsgiver-api
+  name: aareg-innsyn-arbeidsgiver-api-secrets
+  namespace: arbeidsforhold
+type: Opaque
+---
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:

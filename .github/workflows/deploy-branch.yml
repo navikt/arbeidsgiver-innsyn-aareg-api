@@ -23,3 +23,4 @@ jobs:
           PRINT_PAYLOAD: true
           REF: ${{ github.sha }}
           IMAGE: ${{ env.IMAGE }}
+          VAR: altinn_header=${{ secrets.ALTINN_HEADER }},apigw_header=${{ secrets.APIGW_HEADER }}
