@@ -34,8 +34,8 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: aareg-innsyn-arbeidsgiver
-          namespace: arbeidsforhold
+        - application: innsyn-aareg
+          namespace: fager
     outbound:
       rules:
         - application: min-side-ag-fakelogin
