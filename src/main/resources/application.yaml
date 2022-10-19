@@ -73,7 +73,7 @@ spring:
       on-profile: labs
 
 no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: http://min-side-ag-fakelogin/metadata?issuer=selvbetjening
+  discoveryurl: http://min-side-ag-fakelogin.fager/metadata?issuer=selvbetjening
   accepted_audience: aud-selvbetjening
   cookiename: selvbetjening-idtoken
 
