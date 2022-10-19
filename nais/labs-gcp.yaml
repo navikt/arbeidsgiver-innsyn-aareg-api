@@ -1,10 +1,10 @@
 apiVersion: nais.io/v1alpha1
 kind: "Application"
 metadata:
-  name: innsyn-aareg-api
-  namespace: fager
+  name: aareg-innsyn-arbeidsgiver-api
+  namespace: arbeidsforhold
   labels:
-    team: fager
+    team: arbeidsforhold
 spec:
   image: {{{ image }}}
   replicas:
@@ -19,9 +19,6 @@ spec:
       memory: 600Mi
   ingresses:
     - https://arbeidsgiver.labs.nais.io/arbeidsgiver-arbeidsforhold-api/
-  webproxy: false
-  vault:
-    enabled: false
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: labs
@@ -37,8 +34,9 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: innsyn-aareg
-          namespace: fager
+        - application: aareg-innsyn-arbeidsgiver
+          namespace: arbeidsforhold
     outbound:
       rules:
         - application: min-side-ag-fakelogin
+          namespace: fager
