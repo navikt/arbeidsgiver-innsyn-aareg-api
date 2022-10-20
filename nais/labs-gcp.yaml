@@ -10,15 +10,6 @@ spec:
   replicas:
     min: 1
     max: 1
-  resources:
-    limits:
-      cpu: 2000m
-      memory: 3000Mi
-    requests:
-      cpu: 500m
-      memory: 600Mi
-  ingresses:
-    - https://arbeidsgiver.labs.nais.io/arbeidsgiver-arbeidsforhold-api/
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: labs
@@ -34,8 +25,8 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: innsyn-aareg
-          namespace: fager
+        - application: aareg-innsyn-arbeidsgiver
+          namespace: arbeidsforhold
     outbound:
       rules:
         - application: min-side-ag-fakelogin
