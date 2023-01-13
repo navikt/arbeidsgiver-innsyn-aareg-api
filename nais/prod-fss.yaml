@@ -25,6 +25,8 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
+    - name: JAVA_OPTS
+      value: "-XX:MaxRAMPercentage=75.0"
   envFrom:
     - secret: aareg-innsyn-arbeidsgiver-api-secrets
     - configmap: loginservice-idporten
@@ -37,6 +39,13 @@ spec:
   readiness:
     path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/health
     initialDelay: 30
+  resources:
+    limits:
+      cpu: 3000m
+      memory: 2048Mi
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
   vault:
     enabled: true
     paths:
