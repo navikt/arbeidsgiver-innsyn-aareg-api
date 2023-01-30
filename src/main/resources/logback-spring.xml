@@ -1,7 +1,7 @@
 <configuration>
     <appender name="stdout"
               class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
     <springProfile name="local,labs">
         <appender name="stdout"
@@ -16,7 +16,15 @@
     <logger name="jsonLogger" additivity="false" level="INFO">
         <appender-ref ref="stdout"/>
     </logger>
-    <root level="INFO">
+    <!-- NB: Info-nivå på generell logging fører til at ugyldige cookies logges i klartekst i Tomcat (testet 10.1.5) -->
+    <!-- Se https://www.jvt.me/posts/2020/04/07/tomcat-cookie-disclosure/ -->
+    <root level="WARN">
         <appender-ref ref="stdout"/>
     </root>
+
+    <logger name="no.nav.tag" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <logger name="org.springframework" level="INFO"/>
 </configuration>
