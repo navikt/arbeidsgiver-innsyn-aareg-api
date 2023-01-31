@@ -29,6 +29,6 @@ data class OrganisasjonFraEreg(
 
 data class Organisasjoneledd(val organisasjonsledd: OrganisasjonFraEreg)
 
-data class Navn(val redigertnavn: String?)
+data class Navn(val sammensattnavn: String?)
 
 data class Gyldighetsperiode(val fom: String?, val tom: String?)
