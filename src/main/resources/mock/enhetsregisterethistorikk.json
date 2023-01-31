@@ -2,7 +2,7 @@
   "organisasjonsnummer": "810825472",
   "type": "JuridiskEnhet",
   "navn": {
-    "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+    "sammensattnavn": "MALMEFJORD OG RIDABU REGNSKAP",
     "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
     "bruksperiode": {
       "fom": "2020-05-14T14:56:00.191"
@@ -36,7 +36,7 @@
         }
       },
       {
-        "redigertnavn": "MALMEFJORD OG RIDABU REGNSKAP",
+        "sammensattnavn": "MALMEFJORD OG RIDABU REGNSKAP",
         "navnelinje1": "MALMEFJORD OG RIDABU REGNSKAP",
         "bruksperiode": {
           "fom": "2020-05-14T14:56:00.191"
@@ -142,7 +142,7 @@
     {
       "organisasjonsnummer": "910825518",
       "navn": {
-        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "sammensattnavn": "MAURA OG KOLBU REGNSKAP",
         "navnelinje1": "MAURA OG KOLBU REGNSKAP",
         "bruksperiode": {
           "fom": "2020-05-14T14:56:00.003"
@@ -161,7 +161,7 @@
     {
       "organisasjonsnummer": "910825518",
       "navn": {
-        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "sammensattnavn": "MAURA OG KOLBU REGNSKAP",
         "navnelinje1": "MAURA OG KOLBU REGNSKAP",
         "bruksperiode": {
           "fom": "2020-05-14T14:56:00.003"
@@ -180,7 +180,7 @@
     {
       "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "sammensattnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
         "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
         "navnelinje2": "P",
         "bruksperiode": {
@@ -201,7 +201,7 @@
     {
       "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "sammensattnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
         "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
         "navnelinje2": "P",
         "bruksperiode": {
@@ -221,7 +221,7 @@
     {
       "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "sammensattnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
         "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
         "navnelinje2": "P",
         "bruksperiode": {
@@ -242,7 +242,7 @@
     {
       "organisasjonsnummer": "910825518",
       "navn": {
-        "redigertnavn": "MAURA OG KOLBU REGNSKAP",
+        "sammensattnavn": "MAURA OG KOLBU REGNSKAP",
         "navnelinje1": "MAURA OG KOLBU REGNSKAP",
         "bruksperiode": {
           "fom": "2020-05-14T14:56:00.003"
@@ -262,7 +262,7 @@
     {
       "organisasjonsnummer": "910825526",
       "navn": {
-        "redigertnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
+        "sammensattnavn": "GAMLE FREDRIKSTAD OG RAMNES REGNSKAP",
         "navnelinje1": "GAMLE FREDRIKSTAD OG RAMNES REGNSKA",
         "navnelinje2": "P",
         "bruksperiode": {
@@ -283,7 +283,7 @@
     {
       "organisasjonsnummer": "954168395",
       "navn": {
-        "redigertnavn": "HASLUM OG HOSLE REGNSKAP",
+        "sammensattnavn": "HASLUM OG HOSLE REGNSKAP",
         "navnelinje1": "HASLUM OG HOSLE REGNSKAP",
         "bruksperiode": {
           "fom": "2020-08-19T11:16:29.595"
@@ -303,7 +303,7 @@
     {
       "organisasjonsnummer": "954168396",
       "navn": {
-        "redigertnavn": "smokk og skåne",
+        "sammensattnavn": "smokk og skåne",
         "navnelinje1": "smokk og skåne",
         "bruksperiode": {
           "fom": "2020-08-19T11:16:29.595"
