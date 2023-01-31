@@ -84,7 +84,7 @@ class EnhetsregisteretClient(
             }
             .map {
                 Organisasjon(
-                    Name = it.navn?.redigertnavn,
+                    Name = it.navn?.sammensattnavn,
                     ParentOrganizationNumber = juridiskEnhet,
                     OrganizationNumber = it.organisasjonsnummer
                 )
