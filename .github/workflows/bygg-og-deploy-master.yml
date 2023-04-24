@@ -70,11 +70,11 @@ jobs:
           IMAGE: ${{ env.IMAGE }}
           VAR: altinn_header=${{ secrets.ALTINN_HEADER_PROD }},apigw_header=${{ secrets.APIGW_HEADER_PROD }}
 
-      - name: Deploy til labs-gcp
+      - name: Deploy til dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
           DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: labs-gcp
-          RESOURCE: nais/labs-gcp.yaml
+          CLUSTER: dev-gcp
+          RESOURCE: nais/dev-gcp.yaml
           PRINT_PAYLOAD: true
