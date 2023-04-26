@@ -70,10 +70,11 @@ jobs:
           IMAGE: ${{ env.IMAGE }}
           VAR: altinn_header=${{ secrets.ALTINN_HEADER_PROD }},apigw_header=${{ secrets.APIGW_HEADER_PROD }}
 
-      - name: Deploy til dev-gcp
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: nais/dev-gcp.yaml
-          PRINT_PAYLOAD: true
+#    Å flytte fra labs til gcp fungerte ikke rett ut av boksen, disabler deploy inntil videre
+#      - name: Deploy til dev-gcp
+#        uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: dev-gcp
+#          RESOURCE: nais/dev-gcp.yaml
+#          PRINT_PAYLOAD: true
