@@ -114,8 +114,8 @@ spring:
       on-profile: dev
 
 aareg:
-  aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
-  aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  aaregArbeidsforhold: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsgivere: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -134,13 +134,13 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://ereg-services-q1.dev.intern.nav.no/ereg/api/v2/organisasjon/"
+  url: "https://ereg-services-q1.intern.dev.nav.no/ereg/api/v2/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
   altinnHeader: ${ALTINN_HEADER}
   APIGwHeader: ${APIGW_HEADER}
-  proxyUrl: https://altinn-rettigheter-proxy.dev.intern.nav.no/altinn-rettigheter-proxy
+  proxyUrl: https://altinn-rettigheter-proxy.intern.dev.nav.no/altinn-rettigheter-proxy
   proxyAudience: dev-gcp:arbeidsgiver:altinn-rettigheter-proxy
 
 ---
@@ -172,7 +172,7 @@ pdl:
   pdlUrl: "https://pdl-api.nais.adeo.no/graphql"
 
 ereg:
-  url: "https://ereg-services-q2.dev.intern.nav.no/ereg/api/v2/organisasjon/"
+  url: "https://ereg-services-q2.intern.dev.nav.no/ereg/api/v2/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw.adeo.no"
