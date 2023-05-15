@@ -29,5 +29,5 @@ spec:
           namespace: arbeidsforhold
     outbound:
       rules:
-        - application: min-side-ag-fakelogin
+        - application: demo-arbeidsgiver-fake-login
           namespace: fager
