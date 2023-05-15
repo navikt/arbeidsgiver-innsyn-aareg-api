@@ -73,7 +73,7 @@ spring:
       on-profile: labs
 
 no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: http://demo-arbeidsgiver-fake-login.fager/metadata?issuer=selvbetjening
+  discoveryurl: https://arbeidsgiver.ekstern.dev.nav.no/fake-login/metadata?issuer=selvbetjening
   accepted_audience: aud-selvbetjening
   cookiename: selvbetjening-idtoken
 
