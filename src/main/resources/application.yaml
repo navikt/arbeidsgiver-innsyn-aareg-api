@@ -137,7 +137,7 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://ereg-services-q1.intern.dev.nav.no/ereg/api/v2/organisasjon/"
+  url: "https://ereg-services-q1.dev.intern.nav.no/ereg/api/v2/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
