@@ -3,7 +3,7 @@ name: Bygg og deploy master
 on:
   push:
     branches:
-      - "main"
+      - "master"
 env:
   IMAGE_BASE: ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}
   IMAGE: ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}:${{ github.sha }}
