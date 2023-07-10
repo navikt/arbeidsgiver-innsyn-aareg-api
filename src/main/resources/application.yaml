@@ -48,6 +48,7 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  proxyAudience: "local:local:local"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -89,6 +90,7 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  proxyAudience: "labs:labs:labs"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -116,6 +118,7 @@ spring:
 aareg:
   aaregArbeidsforhold: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  audience: dev-fss:arbeidsforhold:aareg-services-q1
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
