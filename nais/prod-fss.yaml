@@ -53,3 +53,17 @@ spec:
         kvPath: /serviceuser/data/prod/srvag-arbforhold
   tokenx:
     enabled: true
+  accessPolicy:
+    inbound:
+      rules:
+        - application: aareg-innsyn-arbeidsgiver
+          namespace: arbeidsforhold
+          cluster: prod-gcp
+    outbound:
+      rules:
+        - application: aareg-services-nais
+          namespace: arbeidsforhold
+          cluster: prod-fss
+        - application: altinn-rettigheter-proxy
+          namespace: arbeidsgiver
+          cluster: prod-gcp
