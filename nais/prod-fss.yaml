@@ -59,6 +59,9 @@ spec:
         - application: aareg-innsyn-arbeidsgiver
           namespace: arbeidsforhold
           cluster: prod-gcp
+        - application: min-side-arbeidsgiver
+          namespace: fager
+          cluster: prod-gcp
     outbound:
       rules:
         - application: aareg-services-nais

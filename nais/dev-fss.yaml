@@ -52,6 +52,9 @@ spec:
         - application: aareg-innsyn-arbeidsgiver
           namespace: arbeidsforhold
           cluster: dev-gcp
+        - application: min-side-arbeidsgiver
+          namespace: fager
+          cluster: dev-gcp
     outbound:
       rules:
         - application: aareg-services-nais-q1
