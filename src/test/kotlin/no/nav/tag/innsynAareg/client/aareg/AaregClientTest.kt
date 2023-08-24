@@ -4,12 +4,15 @@ import no.nav.security.token.support.core.configuration.MultiIssuerConfiguration
 import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.client.sts.STStoken
 import no.nav.tag.innsynAareg.models.IngenRettigheter
+import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
+import no.nav.tag.innsynAareg.service.tokenExchange.TokenXToken
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.kotlin.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest
@@ -47,12 +50,16 @@ class AaregClientTest {
     lateinit var autentisertBruker: AutentisertBruker
 
     @MockBean
+    lateinit var tokenExchangeClient: TokenExchangeClient
+
+    @MockBean
     lateinit var multiIssuerConfiguration: MultiIssuerConfiguration
 
     @Before
     fun setUp() {
         Mockito.`when`(stsClient.token).thenReturn(STStoken(""))
         Mockito.`when`(autentisertBruker.jwtToken).thenReturn("fake token")
+        Mockito.`when`(tokenExchangeClient.exchangeToken(any())).thenReturn(TokenXToken("fake", "fake", "fake" ,999999999))
     }
 
     @Test

@@ -6,11 +6,13 @@ import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.IngenRettigheter
+import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.http.RequestEntity.method
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -18,11 +20,10 @@ import org.springframework.web.client.RestTemplate
 /* Swagger for API-et (krever VDI): * https://modapp-q1.adeo.no/aareg-services/api/swagger-ui/index.html#/
  * Repo for API-et: https://github.com/navikt/aareg-services
  **/
-@Service
+@Component
 class AaregClient(
     private val restTemplate: RestTemplate,
-    private val autentisertBruker: AutentisertBruker,
-    private val stsClient: STSClient,
+    private val tokenExchangeClient: TokenExchangeClient,
 ) {
 
     @Value("\${aareg.aaregArbeidsforhold}")
@@ -30,6 +31,9 @@ class AaregClient(
 
     @Value("\${aareg.aaregArbeidsgivere}")
     lateinit var aaregArbeidsgiverOversiktUrl: String
+
+    @Value("\${aareg.proxyAudience}")
+    lateinit var aaregProxy: String
 
     val logger = LoggerFactory.getLogger(AaregClient::class.java)!!
 
@@ -85,8 +89,7 @@ class AaregClient(
         it["Nav-Call-Id"] = "srvditt-nav-arbeid"
         it["Nav-Arbeidsgiverident"] = bedriftsnr
         it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
-        it["Nav-Consumer-Token"] = stsClient.token.access_token
-        it["Authorization"] = "Bearer ${autentisertBruker.jwtToken}"
+        it["Authorization"] = "Bearer ${tokenExchangeClient.exchangeToken(aaregProxy).access_token}"
     }
 }
 
