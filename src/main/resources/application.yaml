@@ -48,6 +48,7 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  proxyAudience: "local:local:local"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -89,6 +90,7 @@ sts:
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  proxyAudience: "labs:labs:labs"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -114,8 +116,9 @@ spring:
       on-profile: dev
 
 aareg:
-  aaregArbeidsforhold: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
-  aaregArbeidsgivere: "https://aareg-services-q1.intern.dev.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
+  proxyAudience: dev-fss:arbeidsforhold:aareg-services-nais-q1
 
 no.nav.security.jwt.issuer.selvbetjening:
   discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -134,7 +137,7 @@ pdl:
   pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
 
 ereg:
-  url: "https://ereg-services-q1.intern.dev.nav.no/ereg/api/v2/organisasjon/"
+  url: "https://ereg-services-q1.dev.intern.nav.no/ereg/api/v2/organisasjon/"
 
 altinn:
   altinnUrl: "https://api-gw-q1.adeo.no"
