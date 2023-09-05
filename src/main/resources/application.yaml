@@ -31,10 +31,10 @@ spring:
 
 nais.cluster.name: local
 
-no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
-  accepted_audience: someaudience
-  cookiename: localhost-idtoken
+no.nav.security.jwt.issuer:
+  tokenx:
+    discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
+    accepted_audience: someaudience
 
 mock:
   enabled: true
@@ -120,11 +120,9 @@ aareg:
   aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: dev-fss:arbeidsforhold:aareg-services-nais-q1
 
-no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
-  accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
-  cookiename: selvbetjening-idtoken
-  proxyurl: http://webproxy.nais:8088
+no.nav.security.jwt.issuer.tokenx:
+  discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
+  accepted_audience: ${TOKEN_X_CLIENT_ID}
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
@@ -159,11 +157,9 @@ aareg:
   proxyAudience: prod-fss:arbeidsforhold:aareg-services-nais
 
 
-no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
-  accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
-  cookiename: selvbetjening-idtoken
-  proxyurl: http://webproxy.nais:8088
+no.nav.security.jwt.issuer.tokenx:
+  discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
+  accepted_audience: ${TOKEN_X_CLIENT_ID}
 
 sts:
   stsPass: ${STS_PASS}
