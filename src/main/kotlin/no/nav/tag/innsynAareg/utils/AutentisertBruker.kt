@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 const val ACR_CLAIM_OLD = "acr=Level4"
 const val ACR_CLAIM_NEW = "acr=idporten-loa-high"
-const val ISSUER = "tokendings"
+const val ISSUER = "selvbetjening"
 
 @Component
 class AutentisertBruker(
