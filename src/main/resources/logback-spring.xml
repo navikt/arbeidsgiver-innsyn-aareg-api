@@ -27,5 +27,5 @@
     </logger>
 
     <logger name="org.springframework" level="INFO"/>
-    <!--<logger name="no.nav.security.token.support" level="DEBUG"/>-->
+    <logger name="no.nav.security.token.support" level="DEBUG"/>
 </configuration>
