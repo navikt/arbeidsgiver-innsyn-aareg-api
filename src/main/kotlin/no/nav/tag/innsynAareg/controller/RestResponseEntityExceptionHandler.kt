@@ -36,7 +36,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         return getResponseEntity(e, "ingen tilgang", HttpStatus.FORBIDDEN)
     }
 
-    @ExceptionHandler(JwtTokenUnauthorizedException::class, Unauthorized::class)
+    @ExceptionHandler(JwtTokenUnauthorizedException::class)
     @ResponseBody
     protected fun handleUnauthorized(e: RuntimeException, ignored: WebRequest?): ResponseEntity<Any> {
         return getResponseEntity(e, "ingen tilgang", HttpStatus.UNAUTHORIZED)
