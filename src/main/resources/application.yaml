@@ -35,7 +35,6 @@ no.nav.security.jwt.issuer:
   tokenx:
     discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
     accepted_audience: someaudience
-    cookiename: selvbetjening-idtoken
 
 mock:
   enabled: true
@@ -161,6 +160,7 @@ aareg:
 no.nav.security.jwt.issuer.tokenx:
   discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
   accepted_audience: ${TOKEN_X_CLIENT_ID}
+  cookiename: selvbetjening-idtoken
 
 sts:
   stsPass: ${STS_PASS}
