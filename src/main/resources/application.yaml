@@ -157,10 +157,10 @@ aareg:
   proxyAudience: prod-fss:arbeidsforhold:aareg-services-nais
 
 
-no.nav.security.jwt.issuer.tokenx:
-  discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
-  accepted_audience: ${TOKEN_X_CLIENT_ID}
-  cookiename: selvbetjening-idtoken
+no.nav.security.jwt.issuer:
+  tokenx:
+    discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
+    accepted_audience: ${TOKEN_X_CLIENT_ID}
 
 sts:
   stsPass: ${STS_PASS}
