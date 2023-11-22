@@ -29,7 +29,6 @@ spec:
       value: "-XX:MaxRAMPercentage=75.0"
   envFrom:
     - secret: aareg-innsyn-arbeidsgiver-api-secrets
-    - configmap: loginservice-idporten
   prometheus:
     enabled: true
     path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/prometheus
