@@ -8,7 +8,6 @@ import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
 import no.nav.tag.innsynAareg.utils.ACR_CLAIM_NEW
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import no.nav.tag.innsynAareg.utils.ISSUER
-import no.nav.tag.innsynAareg.utils.ACR_CLAIM_OLD
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @ProtectedWithClaims(
     issuer = ISSUER,
-    claimMap = [ACR_CLAIM_OLD, ACR_CLAIM_NEW],
+    claimMap = [ACR_CLAIM_NEW],
     combineWithOr = true,
 )
 @RestController
