@@ -4,6 +4,7 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.core.jwt.JwtToken
 import org.springframework.stereotype.Component
 
+const val ACR_CLAIM_OLD = "acr=Level4"
 const val ACR_CLAIM_NEW = "acr=idporten-loa-high"
 const val ISSUER = "tokenx"
 
