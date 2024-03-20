@@ -125,7 +125,7 @@ no.nav.security.jwt.issuer.tokenx:
   accepted_audience: ${TOKEN_X_CLIENT_ID}
 
 yrkeskodeverk:
-  yrkeskodeUrl: "https://kodeverk.nais.preprod.local/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
+  yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
 
 sts:
   stsPass: ${STS_PASS}
@@ -167,7 +167,7 @@ sts:
   stsUrl: https://security-token-service.nais.adeo.no/rest/v1/sts/token
 
 yrkeskodeverk:
-  yrkeskodeUrl: "https://kodeverk.nais.adeo.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
+  yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
 
 pdl:
   pdlUrl: "https://pdl-api.nais.adeo.no/graphql"

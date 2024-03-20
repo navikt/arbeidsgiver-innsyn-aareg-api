@@ -45,6 +45,7 @@ spec:
         kvPath: /serviceuser/data/dev/srvag-arbforhold
   tokenx:
     enabled: true
+  webproxy: true
   accessPolicy:
     inbound:
       rules:
