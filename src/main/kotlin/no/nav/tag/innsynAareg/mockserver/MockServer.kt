@@ -51,7 +51,8 @@ class MockServer @Autowired constructor(
     @Value("\${aareg.aaregArbeidsgivere}") private val aaregArbeidsgivereUrl: String,
     @Value("\${yrkeskodeverk.yrkeskodeUrl}") private val yrkeskodeUrl: String,
     @Value("\${pdl.pdlUrl}") private val pdlUrl: String,
-    @Value("\${ereg.url}") private val eregUrl: String
+    @Value("\${ereg.url}") private val eregUrl: String,
+    @Value("\${azure.tokenUrl}") private val azureTokenUrl: String
 ) {
 
     init {
@@ -91,6 +92,10 @@ class MockServer @Autowired constructor(
 
         stubForAny(urlPathMatching("${URL(stsUrl).path}.*")) {
             willReturnJson(hentStringFraFil("STStoken.json"))
+        }
+
+        stubForAny(urlPathMatching("${URL(azureTokenUrl).path}.*")) {
+            willReturnJson(hentStringFraFil("azure_token.json"))
         }
 
         stubForAny(urlPathMatching("${URL(yrkeskodeUrl).path}.*")) {

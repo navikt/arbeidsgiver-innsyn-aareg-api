@@ -1,6 +1,6 @@
 package no.nav.tag.innsynAareg.client.pdl
 
-import no.nav.tag.innsynAareg.client.sts.STSClient
+import no.nav.tag.innsynAareg.client.azure.AzureClient
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -13,8 +13,9 @@ import org.springframework.web.client.RestTemplate
 @Service
 class PdlBatchClient @Autowired constructor(
     private val restTemplate: RestTemplate,
-    private val stsClient: STSClient,
-    @Value("\${pdl.pdlUrl}") private val pdlUrl: String
+    private val azureClient: AzureClient,
+    @Value("\${pdl.pdlUrl}") private val pdlUrl: String,
+    @Value("\${pdl.pdlScope}") private val pdlScope: String
 ) {
     private val log = LoggerFactory.getLogger(PdlBatchClient::class.java)!!
 
@@ -32,13 +33,12 @@ class PdlBatchClient @Autowired constructor(
     }
 
     private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
-        val stsToken: String = stsClient.token.access_token
+        val azureToken: String = azureClient.getToken(pdlScope)
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
-        headers["Nav-Consumer-Token"] = "Bearer $stsToken"
-        headers.setBearerAuth(stsToken)
+        headers.setBearerAuth(azureToken)
 
         return restTemplate.postForObject(
             pdlUrl,
