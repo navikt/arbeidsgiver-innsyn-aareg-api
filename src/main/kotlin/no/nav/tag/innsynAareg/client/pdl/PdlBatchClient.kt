@@ -38,6 +38,7 @@ class PdlBatchClient @Autowired constructor(
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
+        headers["Behandlingsnummer"] = "B415"
         headers.setBearerAuth(azureToken)
 
         return restTemplate.postForObject(
