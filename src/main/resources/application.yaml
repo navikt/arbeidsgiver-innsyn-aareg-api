@@ -142,10 +142,10 @@ sts:
   stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
 
 azure:
-  tokenUrl: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token
+  tokenUrl: "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token"
 
 pdl:
-  pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
+  pdlUrl: "https://pdl-api.intern.dev.nav.no/graphql/"
   pdlScope: "api://dev-fss.pdl.pdl-api/.default"
 
 ereg:
@@ -181,13 +181,13 @@ sts:
   stsUrl: https://security-token-service.nais.adeo.no/rest/v1/sts/token
 
 azure:
-  tokenUrl: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token
+  tokenUrl: "https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token"
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
 
 pdl:
-  pdlUrl: "https://pdl-api.nais.adeo.no/graphql"
+  pdlUrl: "https://pdl-api.intern.nav.no/graphql"
   pdlScope: "api://prod-fss.pdl.pdl-api/.default"
 
 ereg:

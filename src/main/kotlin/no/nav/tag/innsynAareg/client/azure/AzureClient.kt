@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.client.azure
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -20,6 +21,7 @@ class AzureClient @Autowired constructor(
     @Value("\${AZURE_APP_CLIENT_SECRET}") private val clientSecret: String,
     private val restTemplate: RestTemplate
 ) {
+    private val log = LoggerFactory.getLogger(AzureClient::class.java)!!
     private val tokens: LinkedHashMap<String, AzureToken> = LinkedHashMap()
 
     fun getToken(scope: String): String {
@@ -38,6 +40,7 @@ class AzureClient @Autowired constructor(
                     updateToken(scope)
                 } catch (e: RuntimeException) {
                     if (hasExpired(token.expires_in)) {
+                        log.error("Feil ved henting av token fra Azure. $e", e)
                         throw RuntimeException("AG-ARBEIDSFORHOLD Klarte ikke hente token fra azure. $e", e)
                     }
                 }
