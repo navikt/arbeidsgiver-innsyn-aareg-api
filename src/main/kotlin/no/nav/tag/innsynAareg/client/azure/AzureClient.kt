@@ -36,37 +36,33 @@ class AzureClient @Autowired constructor(
         synchronized(this) {
             val token = tokens.getValue(scope)
             if (shouldRefresh(token.expires_in)) {
-                try {
-                    updateToken(scope)
-                } catch (e: RuntimeException) {
-                    if (hasExpired(token.expires_in)) {
-                        log.error("Feil ved henting av token fra Azure. $e", e)
-                        throw RuntimeException("AG-ARBEIDSFORHOLD Klarte ikke hente token fra azure. $e", e)
-                    }
-                }
+                updateToken(scope)
             }
         }
     }
 
     private fun updateToken(scope: String) {
-        val formParameters = formParameters(scope)
+        try {
+            val formParameters = formParameters(scope)
 
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        headers.accept = listOf(MediaType.APPLICATION_JSON)
-        headers.setBasicAuth(clientId, clientSecret)
+            val headers = HttpHeaders()
+            headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+            headers.accept = listOf(MediaType.APPLICATION_JSON)
+            headers.setBasicAuth(clientId, clientSecret)
 
-        val requestEntity = HttpEntity<MultiValueMap<String, String>>(formParameters, headers)
+            val requestEntity = HttpEntity<MultiValueMap<String, String>>(formParameters, headers)
 
-        val response = restTemplate.exchange(tokenUrl, HttpMethod.POST, requestEntity, AccessTokenResponse::class.java).body!!
+            val response =
+                restTemplate.exchange(tokenUrl, HttpMethod.POST, requestEntity, AccessTokenResponse::class.java).body!!
 
-        val token = AzureToken(response.accessToken, LocalDateTime.now().plusSeconds(response.expiresIn))
+            val token = AzureToken(response.accessToken, LocalDateTime.now().plusSeconds(response.expiresIn))
 
-        tokens[scope] = token
-    }
-
-    private fun hasExpired(expiry: LocalDateTime): Boolean {
-        return Objects.isNull(expiry) || LocalDateTime.now().isAfter(expiry)
+            tokens[scope] = token
+        } catch (e: Exception) {
+            log.info("tokenUrl: $tokenUrl")
+            log.error("Feil ved henting av token fra Azure. $e", e)
+            throw RuntimeException("AG-ARBEIDSFORHOLD Klarte ikke hente token fra azure. $e", e)
+        }
     }
 
     private fun shouldRefresh(expiry: LocalDateTime): Boolean {
