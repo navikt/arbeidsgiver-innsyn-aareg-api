@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import java.net.URI
 
 @Service
 class PdlBatchClient @Autowired constructor(
@@ -33,16 +34,16 @@ class PdlBatchClient @Autowired constructor(
     }
 
     private fun getBatchFraPdlInternal(fnrs: List<String>): HentPersonBolkResponse {
-        val azureToken: String = azureClient.getToken(pdlScope)
-
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers["Tema"] = "GEN"
         headers["Behandlingsnummer"] = "B415"
-        headers.setBearerAuth(azureToken)
+        headers.setBearerAuth(azureClient.getToken(pdlScope))
+
+
 
         return restTemplate.postForObject(
-            pdlUrl,
+            URI(pdlUrl),
             HttpEntity(
                 HentPersonBolkRequest(fnrs),
                 headers
