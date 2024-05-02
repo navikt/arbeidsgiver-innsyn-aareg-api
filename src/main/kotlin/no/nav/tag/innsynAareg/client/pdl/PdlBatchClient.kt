@@ -29,6 +29,7 @@ class PdlBatchClient @Autowired constructor(
                 .toString()
                 .replace(Regex("""\d{11}"""), "***********")
             log.error("AG-ARBEIDSFORHOLD feiler mot PDL: $msg , pdlUrl: $pdlUrl, pdlScope: $pdlScope")
+            log.error(exception.stackTraceToString())
             null
         }
     }
