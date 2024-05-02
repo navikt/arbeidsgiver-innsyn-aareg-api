@@ -41,8 +41,6 @@ class PdlBatchClient @Autowired constructor(
         headers["Behandlingsnummer"] = "B415"
         headers.setBearerAuth(azureClient.getToken(pdlScope))
 
-
-
         return restTemplate.postForObject(
             URI(pdlUrl),
             HttpEntity(

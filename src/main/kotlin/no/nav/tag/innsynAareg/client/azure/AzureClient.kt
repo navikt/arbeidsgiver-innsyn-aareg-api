@@ -59,7 +59,6 @@ class AzureClient @Autowired constructor(
 
             tokens[scope] = token
         } catch (e: Exception) {
-            log.info("tokenUrl: $tokenUrl")
             log.error("Feil ved henting av token fra Azure. $e", e)
             throw RuntimeException("AG-ARBEIDSFORHOLD Klarte ikke hente token fra azure. $e", e)
         }
