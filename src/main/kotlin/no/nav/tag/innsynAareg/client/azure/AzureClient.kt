@@ -16,7 +16,7 @@ import java.util.*
 
 @Component
 class AzureClient @Autowired constructor(
-    @Value("\${azure.tokenUrl") private val tokenUrl: String,
+    @Value("\${azure.tokenUrl}") private val tokenUrl: String,
     @Value("\${AZURE_APP_CLIENT_ID}") private val clientId: String,
     @Value("\${AZURE_APP_CLIENT_SECRET}") private val clientSecret: String,
     private val restTemplate: RestTemplate
