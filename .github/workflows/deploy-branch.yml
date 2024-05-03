@@ -45,6 +45,7 @@ jobs:
 
   deploy-branch:
     name: Deploy til dev
+    needs: bygg
     runs-on: ubuntu-latest
 
     steps:

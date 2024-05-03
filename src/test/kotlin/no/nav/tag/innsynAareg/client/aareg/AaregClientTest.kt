@@ -1,8 +1,6 @@
 package no.nav.tag.innsynAareg.client.aareg
 
 import no.nav.security.token.support.core.configuration.MultiIssuerConfiguration
-import no.nav.tag.innsynAareg.client.sts.STSClient
-import no.nav.tag.innsynAareg.client.sts.STStoken
 import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenXToken
@@ -44,9 +42,6 @@ class AaregClientTest {
     lateinit var server: MockRestServiceServer
 
     @MockBean
-    lateinit var stsClient: STSClient
-
-    @MockBean
     lateinit var autentisertBruker: AutentisertBruker
 
     @MockBean
@@ -57,7 +52,6 @@ class AaregClientTest {
 
     @Before
     fun setUp() {
-        Mockito.`when`(stsClient.token).thenReturn(STStoken(""))
         Mockito.`when`(autentisertBruker.jwtToken).thenReturn("fake token")
         Mockito.`when`(tokenExchangeClient.exchangeToken(any())).thenReturn(TokenXToken("fake", "fake", "fake" ,999999999))
     }

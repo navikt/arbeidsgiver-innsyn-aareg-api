@@ -2,18 +2,15 @@ package no.nav.tag.innsynAareg.client.aareg
 
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsgiver
-import no.nav.tag.innsynAareg.client.sts.STSClient
 import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
 import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
 import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
-import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.http.RequestEntity.method
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 
