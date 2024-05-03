@@ -45,6 +45,9 @@ spec:
         kvPath: /serviceuser/data/dev/srvag-arbforhold
   tokenx:
     enabled: true
+  azure:
+    application:
+      enabled: true
   webproxy: true
   accessPolicy:
     inbound:
@@ -63,3 +66,6 @@ spec:
         - application: altinn-rettigheter-proxy
           namespace: arbeidsgiver
           cluster: dev-gcp
+        - application: pdl-api
+          namespace: pdl
+          cluster: dev-fss

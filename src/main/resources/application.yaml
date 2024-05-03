@@ -45,6 +45,9 @@ sts:
   stsPass: "mockpass"
   stsUrl: "http://localhost:${mock.port}/sts"
 
+azure:
+  tokenUrl: "http://localhost:${mock.port}/azure"
+
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
@@ -55,6 +58,7 @@ yrkeskodeverk:
 
 pdl:
   pdlUrl: "http://localhost:${mock.port}/graphql"
+  pdlScope: "scope"
 
 ereg:
   url: "http://localhost:${mock.port}/ereg/api/v2/organisasjon/"
@@ -66,6 +70,8 @@ altinn:
   proxyUrl: "http://localhost:${mock.port}/altinn/"
   proxyAudience: "local:local:local"
 
+AZURE_APP_CLIENT_ID: "clientId"
+AZURE_APP_CLIENT_SECRET: "clientSecret"
 ---
 
 spring:
@@ -87,6 +93,9 @@ sts:
   stsPass: "mockpass"
   stsUrl: "http://localhost:${mock.port}/sts"
 
+azure:
+  tokenUrl: "http://localhost:${mock.port}/azure"
+
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
@@ -97,6 +106,7 @@ yrkeskodeverk:
 
 pdl:
   pdlUrl: "http://localhost:${mock.port}/graphql"
+  pdlScope: "scope"
 
 ereg:
   url: "http://localhost:${mock.port}/ereg/api/v2/organisasjon/"
@@ -131,8 +141,12 @@ sts:
   stsPass: ${STS_PASS}
   stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
 
+azure:
+  tokenUrl: "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token"
+
 pdl:
-  pdlUrl: "https://pdl-api.nais.preprod.local/graphql/"
+  pdlUrl: "https://pdl-api.intern.dev.nav.no/graphql"
+  pdlScope: "api://dev-fss.pdl.pdl-api/.default"
 
 ereg:
   url: "https://ereg-services-q1.dev.intern.nav.no/ereg/api/v2/organisasjon/"
@@ -166,11 +180,15 @@ sts:
   stsPass: ${STS_PASS}
   stsUrl: https://security-token-service.nais.adeo.no/rest/v1/sts/token
 
+azure:
+  tokenUrl: "https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token"
+
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
 
 pdl:
-  pdlUrl: "https://pdl-api.nais.adeo.no/graphql"
+  pdlUrl: "https://pdl-api.intern.nav.no/graphql"
+  pdlScope: "api://prod-fss.pdl.pdl-api/.default"
 
 ereg:
   url: "https://ereg-services.intern.nav.no/ereg/api/v2/organisasjon/"
