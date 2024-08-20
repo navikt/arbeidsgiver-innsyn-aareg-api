@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.8.21</kotlin.version>
+        <kotlin.version>2.0.10</kotlin.version>
         <kotlinx-coroutines.version>1.6.4</kotlinx-coroutines.version>
         <token-support.version>3.1.0</token-support.version>
         <!-- required by token-validation-spring-test -->
@@ -190,12 +190,28 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
     </dependencies>
 
 
     <build>
-        <sourceDirectory>${project.basedir}/src/main/kotlin/</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin/</testSourceDirectory>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -217,16 +233,19 @@
                     <compilerPlugins>
                         <plugin>spring</plugin>
                     </compilerPlugins>
+                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
+                        <phase>compile</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>test-compile</id>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
