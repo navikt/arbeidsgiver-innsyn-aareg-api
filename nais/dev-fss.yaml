@@ -69,3 +69,6 @@ spec:
         - application: pdl-api
           namespace: pdl
           cluster: dev-fss
+        - application: kodeverk-api
+          namespace: team-rocket
+          cluster: dev-fss
