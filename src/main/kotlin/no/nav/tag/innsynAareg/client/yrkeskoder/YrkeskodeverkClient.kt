@@ -1,5 +1,6 @@
 package no.nav.tag.innsynAareg.client.yrkeskoder
 
+import no.nav.tag.innsynAareg.client.azure.AzureClient
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkCacheConfig.Companion.YRKESKODE_CACHE
 import no.nav.tag.innsynAareg.client.yrkeskoder.dto.Yrkeskoderespons
 import no.nav.tag.innsynAareg.models.Yrkeskoder
@@ -15,7 +16,9 @@ import java.util.*
 @Service
 class YrkeskodeverkClient @Autowired constructor(
     private val restTemplate: RestTemplate,
-    @Value("\${yrkeskodeverk.yrkeskodeUrl}") val yrkeskodeUrl: String
+    @Value("\${yrkeskodeverk.yrkeskodeUrl}") val yrkeskodeUrl: String,
+    private val azureClient: AzureClient,
+    @Value("\${yrkeskodeverk.yrkeskodeScope}") private val yrkeskodeScope: String
 ) {
     private val logger = LoggerFactory.getLogger(YrkeskodeverkClient::class.java)!!
 
@@ -32,6 +35,7 @@ class YrkeskodeverkClient @Autowired constructor(
             headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
             headers["Nav-Call-Id"] = UUID.randomUUID().toString()
             headers["Nav-Consumer-Id"] = "srvAG-Arbforhold"
+            headers.setBearerAuth(azureClient.getToken(yrkeskodeScope))
             restTemplate.exchange(
                 yrkeskodeUrl,
                 HttpMethod.GET,
