@@ -55,6 +55,7 @@ aareg:
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
+  yrkeskodeScope: "scope"
 
 pdl:
   pdlUrl: "http://localhost:${mock.port}/graphql"
@@ -103,6 +104,7 @@ aareg:
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
+  yrkeskodeScope: "scope"
 
 pdl:
   pdlUrl: "http://localhost:${mock.port}/graphql"
@@ -136,6 +138,7 @@ no.nav.security.jwt.issuer.tokenx:
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
+  yrkeskodeScope: "api://dev-gcp.team-rocket.kodeverk-api/.default"
 
 sts:
   stsPass: ${STS_PASS}
@@ -185,6 +188,7 @@ azure:
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
+  yrkeskodeScope: "api://prod-gcp.team-rocket.kodeverk-api/.default"
 
 pdl:
   pdlUrl: "https://pdl-api.intern.nav.no/graphql"
