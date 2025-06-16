@@ -30,11 +30,6 @@ spec:
     requests:
       cpu: 1000m
       memory: 1024Mi
-  vault:
-    enabled: true
-    paths:
-      - mountPath: /var/run/secrets/nais.io/service_user
-        kvPath: /serviceuser/data/prod/srvag-arbforhold
   tokenx:
     enabled: true
   azure:
