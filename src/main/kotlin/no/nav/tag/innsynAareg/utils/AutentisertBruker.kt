@@ -12,17 +12,14 @@ const val ISSUER = "tokenx"
 class AutentisertBruker(
     val tokenValidationContextHolder: TokenValidationContextHolder
 ) {
-    val fødselsnummer: String
-        get() =
-            tokenValidationContextHolder
-                .tokenValidationContext
-                .getClaims(ISSUER)
-                .getStringClaim("pid")
+    private val jwtToken: JwtToken
+        get() = tokenValidationContextHolder.getTokenValidationContext()
+            .getJwtToken(ISSUER) ?: throw NoSuchElementException("no valid token. how did you get so far without a valid token?")
 
-    val jwtToken: String
-        get() =
-            tokenValidationContextHolder
-                .tokenValidationContext
-                .getJwtToken(ISSUER)
-                .tokenAsString
+
+    val token: String
+        get() = jwtToken.encodedToken
+
+    val fødselsnummer: String
+        get() = jwtToken.jwtTokenClaims.getStringClaim("pid")!!
 }
