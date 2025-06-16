@@ -23,11 +23,6 @@ spec:
   readiness:
     path: /arbeidsgiver-arbeidsforhold-api/internal/actuator/health
     initialDelay: 30
-  vault:
-    enabled: true
-    paths:
-      - mountPath: /var/run/secrets/nais.io/service_user
-        kvPath: /serviceuser/data/dev/srvag-arbforhold
   tokenx:
     enabled: true
   azure:
