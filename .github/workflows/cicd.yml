@@ -76,7 +76,7 @@ jobs:
           REF: ${{ github.sha }}
 
       - name: Deploy til prod-fss
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ steps.login.outputs.registry }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
           RESOURCE: nais/prod-fss.yaml
