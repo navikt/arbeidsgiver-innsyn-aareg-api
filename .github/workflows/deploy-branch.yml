@@ -20,3 +20,4 @@ jobs:
           VAR: image=${{ steps.login.outputs.registry }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
           RESOURCE: nais/dev-fss.yaml
           CLUSTER: dev-fss
+          REF: ${{ github.sha }}
