@@ -46,7 +46,6 @@ fun MappingBuilder.willReturnJson(body: String) {
 @ConditionalOnProperty("mock.enabled", havingValue = "true")
 class MockServer @Autowired constructor(
     @Value("\${mock.port}") private val port: Int,
-    @Value("\${sts.stsUrl}") private val stsUrl: String,
     @Value("\${aareg.aaregArbeidsforhold}") private val aaregArbeidsforholdUrl: String,
     @Value("\${aareg.aaregArbeidsgivere}") private val aaregArbeidsgivereUrl: String,
     @Value("\${yrkeskodeverk.yrkeskodeUrl}") private val yrkeskodeUrl: String,
@@ -88,10 +87,6 @@ class MockServer @Autowired constructor(
             withHeader("Nav-Opplysningspliktigident", equalTo("983887457"))
             withHeader("Nav-Arbeidsgiverident", equalTo("910825518"))
             willReturnJson(hentStringFraFil("arbeidsgiveroversiktaareg.json"))
-        }
-
-        stubForAny(urlPathMatching("${URL(stsUrl).path}.*")) {
-            willReturnJson(hentStringFraFil("STStoken.json"))
         }
 
         stubForAny(urlPathMatching("${URL(azureTokenUrl).path}.*")) {

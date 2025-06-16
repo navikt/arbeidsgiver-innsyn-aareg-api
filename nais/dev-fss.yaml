@@ -12,8 +12,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
-    - name: JAVA_OPTS
-      value: "-XX:MaxRAMPercentage=75.0"
   envFrom:
     - secret: aareg-innsyn-arbeidsgiver-api
   prometheus:

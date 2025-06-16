@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 21
           cache: maven
 
       - run: mvn -B package
@@ -28,6 +28,7 @@ jobs:
         with:
           team: arbeidsforhold
           tag: ${{ github.sha }}
+          byosbom: target/classes/META-INF/sbom/application.cdx.json
 
   deploy-dev:
     permissions:
