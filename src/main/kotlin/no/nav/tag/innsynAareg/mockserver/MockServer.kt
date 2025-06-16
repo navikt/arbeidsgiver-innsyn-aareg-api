@@ -51,7 +51,7 @@ class MockServer @Autowired constructor(
     @Value("\${yrkeskodeverk.yrkeskodeUrl}") private val yrkeskodeUrl: String,
     @Value("\${pdl.pdlUrl}") private val pdlUrl: String,
     @Value("\${ereg.url}") private val eregUrl: String,
-    @Value("\${azure.tokenUrl}") private val azureTokenUrl: String
+    @Value("\${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}") private val azureTokenUrl: String
 ) {
 
     init {
