@@ -8,7 +8,6 @@ import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.*
 import org.springframework.http.RequestEntity.method
 import org.springframework.stereotype.Component
@@ -20,7 +19,7 @@ import org.springframework.web.client.RestTemplate
  **/
 @Component
 class AaregClient(
-    restTemplateBuilder: RestTemplateBuilder,
+    private val restTemplate: RestTemplate,
     private val tokenExchangeClient: TokenExchangeClient,
 ) {
 
@@ -34,8 +33,6 @@ class AaregClient(
     lateinit var aaregProxy: String
 
     val logger = LoggerFactory.getLogger(AaregClient::class.java)!!
-
-    val restTemplate = restTemplateBuilder.build()
 
     fun hentArbeidsforhold(
         bedriftsnr: String,
