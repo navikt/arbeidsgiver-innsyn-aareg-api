@@ -12,10 +12,10 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit4.SpringRunner
 
 
@@ -28,12 +28,12 @@ class AAregControllerTest {
     @Autowired
     lateinit var aAregController: AaregController
 
-    @MockBean
+    @MockitoBean
     lateinit var autentisertBruker: AutentisertBruker
 
     @Before
     fun setUp() {
-        Mockito.`when`(autentisertBruker.jwtToken).thenReturn("fake token")
+        Mockito.`when`(autentisertBruker.token).thenReturn("fake token")
     }
 
     @Test
