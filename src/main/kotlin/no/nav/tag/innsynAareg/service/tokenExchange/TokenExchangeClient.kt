@@ -42,7 +42,7 @@ class TokenExchangeClientImpl internal constructor (
                     "grant_type" to listOf(GRANT_TYPE),
                     "client_assertion_type" to listOf(CLIENT_ASSERTION_TYPE),
                     "subject_token_type" to listOf(SUBJECT_TOKEN_TYPE),
-                    "subject_token" to listOf(autentisertBruker.jwtToken),
+                    "subject_token" to listOf(autentisertBruker.token),
                     "client_assertion" to listOf(clientAssertionTokenFactory.clientAssertion),
                     "audience" to listOf(audience),
                     "client_id" to listOf(properties.clientId)
