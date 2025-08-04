@@ -2,63 +2,22 @@ name: Deploy til dev
 on:
   workflow_dispatch:
 
-env:
-  IMAGE_BASE: ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}
-  IMAGE: ghcr.io/${{ github.repository }}/${{ github.event.repository.name }}:${{ github.sha }}
-
 jobs:
-  bygg:
-    name: Bygg
+  deploy-dev:
+    name: Deploy dev (dev-fss)
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      actions: write
-      packages: write
+      contents: "read"
+      id-token: "write"
     steps:
-      - name: Sjekk ut kode
-        uses: actions/checkout@v3
-
-      - name: Oppsett Java
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: nais/login@v0
+        id: login
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
-      - name: Bygg og test med Maven
-        run: mvn -f ./pom.xml clean test package
-
-      - uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ env.IMAGE }}
-            ${{ env.IMAGE_BASE }}:latest
-          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:latest
-          cache-to: type=inline
-
-  deploy-branch:
-    name: Deploy til dev
-    needs: bygg
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Sjekk ut kode
-        uses: actions/checkout@v3
-
-      - name: Deploy
-        uses: nais/deploy/actions/deploy@v1
+          team: arbeidsforhold
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
+          VAR: image=${{ steps.login.outputs.registry }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
           RESOURCE: nais/dev-fss.yaml
-          PRINT_PAYLOAD: true
+          CLUSTER: dev-fss
           REF: ${{ github.sha }}
-          IMAGE: ${{ env.IMAGE }}
-          VAR: altinn_header=${{ secrets.ALTINN_HEADER_DEV }},apigw_header=${{ secrets.APIGW_HEADER_DEV }}

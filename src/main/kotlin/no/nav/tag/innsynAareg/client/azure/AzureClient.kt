@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
@@ -16,7 +17,7 @@ import java.util.*
 
 @Component
 class AzureClient @Autowired constructor(
-    @Value("\${azure.tokenUrl}") private val tokenUrl: String,
+    @Value("\${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}") private val tokenUrl: String,
     @Value("\${AZURE_APP_CLIENT_ID}") private val clientId: String,
     @Value("\${AZURE_APP_CLIENT_SECRET}") private val clientSecret: String,
     private val restTemplate: RestTemplate
@@ -43,17 +44,22 @@ class AzureClient @Autowired constructor(
 
     private fun updateToken(scope: String) {
         try {
-            val formParameters = formParameters(scope)
-
-            val headers = HttpHeaders()
-            headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-            headers.accept = listOf(MediaType.APPLICATION_JSON)
-            headers.setBasicAuth(clientId, clientSecret)
-
-            val requestEntity = HttpEntity<MultiValueMap<String, String>>(formParameters, headers)
-
-            val response =
-                restTemplate.exchange(tokenUrl, HttpMethod.POST, requestEntity, AccessTokenResponse::class.java).body!!
+            val response = restTemplate.postForEntity(
+                tokenUrl,
+                HttpEntity(
+                    multiValueMapOf(
+                        "grant_type" to "client_credentials",
+                        "client_id" to clientId,
+                        "client_secret" to clientSecret,
+                        "scope" to scope,
+                    ),
+                    HttpHeaders().apply {
+                        contentType = MediaType.APPLICATION_FORM_URLENCODED
+                        accept = listOf(MediaType.APPLICATION_JSON)
+                    }
+                ),
+                AccessTokenResponse::class.java
+            ).body!!
 
             val token = AzureToken(response.accessToken, LocalDateTime.now().plusSeconds(response.expiresIn))
 
@@ -76,3 +82,10 @@ class AzureClient @Autowired constructor(
         return formParameters
     }
 }
+
+fun <K : Any, V>multiValueMapOf(vararg bindings: Pair<K, V>): MultiValueMap<K, V> =
+    LinkedMultiValueMap<K, V>().apply {
+        bindings.forEach { (key, value) ->
+            add(key, value)
+        }
+    }

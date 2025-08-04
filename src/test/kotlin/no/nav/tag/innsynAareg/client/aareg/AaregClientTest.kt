@@ -14,9 +14,9 @@ import org.mockito.kotlin.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers.method
@@ -41,18 +41,18 @@ class AaregClientTest {
     @Autowired
     lateinit var server: MockRestServiceServer
 
-    @MockBean
+    @MockitoBean
     lateinit var autentisertBruker: AutentisertBruker
 
-    @MockBean
+    @MockitoBean
     lateinit var tokenExchangeClient: TokenExchangeClient
 
-    @MockBean
+    @MockitoBean
     lateinit var multiIssuerConfiguration: MultiIssuerConfiguration
 
     @Before
     fun setUp() {
-        Mockito.`when`(autentisertBruker.jwtToken).thenReturn("fake token")
+        Mockito.`when`(autentisertBruker.token).thenReturn("fake token")
         Mockito.`when`(tokenExchangeClient.exchangeToken(any())).thenReturn(TokenXToken("fake", "fake", "fake" ,999999999))
     }
 

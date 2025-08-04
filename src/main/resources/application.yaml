@@ -41,13 +41,6 @@ mock:
   port: 8081
   aktorPort: 8082
 
-sts:
-  stsPass: "mockpass"
-  stsUrl: "http://localhost:${mock.port}/sts"
-
-azure:
-  tokenUrl: "http://localhost:${mock.port}/azure"
-
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
@@ -73,6 +66,8 @@ altinn:
 
 AZURE_APP_CLIENT_ID: "clientId"
 AZURE_APP_CLIENT_SECRET: "clientSecret"
+AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: "http://localhost:${mock.port}/azure"
+
 ---
 
 spring:
@@ -89,13 +84,6 @@ mock:
   enabled: true
   port: 8081
   aktorPort: 8082
-
-sts:
-  stsPass: "mockpass"
-  stsUrl: "http://localhost:${mock.port}/sts"
-
-azure:
-  tokenUrl: "http://localhost:${mock.port}/azure"
 
 aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
@@ -120,6 +108,8 @@ altinn:
   proxyUrl: "http://localhost:${mock.port}/altinn/"
   proxyAudience: "labs:labs:labs"
 
+AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: "http://localhost:${mock.port}/azure"
+
 ---
 
 spring:
@@ -139,13 +129,6 @@ no.nav.security.jwt.issuer.tokenx:
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb"
   yrkeskodeScope: "api://dev-gcp.team-rocket.kodeverk-api/.default"
-
-sts:
-  stsPass: ${STS_PASS}
-  stsUrl: https://security-token-service.nais.preprod.local/rest/v1/sts/token
-
-azure:
-  tokenUrl: "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token"
 
 pdl:
   pdlUrl: "https://pdl-api.intern.dev.nav.no/graphql"
@@ -178,13 +161,6 @@ no.nav.security.jwt.issuer:
   tokenx:
     discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
     accepted_audience: ${TOKEN_X_CLIENT_ID}
-
-sts:
-  stsPass: ${STS_PASS}
-  stsUrl: https://security-token-service.nais.adeo.no/rest/v1/sts/token
-
-azure:
-  tokenUrl: "https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token"
 
 yrkeskodeverk:
   yrkeskodeUrl: "https://kodeverk-api.nav.no/api/v1/kodeverk/Yrker/koder/betydninger?spraak=nb&spraak=nn"
