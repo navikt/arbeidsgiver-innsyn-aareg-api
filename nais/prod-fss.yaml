@@ -12,6 +12,8 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
+    - name: JDK_JAVA_OPTIONS
+      value: $(JAVA_PROXY_OPTIONS)
   envFrom:
     - secret: aareg-innsyn-arbeidsgiver-api
   prometheus:
