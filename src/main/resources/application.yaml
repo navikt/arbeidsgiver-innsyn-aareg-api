@@ -12,6 +12,10 @@ spring:
     active: local
   main:
     banner-mode: log
+  # As of Spring Boot 3.4 https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.4-Release-Notes#upgrading-from-spring-boot-33
+  # The default `RestTemplate` uses the JDK HTTP client, which does not support proxy configuration via system properties in the same way the
+  # Simple JDK HttpURLConnection (SimpleClientHttpRequestFactory) did.
+  # This results in intermittent connection issues often resulting in errors like "org.springframework.web.client.ResourceAccessException: I/O error on POST request for https://login.microsoftonline.com..."
   http.client.factory: simple
 springdoc:
   swagger-ui:
