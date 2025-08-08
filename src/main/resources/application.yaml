@@ -12,6 +12,7 @@ spring:
     active: local
   main:
     banner-mode: log
+  http.client.factory: simple
 springdoc:
   swagger-ui:
     enabled: true
