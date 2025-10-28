@@ -86,6 +86,7 @@ class AaregClient(
         it["Nav-Call-Id"] = "srvditt-nav-arbeid"
         it["Nav-Arbeidsgiverident"] = bedriftsnr
         it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
+        it["Nav-Aareg-Kontekst"] = "ARBEIDSGIVER"
         it["Authorization"] = "Bearer ${tokenExchangeClient.exchangeToken(aaregProxy).access_token}"
     }
 }
