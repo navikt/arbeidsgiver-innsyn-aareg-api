@@ -118,7 +118,7 @@ spring:
       on-profile: dev
 
 aareg:
-  aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/arbeidsgiver/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: dev-fss:arbeidsforhold:aareg-services-nais-q1
 
