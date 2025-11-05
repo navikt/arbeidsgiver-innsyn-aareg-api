@@ -152,7 +152,7 @@ spring:
       on-profile: prod
 
 aareg:
-  aaregArbeidsforhold: "https://aareg-services.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
+  aaregArbeidsforhold: "https://aareg-services.intern.nav.no/api/v1/arbeidsgiver/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: prod-fss:arbeidsforhold:aareg-services-nais
 
