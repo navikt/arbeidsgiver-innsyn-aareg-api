@@ -8,7 +8,9 @@ import no.nav.tag.innsynAareg.models.IngenRettigheter
 import no.nav.tag.innsynAareg.service.tokenExchange.TokenExchangeClient
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.*
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
+import org.springframework.http.RequestEntity
 import org.springframework.http.RequestEntity.method
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
@@ -85,7 +87,7 @@ class AaregClient(
         it.contentType = MediaType.APPLICATION_FORM_URLENCODED
         it["Nav-Call-Id"] = "srvditt-nav-arbeid"
         it["Nav-Arbeidsgiverident"] = bedriftsnr
-        it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
+        //it["Nav-Opplysningspliktigident"] = overOrdnetEnhetOrgnr
         it["Nav-Aareg-Kontekst"] = "ARBEIDSGIVER"
         it["Authorization"] = "Bearer ${tokenExchangeClient.exchangeToken(aaregProxy).access_token}"
     }
