@@ -15,6 +15,22 @@ jobs:
         id: login
         with:
           team: arbeidsforhold
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          cache: maven
+
+      - run: mvn -B package
+
+      - uses: nais/docker-build-push@v0
+        id: gar-push
+        with:
+          team: arbeidsforhold
+          tag: ${{ github.sha }}
+          byosbom: target/classes/META-INF/sbom/application.cdx.json
+
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ steps.login.outputs.registry }}/arbeidsgiver-innsyn-aareg-api:${{ github.sha }}
