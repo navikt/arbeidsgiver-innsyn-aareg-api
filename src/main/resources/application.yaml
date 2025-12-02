@@ -129,7 +129,7 @@ aareg:
   proxyAudience: dev-fss:arbeidsforhold:aareg-services-nais-q1
   tilgangskontroll.alle.organisasjoner.url: https://aareg-tilgangskontroll-q1.intern.dev.nav.no/api/v1/tilganger/innsyn-arbeidsgiver
   tilgangskontroll.organisasjoner.url: https://aareg-tilgangskontroll-q1.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet
-  tilgangskontroll.scope: "api://dev-gcp.arbeidsforhold.aareg-tilgangskontroll-q1/.default"
+  tilgangskontroll.scope: "dev-gcp:arbeidsforhold:aareg-tilgangskontroll-q1"
 
 no.nav.security.jwt.issuer.tokenx:
   discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
@@ -166,7 +166,7 @@ aareg:
   proxyAudience: prod-fss:arbeidsforhold:aareg-services-nais
   tilgangskontroll.alle.organisasjoner.url: https://aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver
   tilgangskontroll.organisasjoner.url: https://aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet
-  tilgangskontroll.scope: "api://prod-gcp.arbeidsforhold.aareg-tilgangskontroll-q1/.default"
+  tilgangskontroll.scope: "prod-gcp:arbeidsforhold:aareg-tilgangskontroll-q1"
 
 no.nav.security.jwt.issuer:
   tokenx:
