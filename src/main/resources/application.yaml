@@ -45,6 +45,9 @@ aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: "local:local:local"
+  tilgangskontroll.alle.organisasjoner.url: "http://localhost:${mock.port}/aareg-tilgangskontroll.intern.dev.nav.no/api/v1/tilganger/innsyn-arbeidsgiver"
+  tilgangskontroll.organisasjoner.url: "http://localhost:${mock.port}/aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet"
+  tilgangskontroll.scope: "local:local:local"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -89,6 +92,9 @@ aareg:
   aaregArbeidsforhold: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE"
   aaregArbeidsgivere: "http://localhost:${mock.port}/aareg-services/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: "labs:labs:labs"
+  tilgangskontroll.alle.organisasjoner.url: "http://localhost:${mock.port}/aareg-tilgangskontroll.intern.dev.nav.no/api/v1/tilganger/innsyn-arbeidsgiver"
+  tilgangskontroll.organisasjoner.url: "http://localhost:${mock.port}/aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet"
+  tilgangskontroll.scope: "labs:labs:labs"
 
 yrkeskodeverk:
   yrkeskodeUrl: "http://localhost:${mock.port}/kodeverk/api/"
@@ -121,6 +127,9 @@ aareg:
   aaregArbeidsforhold: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services-q1.dev.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: dev-fss:arbeidsforhold:aareg-services-nais-q1
+  tilgangskontroll.alle.organisasjoner.url: https://aareg-tilgangskontroll.intern.dev.nav.no/api/v1/tilganger/innsyn-arbeidsgiver
+  tilgangskontroll.organisasjoner.url: https://aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet
+  tilgangskontroll.scope: dev-gcp:arbeidsforhold:aareg-tilgangskontroll
 
 no.nav.security.jwt.issuer.tokenx:
   discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
@@ -155,7 +164,9 @@ aareg:
   aaregArbeidsforhold: "https://aareg-services.intern.nav.no/api/v1/opplysningspliktig/arbeidsforholdoversikt?regelverk=A_ORDNINGEN&status=ALLE&arbeidsforholdtype=ordinaertArbeidsforhold,maritimtArbeidsforhold,forenkletOppgjoersordning,frilanserOppdragstakerHonorarPersonerMm"
   aaregArbeidsgivere: "https://aareg-services.intern.nav.no/api/v1/opplysningspliktig/arbeidsgiveroversikt"
   proxyAudience: prod-fss:arbeidsforhold:aareg-services-nais
-
+  tilgangskontroll.alle.organisasjoner.url: https://aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver
+  tilgangskontroll.organisasjoner.url: https://aareg-tilgangskontroll.intern.nav.no/api/v1/tilganger/innsyn-arbeidsgiver/har-rettighet
+  tilgangskontroll.scope: prod-gcp:arbeidsforhold:aareg-tilgangskontroll
 
 no.nav.security.jwt.issuer:
   tokenx:
