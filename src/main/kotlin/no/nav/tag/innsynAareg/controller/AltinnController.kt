@@ -1,14 +1,14 @@
 package no.nav.tag.innsynAareg.controller
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.tag.innsynAareg.client.altinn.AltinnClient
 import no.nav.tag.innsynAareg.client.altinn.dto.Organisasjon
+import no.nav.tag.innsynAareg.client.tilgangskontroll.TilgangskontrollClient
 import no.nav.tag.innsynAareg.models.AltinnIngenRettigheter
 import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
 import no.nav.tag.innsynAareg.utils.ACR_CLAIM_NEW
+import no.nav.tag.innsynAareg.utils.ACR_CLAIM_OLD
 import no.nav.tag.innsynAareg.utils.AutentisertBruker
 import no.nav.tag.innsynAareg.utils.ISSUER
-import no.nav.tag.innsynAareg.utils.ACR_CLAIM_OLD
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,15 +22,13 @@ import org.springframework.web.bind.annotation.RestController
 )
 @RestController
 class OrganisasjonController(
-    val altinnClient: AltinnClient,
+    var tilgangskontrollClient: TilgangskontrollClient,
     val autentisertBruker: AutentisertBruker
 ) {
 
     @GetMapping(value = ["/organisasjoner"])
     fun hentOrganisasjoner(): ResponseEntity<List<Organisasjon>> {
-        val result = altinnClient.hentOrganisasjoner(
-            autentisertBruker.fødselsnummer
-        )
+        val result = tilgangskontrollClient.hentOrganisasjoner()
         return when (result) {
             is AltinnOppslagVellykket -> ResponseEntity.ok(result.organisasjoner)
             AltinnIngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
@@ -42,11 +40,7 @@ class OrganisasjonController(
         @RequestParam serviceKode: String?,
         @RequestParam serviceEdition: String?
     ): ResponseEntity<List<Organisasjon>> {
-        val result = altinnClient.hentOrganisasjonerBasertPaRettigheter(
-            autentisertBruker.fødselsnummer,
-            serviceKode!!,
-            serviceEdition!!
-        )
+        val result = tilgangskontrollClient.hentOrganisasjonerBasertPaRettigheter()
         return when (result) {
             is AltinnOppslagVellykket -> ResponseEntity.ok(result.organisasjoner)
             AltinnIngenRettigheter -> ResponseEntity(HttpStatus.FORBIDDEN)
