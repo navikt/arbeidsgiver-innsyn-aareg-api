@@ -2,12 +2,15 @@ package no.nav.tag.innsynAareg.service
 
 import no.nav.tag.innsynAareg.client.aareg.AaregClient
 import no.nav.tag.innsynAareg.client.aareg.AaregException
+import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
 import no.nav.tag.innsynAareg.client.enhetsregisteret.EnhetsregisteretClient
 import no.nav.tag.innsynAareg.client.enhetsregisteret.dto.OrganisasjonFraEreg
+import no.nav.tag.innsynAareg.client.tilgangskontroll.TilgangskontrollClient
 import no.nav.tag.innsynAareg.client.yrkeskoder.YrkeskodeverkClient
-import no.nav.tag.innsynAareg.client.aareg.dto.OversiktOverArbeidsForhold
-import no.nav.tag.innsynAareg.client.altinn.AltinnClient
-import no.nav.tag.innsynAareg.models.*
+import no.nav.tag.innsynAareg.models.AltinnOppslagVellykket
+import no.nav.tag.innsynAareg.models.ArbeidsforholdFunnet
+import no.nav.tag.innsynAareg.models.ArbeidsforholdOppslagResultat
+import no.nav.tag.innsynAareg.models.IngenRettigheter
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -17,9 +20,9 @@ const val SERVICE_EDITION_INNSYN_AAREG = "1"
 @Service
 class InnsynService(
     private val aaregClient: AaregClient,
+    private val tilgangskontrollClient: TilgangskontrollClient,
     private val yrkeskodeverkClient: YrkeskodeverkClient,
     private val enhetsregisteretService: EnhetsregisteretClient,
-    private val altinnClient: AltinnClient,
     private val navneoppslagService: NavneoppslagService
 ) {
     private val logger = LoggerFactory.getLogger(InnsynService::class.java)!!
@@ -133,11 +136,7 @@ class InnsynService(
         overOrdnetEnhetOrgnr: String,
         fnr: String
     ): ArbeidsforholdOppslagResultat {
-        val organisasjonerMedTilgang = altinnClient.hentOrganisasjonerBasertPaRettigheter(
-            fnr,
-            SERVICEKODE_INNSYN_AAREG,
-            SERVICE_EDITION_INNSYN_AAREG
-        )
+        val organisasjonerMedTilgang = tilgangskontrollClient.hentOrganisasjonerBasertPaRettigheter()
 
         if (organisasjonerMedTilgang is AltinnOppslagVellykket) {
             val juridiskeEnhetermedTilgang = organisasjonerMedTilgang
